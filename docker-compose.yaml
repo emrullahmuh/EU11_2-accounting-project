@@ -1,14 +1,14 @@
 # Use postgres/example user/password credentials
-version: '3.1'
+version: '3.9'
 
 services:
   postgres:
-    image: postgres:15.1
+    image: postgres:14.1
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - ~/apps/postgres:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: fin-tracker-app-db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=fin-tracker-app-db
