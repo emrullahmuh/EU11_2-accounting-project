@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Currency Converter</title>
+</head>
+<body>
+<h2>Currency Converter</h2>
+<form action="#" th:action="@{/convert}" method="post">
+    <div>
+        <label for="amount">Amount:</label>
+        <input type="text" id="amount" name="amount" required>
+    </div>
+
+    <div>
+        <label for="fromCurrency">From:</label>
+        <select id="fromCurrency" name="fromCurrency" required>
+            <option value="USD" th:selected="${fromCurrency == 'USD'}">USD</option>
+            <option value="EUR" th:selected="${fromCurrency == 'EUR'}">EUR</option>
+            <option value="TRY" th:selected="${fromCurrency == 'TRY'}">TRY</option>
+            <!-- Diğer döviz seçeneklerini buraya ekleyebilirsiniz -->
+        </select>
+    </div>
+
+    <div>
+        <label for="toCurrency">To:</label>
+        <select id="toCurrency" name="toCurrency" required>
+            <option value="USD" th:selected="${toCurrency == 'USD'}">USD</option>
+            <option value="EUR" th:selected="${toCurrency == 'EUR'}">EUR</option>
+            <option value="TRY" th:selected="${toCurrency == 'TRY'}">TRY</option>
+            <!-- Diğer döviz seçeneklerini buraya ekleyebilirsiniz -->
+        </select>
+    </div>
+
+    <div>
+        <label for="convertedAmount">Converted Amount:</label>
+        <input type="text" id="convertedAmount" name="convertedAmount" readonly>
+    </div>
+
+    <div>
+        <button type="submit">Convert</button>
+    </div>
+</form>
+</body>
+</html>
