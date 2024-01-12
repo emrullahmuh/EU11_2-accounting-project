@@ -1,10 +1,10 @@
-insert into roles(insert_date_time, insert_user_id, is_deleted, last_update_date_time,
-                  last_update_user_id, description)
-values ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Root User'),
-       ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Admin'),
-       ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Manager'),
-       ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Employee');
-
+-- insert into roles(insert_date_time, insert_user_id, is_deleted, last_update_date_time,
+--                   last_update_user_id, description)
+-- values ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Root User'),
+--        ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Admin'),
+--        ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Manager'),
+--        ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Employee');
+--
 -- insert into addresses(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
 --                       address_line1, address_line2, city, state, country, zip_code)
 -- values ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
@@ -86,17 +86,17 @@ values ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Root User'),
 -- ('2022-09-15T00:00',3, false,'2022-09-15T00:00',3,'VENDOR', 'Mod Tech', '+1 (652) 852-3648','https://www.modtech.com', 2, 3);
 --
 --
--- insert into categories(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
---                        description, company_id)
--- values
--- -- COMPANY-2 / Green Tech
--- ('2022-09-15 00:00:00', 2, false, '2022-09-15 00:00:00', 2, 'Computer', 2),
--- ('2022-09-15 00:00:00', 2, false, '2022-09-15 00:00:00', 2, 'Phone', 2),
--- -- COMPANY-3 / Blue Tech
--- ('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'Phone', 3),
--- ('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'TV', 3),
--- ('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'Monitor', 3);
---
+insert into categories(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
+                       description, company_id)
+values
+-- COMPANY-2 / Green Tech
+('2022-09-15 00:00:00', 2, false, '2022-09-15 00:00:00', 2, 'Computer', 2),
+('2022-09-15 00:00:00', 2, false, '2022-09-15 00:00:00', 2, 'Phone', 2),
+-- COMPANY-3 / Blue Tech
+('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'Phone', 3),
+('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'TV', 3),
+('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'Monitor', 3);
+
 -- insert into products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
 --                      name, quantity_in_stock, low_limit_alert, product_unit, category_id)
 --  VALUES
@@ -152,4 +152,4 @@ values ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Root User'),
 -- ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 5, 0, 10, 0, 10, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 24420 & profit (with tax) : 5280+1540=6820
 -- ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 2, 0, 10, 0, 11, 6),    --sale AWAITING_APPROVAL after approval total sale (with tax) : 27060 & profit (with tax) : 6820+440=7260
 -- ('2022-12-15 00:00', 3, 'false', '2022-12-15 00:00', 3, 600, 4, 0, 10, 0, 13, 7);    --purchase AWAITING_APPROVAL
---
+
