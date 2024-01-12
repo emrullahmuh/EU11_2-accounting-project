@@ -3,18 +3,16 @@ package com.cydeo.entity;
 import com.cydeo.entity.common.BaseEntity;
 import com.cydeo.enums.InvoiceStatus;
 import com.cydeo.enums.InvoiceType;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-//todo I need to add lombok I think
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "invoices")
+@Builder
 public class Invoice extends BaseEntity {
 
     @Column(name = "invoice_no")
