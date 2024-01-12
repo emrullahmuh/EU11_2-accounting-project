@@ -10,6 +10,4 @@ public enum ClientVendorType {
     CLIENT("Client");
 
     private final String value;
-
-
 }
