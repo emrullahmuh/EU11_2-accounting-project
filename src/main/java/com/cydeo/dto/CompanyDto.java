@@ -3,10 +3,10 @@ package com.cydeo.dto;
 import com.cydeo.enums.CompanyStatus;
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CompanyDto {
 
     private Long id;
