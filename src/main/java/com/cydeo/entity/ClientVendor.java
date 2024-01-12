@@ -3,6 +3,8 @@ package com.cydeo.entity;
 import com.cydeo.entity.common.BaseEntity;
 import com.cydeo.enums.ClientVendorType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,6 +13,8 @@ import javax.persistence.*;
 @Table(name = "clients_vendors")
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
+@Builder
 public class ClientVendor extends BaseEntity {
 
     private String clientVendorName;
