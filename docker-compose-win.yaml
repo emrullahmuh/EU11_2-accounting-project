@@ -11,7 +11,7 @@ services:                             # Which containers I need.
       DATABASE_PORT: 5432             # Database provider will be waiting us at 5433 - Other container's port
       DATABASE_NAME: cacoon           # Database name
       DATABASE_USERNAME: postgres     # Database username
-      DATABASE_PASSWORD: admin        # Database password
+      DATABASE_PASSWORD: Rm687291     # Database password
       DATABASE_SSL: 'false'
       SLEEP_LENGTH: 5
     ports:
@@ -30,7 +30,7 @@ services:                             # Which containers I need.
       - .m2:/root/.m2             # Save my data inside hosting OS ".m2:/root/.m2 folder"
     environment:
       POSTGRES_USER: postgres     # Postgres inside this container has this credentials
-      POSTGRES_PASSWORD: admin
+      POSTGRES_PASSWORD: Rm687291
       POSTGRES_DB: cacoon
 
 networks:                         # Create this network so as our containers can communicate each other.
