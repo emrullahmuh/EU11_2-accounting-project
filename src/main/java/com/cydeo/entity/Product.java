@@ -2,15 +2,16 @@ package com.cydeo.entity;
 
 import com.cydeo.entity.common.BaseEntity;
 import com.cydeo.enums.ProductUnit;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
+
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "products")
 public class Product extends BaseEntity {
@@ -23,6 +24,7 @@ public class Product extends BaseEntity {
     private ProductUnit productUnit;
 
     @ManyToOne
-    @JoinColumn(name = "")
     private Category category;
+
+
 }
