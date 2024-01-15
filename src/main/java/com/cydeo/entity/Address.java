@@ -17,17 +17,22 @@ import javax.persistence.Table;
 @Builder
 public class Address extends BaseEntity {
 
+    @Column(name = "addressLine1")
     private String addressLine1;
+
+    @Column(name = "addressLine2")
     private String addressLine2;
+
+    @Column(name = "city")
     private String city;
 
-    @Column(name = "State")
+    @Column(name = "state")
     private String state;
 
-    @Column(name = "Country")
+    @Column(name = "country")
     private String country;
 
-    @Column(name = "Zipcode")
+    @Column(name = "zipcode")
     private String zipCode;
 
 }
