@@ -71,8 +71,8 @@ public class UserPrincipal implements UserDetails {
         return this.user.getFirstname()+" "+this.user.getLastname();
     }
 
-//    public String getCompanyTitleForProfile(){
-//        return this.user.getCompany().getTitle();
-//    }
+    public String getCompanyTitleForProfile(){
+        return this.user.getCompany().getTitle();
+    }
 
 }
