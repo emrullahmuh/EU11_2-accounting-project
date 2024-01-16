@@ -7,7 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Data
-
 public class AddressDto {
 
     private Long id;
