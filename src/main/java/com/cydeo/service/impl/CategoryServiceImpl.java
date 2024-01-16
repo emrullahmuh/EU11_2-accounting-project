@@ -32,9 +32,43 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDto> listAllCategories() {
 
-        List<Category> categoryList = categoryRepository.findAll();
+        List<Category> categoryList = categoryRepository.findAllByIsDeleted(false);
         return categoryList.stream()
                 .map(category->mapperUtil.convert(category, new CategoryDto()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CategoryDto update(CategoryDto category) {
+
+        Optional<Category> category1=categoryRepository.findById(category.getId());
+
+        Category convertedCategory = mapperUtil.convert(category, new Category());
+
+        convertedCategory.setId(category1.get().getId());
+
+        categoryRepository.save(convertedCategory);
+
+        return getById(category.getId());
+    }
+
+    @Override
+    public void delete(Long id) {
+
+        Category category = categoryRepository.findByIdAndIsDeleted(id,false);
+
+        category.setIsDeleted(true);
+
+        categoryRepository.save(category);
+
+    }
+
+    @Override
+    public void save(CategoryDto category) {
+
+        Category category1 = mapperUtil.convert(category, new Category());
+
+        categoryRepository.save(category1);
+
     }
 }
