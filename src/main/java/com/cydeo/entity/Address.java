@@ -21,13 +21,13 @@ public class Address extends BaseEntity {
     private String addressLine2;
     private String city;
 
-    @Column(name = "State")
+    @Column(name = "state")
     private String state;
 
-    @Column(name = "Country")
+    @Column(name = "country")
     private String country;
 
-    @Column(name = "Zipcode")
+    @Column(name = "zipcode")
     private String zipCode;
 
 }
