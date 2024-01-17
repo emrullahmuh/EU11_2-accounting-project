@@ -85,17 +85,17 @@ insert into clients_vendors(insert_date_time, insert_user_id, is_deleted, last_u
 ('2022-09-15T00:00',3, false,'2022-09-15T00:00',3,'CLIENT', 'Key Tech', '+1 (652) 852-7896','https://www.keytech.com', 1, 3),
 ('2022-09-15T00:00',3, false,'2022-09-15T00:00',3,'VENDOR', 'Mod Tech', '+1 (652) 852-3648','https://www.modtech.com', 2, 3);
 
---
--- insert into categories(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
---                        description, company_id)
--- values
--- -- COMPANY-2 / Green Tech
--- ('2022-09-15 00:00:00', 2, false, '2022-09-15 00:00:00', 2, 'Computer', 2),
--- ('2022-09-15 00:00:00', 2, false, '2022-09-15 00:00:00', 2, 'Phone', 2),
--- -- COMPANY-3 / Blue Tech
--- ('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'Phone', 3),
--- ('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'TV', 3),
--- ('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'Monitor', 3);
+
+insert into categories(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
+                       description, company_id)
+values
+-- COMPANY-2 / Green Tech
+('2022-09-15 00:00:00', 2, false, '2022-09-15 00:00:00', 2, 'Computer', 2),
+('2022-09-15 00:00:00', 2, false, '2022-09-15 00:00:00', 2, 'Phone', 2),
+-- COMPANY-3 / Blue Tech
+('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'Phone', 3),
+('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'TV', 3),
+('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'Monitor', 3);
 --
 insert into products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                      name, quantity_in_stock, low_limit_alert, product_unit, category_id)
