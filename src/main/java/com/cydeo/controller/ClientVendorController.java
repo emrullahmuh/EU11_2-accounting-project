@@ -16,20 +16,21 @@ import java.util.List;
 public class ClientVendorController {
 
     private final ClientVendorService clientVendorService;
-
     public ClientVendorController(ClientVendorService clientVendorService) {
         this.clientVendorService = clientVendorService;
     }
 
     @GetMapping("/list")
     public String listClientVendor(Model model){
+
         List<ClientVendorDto> clientVendor = clientVendorService.listAllClientVendor();
         model.addAttribute("clientVendor",clientVendor);
         return "/clientVendor_list";
     }
 
     @GetMapping("/create")
-    public String ShowCreate(Model model){
+    public String showCreateVendor(Model model){
+
         model.addAttribute("newClientVendor", new ClientVendorDto());
         model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
 
@@ -37,16 +38,15 @@ public class ClientVendorController {
     }
 
     @PostMapping("/create")
-    public String EditCreate(@ModelAttribute("newClientVendor") ClientVendorDto clientVendor, Model model){
-        clientVendorService.save(clientVendor);
-        model.addAttribute("newClientVendor", new ClientVendorDto());
-        model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
+    public String editCreateVendor(@ModelAttribute("newClientVendor") ClientVendorDto newClientVendor){
 
-        return "/clientVendor_list";
+        clientVendorService.saveClientVendor(newClientVendor);
+
+        return "redirect:/clientVendor_list";
     }
 
     @GetMapping("/update/{id}")
-    public String ShowUpdateClientVendor(@PathVariable("id") Long id, Model model){
+    public String showUpdateClientVendor(@PathVariable("id") Long id, Model model){
 
         ClientVendorDto clientVendor=clientVendorService.findById(id);
         model.addAttribute("clientVendor", clientVendor);
@@ -63,7 +63,8 @@ public class ClientVendorController {
         return "redirect:/clientVendor_list";
     }
 
-    public String Delete(@PathVariable("id") Long id){
+    public String delete(@PathVariable("id") Long id){
+
         clientVendorService.delete(id);
         return  "redirect:/clientVendor_list";
     }

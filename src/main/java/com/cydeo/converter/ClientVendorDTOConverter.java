@@ -9,19 +9,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationPropertiesBinding
-public class ClientVendorDTOConverter implements Converter<Long, ClientVendorDto> {
+public class ClientVendorDTOConverter implements Converter<String, ClientVendorDto> {
 
     private final ClientVendorService clientVendorService;
-
-    public ClientVendorDTOConverter(@Lazy ClientVendorService clientVendorService) {
+    protected ClientVendorDTOConverter(@Lazy ClientVendorService clientVendorService) {
         this.clientVendorService = clientVendorService;
     }
 
     @Override
-    public ClientVendorDto convert(Long source) {
-        if (source == null || source.equals("")) {
-            return null;
-        }
-        return clientVendorService.findById(source);
+    public ClientVendorDto convert(String  source){
+
+        Long id = Long.valueOf(source);
+        return clientVendorService.findById(id);
     }
+
 }
