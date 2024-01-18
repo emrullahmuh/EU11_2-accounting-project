@@ -28,22 +28,4 @@ public class CompanyController {
 
     }
 
-    @GetMapping("/activate/{id}")
-    public String activateCompany(@PathVariable("id") Long companyId){
-
-        companyService.activateCompany(companyId);
-
-        return "redirect:/companies/list";
-
-    }
-
-    @GetMapping("/deactivate/{id}")
-    public String deactivateCompany(@PathVariable("id") Long companyId){
-
-        companyService.deactivateCompany(companyId);
-
-        return "redirect:/companies/list";
-
-    }
-
 }

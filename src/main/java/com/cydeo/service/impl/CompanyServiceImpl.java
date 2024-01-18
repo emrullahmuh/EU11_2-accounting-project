@@ -53,37 +53,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void activateCompany(Long companyId) {
-
-        Company companyToBeActivate = companyRepository.findById(companyId).get();
-        companyToBeActivate.setCompanyStatus(CompanyStatus.ACTIVE);
-
-        /*User user = userRepository.findByCompanyId(companyId);
-        if (userDetails.isAccountNonLocked() != true){          //Need more details. it gives error right now.
-            user.setEnabled(true);
-        }*/
-
-        companyRepository.save(companyToBeActivate);
-        //userRepository.save(user);
-    }
-
-    @Override
-    public void deactivateCompany(Long companyId) {
-
-        Company companyToBeDeactivate = companyRepository.findById(companyId).get();
-        companyToBeDeactivate.setCompanyStatus(CompanyStatus.PASSIVE);
-
-        /*User user = userRepository.findByCompanyId(companyId);
-
-        if (userDetails.isAccountNonLocked() == true){           //Need more details. It gives error.
-            user.setEnabled(false);
-        }*/
-
-        companyRepository.save(companyToBeDeactivate);
-        //userRepository.save(user);
-    }
-
-    @Override
     public CompanyDto findById(Long companyId) {
         Company company = companyRepository.findById(companyId).get();
         return mapperUtil.convert(company, new CompanyDto());

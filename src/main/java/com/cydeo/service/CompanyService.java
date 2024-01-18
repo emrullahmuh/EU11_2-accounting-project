@@ -9,10 +9,6 @@ public interface CompanyService {
 
     List<CompanyDto> listAllCompanies();
 
-    void activateCompany(Long companyId);
-
-    void deactivateCompany(Long companyId);
-
     CompanyDto findById(Long companyId);
 
 }
