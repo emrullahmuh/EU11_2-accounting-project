@@ -9,22 +9,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class CompanyDtoConverter implements Converter<String, CompanyDto> {
 
-    private final CompanyRepository companyRepository;
+    private final CompanyService companyService;
 
-    public CompanyDtoConverter(CompanyRepository companyRepository) {
-        this.companyRepository = companyRepository;
+    public CompanyDtoConverter(CompanyService companyService) {
+        this.companyService = companyService;
     }
 
     @Override
-    public CompanyDto convert(String source) {
+    public CompanyDto convert(String id) {
 
-        if (source == null || source.equals("")) {
+        if (id == null || id.equals("")) {
             return null;
         }
 
-        return companyRepository.findByTitle(source);
+        return companyService.findById(Long.parseLong(id));
 
     }
-
 
 }

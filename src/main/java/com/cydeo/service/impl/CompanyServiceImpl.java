@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -52,32 +53,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void createCompany(CompanyDto newCompany) {
-
-        newCompany.setCompanyStatus(CompanyStatus.PASSIVE);
-
-        companyRepository.save(mapperUtil.convert(newCompany,new Company()));
-
-    }
-
-    @Override
-    public CompanyDto updateCompany(CompanyDto companyDto) {
-
-        Optional<Company> oldCompany = companyRepository.findById(companyDto.getId());
-
-        if (oldCompany.isPresent()) {
-            CompanyStatus oldCompanyStatus = oldCompany.get().getCompanyStatus();
-            companyDto.setCompanyStatus(oldCompanyStatus);
-            Company savedCompany = companyRepository.save(mapperUtil.convert(companyDto, new Company()));
-
-            return mapperUtil.convert(savedCompany, companyDto);
-        }
-
-        return null;
-
-    }
-
-    @Override
     public void activateCompany(Long companyId) {
 
         Company companyToBeActivate = companyRepository.findById(companyId).get();
@@ -106,6 +81,12 @@ public class CompanyServiceImpl implements CompanyService {
 
         companyRepository.save(companyToBeDeactivate);
         //userRepository.save(user);
+    }
+
+    @Override
+    public CompanyDto findById(Long companyId) {
+        Company company = companyRepository.findById(companyId).get();
+        return mapperUtil.convert(company, new CompanyDto());
     }
 
 }
