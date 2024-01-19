@@ -1,0 +1,28 @@
+package com.cydeo.fintracker.converter;
+
+import com.cydeo.fintracker.dto.UserDto;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
+
+@Component
+//@ConfigurationPropertiesBinding
+public class UserDtoConverter implements Converter<String, UserDto> {
+
+//    UserService userService;
+//
+//    public UserDtoConverter(UserService userService) {
+//        this.userService = userService;
+//    }
+
+    @Override
+    public UserDto convert(String source) {
+
+        if (source == null || source.equals("")) {
+            return null;
+        }
+return null;
+//        return userService.findById(Long.parseLong(source));
+
+    }
+
+}
