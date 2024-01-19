@@ -11,30 +11,36 @@ import java.time.LocalDateTime;
 public class BaseEntityListener extends AuditingEntityListener {
 
     @PrePersist
-    private void onPrePersist(BaseEntity baseEntity){
+    private void onPrePersist(BaseEntity baseEntity) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        baseEntity.setInsertDateTime(LocalDateTime.now());
-        baseEntity.setLastUpdateDateTime(LocalDateTime.now());
+        baseEntity.insertDateTime = LocalDateTime.now();
+        baseEntity.lastUpdateDateTime = LocalDateTime.now();
 
-        if(authentication != null && !authentication.getName().equals("anonymousUser")){
-            Object principal = authentication.getPrincipal();
-            baseEntity.setInsertUserId(((UserPrincipal) principal).getId());
-            baseEntity.setLastUpdateUserId( ((UserPrincipal) principal).getId());
+        if (authentication != null && !authentication.getPrincipal().equals("anonymous")) {
+            UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+            baseEntity.insertUserId = principal.getId();
+            baseEntity.lastUpdateUserId = principal.getId();
+        } else {
+            baseEntity.insertUserId = -1L;
+            baseEntity.lastUpdateUserId = -1L;
         }
     }
 
     @PreUpdate
-    private void onPreUpdate(BaseEntity baseEntity){
+    private void onPreUpdate(BaseEntity baseEntity) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        baseEntity.setLastUpdateDateTime(LocalDateTime.now());
+        baseEntity.lastUpdateDateTime = LocalDateTime.now();
 
-        if(authentication != null && !authentication.getName().equals("anonymousUser")){
-            Object principal = authentication.getPrincipal();
-            baseEntity.setLastUpdateUserId( ((UserPrincipal) principal).getId());
+        if (authentication != null && !authentication.getPrincipal().equals("anonymous")) {
+            UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+            baseEntity.lastUpdateUserId = principal.getId();
+        } else {
+            baseEntity.insertUserId = -1L;
+            baseEntity.lastUpdateUserId = -1L;
         }
     }
 }

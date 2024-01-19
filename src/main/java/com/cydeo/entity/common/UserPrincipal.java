@@ -67,12 +67,20 @@ public class UserPrincipal implements UserDetails {
         return this.user.getId();
     }
 
-    public String getFullNameForProfile(){
-        return this.user.getFirstname()+" "+this.user.getLastname();
+    /**
+     * to show logged-in user firstname and lastname in UI dropdown menu
+     */
+    public String getFullNameForProfile() {
+        return this.user.getFirstname() + " " + this.user.getLastname();
     }
 
-    public String getCompanyTitleForProfile(){
-        return this.user.getCompany().getTitle();
+    /**
+     * This method is defined to show logged-in user's company title for simplicity
+     *
+     * @return The title of logged-in user's Company in String
+     */
+    public String getCompanyTitleForProfile() {
+        return this.user.getCompany().getTitle().toUpperCase();
     }
 
 }
