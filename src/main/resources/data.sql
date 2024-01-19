@@ -1,9 +1,9 @@
 insert into roles(insert_date_time, insert_user_id, is_deleted, last_update_date_time,
-                last_update_user_id, description)
+                  last_update_user_id, description)
 values ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Root User'),
-     ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Admin'),
-      ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Manager'),
-      ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Employee');
+       ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Admin'),
+       ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Manager'),
+       ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Employee');
 
 insert into addresses(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                       address_line1, address_line2, city, state, country, zip_code)
@@ -34,7 +34,7 @@ values ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
         'Blue Tech','+1 (215) 654-5268', 'https://www.bluetech.com', 3, 'ACTIVE'),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
         'Red Tech','+1 (215) 846-2642', 'https://www.redtech.com', 4, 'PASSIVE');
-        
+
 insert into users(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                   username, password, firstname, lastname, phone, role_id, company_id, enabled)
 values
@@ -72,9 +72,9 @@ values
  'John', 'Doe', '+1 (659) 756-1265', 2, 4, true);
 
 insert into clients_vendors(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
-                             client_vendor_type, client_vendor_name, phone, website, address_id, company_id)
- values
---COMPANY-2 / Green Tech
+                            client_vendor_type, client_vendor_name, phone, website, address_id, company_id)
+values
+-- COMPANY-2 / Green Tech
 ('2022-09-15T00:00',2, false,'2022-09-15T00:00',2,'CLIENT','Orange Tech', '+1 (251) 321-4155', 'https://www.orange.com', 5, 2),
 ('2022-09-15T00:00',2, false,'2022-09-15T00:00',2,'CLIENT','Ower Tech', '+1 (251) 321-4141', 'https://www.ower.com', 8, 2),
 ('2022-09-15T00:00',2, false,'2022-09-15T00:00',2,'VENDOR','Photobug Tech', '+1 (652) 852-3246', 'https://www.photobug.com', 6, 2),
@@ -96,16 +96,16 @@ values
 ('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'Phone', 3),
 ('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'TV', 3),
 ('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'Monitor', 3);
---
+
 insert into products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                      name, quantity_in_stock, low_limit_alert, product_unit, category_id)
  VALUES
-    COMPANY-2 / Green Tech
+--     COMPANY-2 / Green Tech
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'HP Elite 800G1 Desktop Computer Package', 8, 5,'PCS', 1),
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, '2021 Apple MacBook Pro', 0, 5,'PCS', 1),
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'Apple iPhone-13', 0, 5,'PCS', 2),
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'SAMSUNG Galaxy S22',0, 5,'PCS', 2),
-    COMPANY-3 / Blue Tech
+--     COMPANY-3 / Blue Tech
     ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S20 (renewed)', 30, 5, 'PCS', 3),
     ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S22', 20, 5, 'PCS', 3),
     ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Moto G Power', 0, 5, 'PCS', 3);
@@ -152,3 +152,4 @@ values
 ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 5, 0, 10, 0, 10, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 24420 & profit (with tax) : 5280+1540=6820
 ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 2, 0, 10, 0, 11, 6),    --sale AWAITING_APPROVAL after approval total sale (with tax) : 27060 & profit (with tax) : 6820+440=7260
 ('2022-12-15 00:00', 3, 'false', '2022-12-15 00:00', 3, 600, 4, 0, 10, 0, 13, 7);    --purchase AWAITING_APPROVAL
+
