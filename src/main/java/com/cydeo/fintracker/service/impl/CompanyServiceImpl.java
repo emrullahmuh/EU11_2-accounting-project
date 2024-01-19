@@ -1,11 +1,13 @@
-package com.cydeo.service.impl;
+package com.cydeo.fintracker.service.impl;
 
-import com.cydeo.dto.CompanyDto;
-import com.cydeo.entity.Company;
-import com.cydeo.enums.CompanyStatus;
-import com.cydeo.repository.CompanyRepository;
-import com.cydeo.service.CompanyService;
-import com.cydeo.util.MapperUtil;
+
+import com.cydeo.fintracker.dto.CompanyDto;
+import com.cydeo.fintracker.entity.Company;
+import com.cydeo.fintracker.enums.CompanyStatus;
+import com.cydeo.fintracker.repository.CompanyRepository;
+import com.cydeo.fintracker.service.CompanyService;
+
+import com.cydeo.fintracker.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

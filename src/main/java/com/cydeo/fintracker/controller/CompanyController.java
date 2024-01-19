@@ -1,7 +1,8 @@
-package com.cydeo.controller;
+package com.cydeo.fintracker.controller;
 
-import com.cydeo.dto.CompanyDto;
-import com.cydeo.service.CompanyService;
+
+import com.cydeo.fintracker.dto.CompanyDto;
+import com.cydeo.fintracker.service.CompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,7 +41,7 @@ public class CompanyController {
 
         companyService.createCompany(newCompany);
 
-        return "redirect:/company/list";
+        return "redirect:/companies/list";
 
     }
 

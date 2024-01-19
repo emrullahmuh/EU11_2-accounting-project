@@ -1,7 +1,8 @@
-package com.cydeo.converter;
+package com.cydeo.fintracker.converter;
 
-import com.cydeo.dto.CompanyDto;
-import com.cydeo.service.CompanyService;
+
+import com.cydeo.fintracker.dto.CompanyDto;
+import com.cydeo.fintracker.service.CompanyService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
