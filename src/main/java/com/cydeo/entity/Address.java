@@ -21,6 +21,7 @@ public class Address extends BaseEntity {
     private String addressLine1;
 
     @Column(name = "address_line2")
+
     private String addressLine2;
 
     @Column(name = "city")
@@ -32,7 +33,6 @@ public class Address extends BaseEntity {
     @Column(name = "country")
     private String country;
 
-    @Column(name = "zip_code")
     private String zipCode;
 
 }
