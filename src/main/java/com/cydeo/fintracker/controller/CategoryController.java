@@ -1,14 +1,10 @@
-package com.cydeo.controller;
+package com.cydeo.fintracker.controller;
 
-import com.cydeo.dto.CategoryDto;
-
-import com.cydeo.exception.CategoryNotFoundException;
-import com.cydeo.service.CategoryService;
-
+import com.cydeo.fintracker.dto.CategoryDto;
+import com.cydeo.fintracker.exception.CategoryNotFoundException;
+import com.cydeo.fintracker.service.CategoryService;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.ui.Model;
-
 import org.springframework.web.bind.annotation.*;
 
 @Controller

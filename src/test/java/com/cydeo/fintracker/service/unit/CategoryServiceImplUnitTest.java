@@ -1,14 +1,11 @@
-package com.cydeo.my_accounting_project.service.unit;
+package com.cydeo.fintracker.service.unit;
 
-import com.cydeo.dto.CategoryDto;
-import com.cydeo.entity.Category;
-import com.cydeo.entity.Company;
-import com.cydeo.exception.CategoryNotFoundException;
-import com.cydeo.repository.CategoryRepository;
-import com.cydeo.service.impl.CategoryServiceImpl;
-import com.cydeo.util.MapperUtil;
-import net.bytebuddy.matcher.ElementMatcher;
-import org.checkerframework.checker.units.qual.C;
+import com.cydeo.fintracker.dto.CategoryDto;
+import com.cydeo.fintracker.entity.Category;
+import com.cydeo.fintracker.exception.CategoryNotFoundException;
+import com.cydeo.fintracker.repository.CategoryRepository;
+import com.cydeo.fintracker.service.impl.CategoryServiceImpl;
+import com.cydeo.fintracker.util.MapperUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,12 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static net.bytebuddy.matcher.ElementMatchers.any;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

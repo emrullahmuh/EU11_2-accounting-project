@@ -1,4 +1,4 @@
-package com.cydeo.exception;
+package com.cydeo.fintracker.exception;
 
 public class CategoryNotFoundException extends Exception{
 

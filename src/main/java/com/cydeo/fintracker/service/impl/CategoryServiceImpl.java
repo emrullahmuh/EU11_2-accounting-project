@@ -1,21 +1,14 @@
-package com.cydeo.service.impl;
+package com.cydeo.fintracker.service.impl;
 
-import com.cydeo.dto.CategoryDto;
-
-import com.cydeo.entity.Category;
-
-import com.cydeo.exception.CategoryNotFoundException;
-
-import com.cydeo.repository.CategoryRepository;
-
-import com.cydeo.service.CategoryService;
-
-import com.cydeo.util.MapperUtil;
-
+import com.cydeo.fintracker.dto.CategoryDto;
+import com.cydeo.fintracker.entity.Category;
+import com.cydeo.fintracker.exception.CategoryNotFoundException;
+import com.cydeo.fintracker.repository.CategoryRepository;
+import com.cydeo.fintracker.service.CategoryService;
+import com.cydeo.fintracker.util.MapperUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 import java.util.stream.Collectors;
 
 @Service
@@ -47,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto update(CategoryDto category) throws CategoryNotFoundException {
+    public void update(CategoryDto category) throws CategoryNotFoundException {
 
         Category category1=categoryRepository.findByIdAndIsDeleted(category.getId(),false)
                 .orElseThrow(()->new CategoryNotFoundException("Category Not Found"));
@@ -58,7 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryRepository.save(convertedCategory);
 
-        return getById(category.getId());
+
     }
 
     @Override

@@ -1,8 +1,8 @@
-package com.cydeo.converter;
+package com.cydeo.fintracker.converter;
 
-import com.cydeo.dto.CategoryDto;
-import com.cydeo.exception.CategoryNotFoundException;
-import com.cydeo.service.CategoryService;
+import com.cydeo.fintracker.dto.CategoryDto;
+import com.cydeo.fintracker.exception.CategoryNotFoundException;
+import com.cydeo.fintracker.service.CategoryService;
 import org.springframework.core.convert.converter.Converter;
 
 public class CategoryDTOConverter implements Converter<Long, CategoryDto> {
