@@ -1,7 +1,8 @@
-package com.cydeo.converter;
+package com.cydeo.fintracker.converter;
 
-import com.cydeo.dto.ClientVendorDto;
-import com.cydeo.service.ClientVendorService;
+
+import com.cydeo.fintracker.dto.ClientVendorDto;
+import com.cydeo.fintracker.service.ClientVendorService;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;

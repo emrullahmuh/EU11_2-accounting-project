@@ -1,6 +1,7 @@
-package com.cydeo.repository;
+package com.cydeo.fintracker.repository;
 
-import com.cydeo.entity.ClientVendor;
+
+import com.cydeo.fintracker.entity.ClientVendor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

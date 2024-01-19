@@ -1,14 +1,16 @@
-package com.cydeo.service.impl;
+package com.cydeo.fintracker.service.impl;
 
-import com.cydeo.dto.ClientVendorDto;
-import com.cydeo.dto.CompanyDto;
-import com.cydeo.dto.UserDto;
-import com.cydeo.entity.ClientVendor;
-import com.cydeo.entity.Company;
-import com.cydeo.repository.ClientVendorRepository;
-import com.cydeo.service.ClientVendorService;
-import com.cydeo.service.SecurityService;
-import com.cydeo.util.MapperUtil;
+
+import com.cydeo.fintracker.dto.ClientVendorDto;
+import com.cydeo.fintracker.dto.CompanyDto;
+import com.cydeo.fintracker.dto.UserDto;
+import com.cydeo.fintracker.entity.ClientVendor;
+import com.cydeo.fintracker.entity.Company;
+import com.cydeo.fintracker.repository.ClientVendorRepository;
+import com.cydeo.fintracker.service.ClientVendorService;
+
+import com.cydeo.fintracker.service.SecurityService;
+import com.cydeo.fintracker.util.MapperUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
