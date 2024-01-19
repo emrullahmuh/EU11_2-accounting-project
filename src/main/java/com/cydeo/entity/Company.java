@@ -23,12 +23,12 @@ public class Company extends BaseEntity {
     @Column(name = "website")
     private String website;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "company_status")
-    private CompanyStatus companyStatus;
-
     @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "company_status")
+    private CompanyStatus companyStatus;
 
 }

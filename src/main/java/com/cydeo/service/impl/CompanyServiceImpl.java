@@ -6,52 +6,58 @@ import com.cydeo.enums.CompanyStatus;
 import com.cydeo.repository.CompanyRepository;
 import com.cydeo.service.CompanyService;
 import com.cydeo.util.MapperUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class CompanyServiceImpl implements CompanyService {
 
     private final MapperUtil mapperUtil;
     private final CompanyRepository companyRepository;
 
-    public CompanyServiceImpl(MapperUtil mapperUtil, CompanyRepository companyRepository) {
-        this.mapperUtil = mapperUtil;
-        this.companyRepository = companyRepository;
-    }
-
     @Override
     public CompanyDto findById(Long companyId) {
 
-        Company company = companyRepository.findById(companyId).get();
-        return mapperUtil.convert(company, new CompanyDto());
+        Optional company = companyRepository.findById(companyId);
+        CompanyDto companyResponse = mapperUtil.convert(company, new CompanyDto());
+        log.info("Company found by id: '{}', '{}'", companyId, companyResponse);
+
+        return companyResponse;
 
     }
 
     @Override
-    public List<CompanyDto> getCompanyList() {
+    public List<CompanyDto> getCompanies() {
 
-        List<Company> companies = companyRepository.getCompanyList();
+        List<Company> companies = companyRepository.getCompanies();
 
-        if (companies.size() !=0){
+        if (!companies.isEmpty()) {
             return companies.stream()
-                    .map(company -> mapperUtil.convert(company,new CompanyDto()))
+                    .map(company -> mapperUtil.convert(company, new CompanyDto()))
                     .collect(Collectors.toList());
         }
-        return null;
+        return Collections.singletonList(mapperUtil.convert(companies, new CompanyDto()));
 
     }
 
     @Override
-    public void createCompany(CompanyDto newCompany) {
+    public CompanyDto createCompany(CompanyDto newCompany) {
 
         newCompany.setCompanyStatus(CompanyStatus.PASSIVE);
 
-        companyRepository.save(mapperUtil.convert(newCompany,new Company()));
+        Company companyToBeSave = companyRepository.save(mapperUtil.convert(newCompany, new Company()));
+        log.info("Company saved with title: '{}'", companyToBeSave.getTitle());
+
+        CompanyDto createdCompany = mapperUtil.convert(companyToBeSave, new CompanyDto());
+        log.info("Company created with title: '{}'", createdCompany.getTitle());
+
+        return createdCompany;
 
     }
 
@@ -60,15 +66,21 @@ public class CompanyServiceImpl implements CompanyService {
 
         Optional<Company> oldCompany = companyRepository.findById(companyDto.getId());
 
-        if (oldCompany.isPresent()) {
-            CompanyStatus oldCompanyStatus = oldCompany.get().getCompanyStatus();
-            companyDto.setCompanyStatus(oldCompanyStatus);
-            Company savedCompany = companyRepository.save(mapperUtil.convert(companyDto, new Company()));
-
-            return mapperUtil.convert(savedCompany, companyDto);
+        if (oldCompany.isEmpty()) {
+            throw new NoSuchElementException("Company not exist with title: " + companyDto.getTitle());
         }
 
-        return null;
+        Company company = oldCompany.get();
+        log.info("Company data will be updated : '{}'", company);
+
+        CompanyStatus oldCompanyStatus = company.getCompanyStatus();
+        companyDto.setCompanyStatus(oldCompanyStatus);
+        Company savedCompany = companyRepository.save(mapperUtil.convert(companyDto, new Company()));
+
+        CompanyDto updatedCompany = mapperUtil.convert(savedCompany, companyDto);
+        log.info("Company updated for company '{}', '{}': ", updatedCompany.getTitle(), updatedCompany);
+
+        return updatedCompany;
 
     }
 
@@ -76,9 +88,12 @@ public class CompanyServiceImpl implements CompanyService {
     public void activateCompany(Long companyId) {
 
         Company companyToBeActivate = companyRepository.findById(companyId).get();
+
         companyToBeActivate.setCompanyStatus(CompanyStatus.ACTIVE);
+        log.info("Company status has changed to 'Activated' : '{}'", companyToBeActivate);
 
         companyRepository.save(companyToBeActivate);
+        log.info("Company status has changed: '{}'", companyToBeActivate.getCompanyStatus());
 
     }
 
@@ -86,9 +101,13 @@ public class CompanyServiceImpl implements CompanyService {
     public void deactivateCompany(Long companyId) {
 
         Company companyToBeDeactivate = companyRepository.findById(companyId).get();
+
         companyToBeDeactivate.setCompanyStatus(CompanyStatus.PASSIVE);
+        log.info("Company status has changed to 'Deactivated' : '{}'", companyToBeDeactivate);
 
         companyRepository.save(companyToBeDeactivate);
+        log.info("Company status has changed: '{}'", companyToBeDeactivate.getCompanyStatus());
+
     }
 
 }

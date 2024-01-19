@@ -8,9 +8,9 @@ public interface CompanyService {
 
     CompanyDto findById(Long companyId);
 
-    List<CompanyDto> getCompanyList();
+    List<CompanyDto> getCompanies();
 
-    void createCompany(CompanyDto newCompany);
+    CompanyDto createCompany(CompanyDto newCompany);
 
     CompanyDto updateCompany(CompanyDto companyDto);
 

@@ -14,6 +14,6 @@ public interface CompanyRepository extends JpaRepository<Company,Long> {
     Optional<Company> findById(Long companyId);
 
     @Query("select c from Company c")
-    List<Company> getCompanyList();
+    List<Company> getCompanies();
 
 }
