@@ -1,13 +1,8 @@
-package com.cydeo.controller;
-
-import com.cydeo.dto.CompanyDto;
-import com.cydeo.repository.CompanyRepository;
-import com.cydeo.service.CompanyService;
+package com.cydeo.fintracker.controller;
+import com.cydeo.fintracker.service.CompanyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/companies")
@@ -24,7 +19,7 @@ public class CompanyController {
 
         model.addAttribute("companies", companyService.listAllCompanies());
 
-        return "/company/company-list";
+        return "company/company-list";
 
     }
 
