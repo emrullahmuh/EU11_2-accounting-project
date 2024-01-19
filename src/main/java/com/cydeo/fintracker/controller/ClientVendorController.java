@@ -1,9 +1,9 @@
-package com.cydeo.controller;
+package com.cydeo.fintracker.controller;
 
-import com.cydeo.dto.ClientVendorDto;
-import com.cydeo.enums.ClientVendorType;
-import com.cydeo.service.ClientVendorService;
-import lombok.RequiredArgsConstructor;
+
+import com.cydeo.fintracker.dto.ClientVendorDto;
+import com.cydeo.fintracker.enums.ClientVendorType;
+import com.cydeo.fintracker.service.ClientVendorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

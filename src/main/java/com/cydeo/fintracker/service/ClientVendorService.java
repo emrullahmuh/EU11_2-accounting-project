@@ -1,7 +1,8 @@
-package com.cydeo.service;
+package com.cydeo.fintracker.service;
 
-import com.cydeo.dto.ClientVendorDto;
-import com.cydeo.dto.CompanyDto;
+
+
+import com.cydeo.fintracker.dto.ClientVendorDto;
 
 import java.util.List;
 
