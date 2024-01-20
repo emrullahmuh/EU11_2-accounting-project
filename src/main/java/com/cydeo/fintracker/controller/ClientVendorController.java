@@ -6,6 +6,7 @@ import com.cydeo.fintracker.enums.ClientVendorType;
 import com.cydeo.fintracker.service.ClientVendorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -38,7 +39,12 @@ public class ClientVendorController {
     }
 
     @PostMapping("/create")
-    public String editCreateVendor(@ModelAttribute("newClientVendor") ClientVendorDto newClientVendor){
+    public String editCreateVendor(@ModelAttribute("newClientVendor") ClientVendorDto newClientVendor, BindingResult bindingResult, Model model){
+
+        if (bindingResult.hasFieldErrors()){
+            model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
+            return "clientVendor/clientVendor-create";
+        }
 
         clientVendorService.saveClientVendor(newClientVendor);
 
@@ -56,7 +62,12 @@ public class ClientVendorController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateClientVendor(@PathVariable("id") Long id, @ModelAttribute("clientVendor") ClientVendorDto clientVendor){
+    public String updateClientVendor(@PathVariable("id") Long id, @ModelAttribute("clientVendor") ClientVendorDto clientVendor,BindingResult bindingResult, Model model){
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
+            return "clientVendor/clientVendor-update";
+        }
 
         clientVendorService.update(id,clientVendor);
 
