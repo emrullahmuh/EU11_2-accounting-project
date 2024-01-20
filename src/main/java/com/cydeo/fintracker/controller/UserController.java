@@ -82,7 +82,7 @@ public class UserController {
     public String updateUser( @ModelAttribute("user") UserDto user, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
-//TODO What is the puropse of bindingResult research. And why we did not add the user here like above.
+
             model.addAttribute("userRoles", roleService.listAllRoles());
             model.addAttribute("companies", companyService.getCompanies());
 
