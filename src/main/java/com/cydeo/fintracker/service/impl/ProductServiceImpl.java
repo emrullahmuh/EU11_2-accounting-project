@@ -1,0 +1,64 @@
+package com.cydeo.fintracker.service.impl;
+
+import com.cydeo.fintracker.dto.ProductDto;
+import com.cydeo.fintracker.entity.Product;
+import com.cydeo.fintracker.repository.ProductRepository;
+import com.cydeo.fintracker.service.ProductService;
+import com.cydeo.fintracker.util.MapperUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class ProductServiceImpl implements ProductService {
+
+    private final MapperUtil mapperUtil;
+    private final ProductRepository productRepository;
+
+
+
+    @Override
+    public List<ProductDto> getProducts() {
+
+        List<Product> products= productRepository.findAll();
+        return products.stream()
+                .map(product -> mapperUtil.convert(product, new ProductDto()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductDto updateProduct(ProductDto productDto) {
+
+        Optional<Product> oldProduct= productRepository.findById(productDto.getId());
+
+        Product product=oldProduct.get();
+
+        Product newProduct= productRepository.save(mapperUtil.convert(productDto, new Product()));
+
+        ProductDto updatedProduct=mapperUtil.convert(newProduct,productDto);
+
+        return updatedProduct;
+    }
+
+    @Override
+    public Optional<Product> findById(Long id) {
+
+        return productRepository.findById(id);
+    }
+
+    @Override
+    public void delete(Long id) {
+
+        productRepository.deleteProductById(id);
+
+    }
+
+    @Override
+    public List<Product> getProductsByCompanyId(Long companyId) {
+        return productRepository.getProductsById(companyId);
+    }
+}
