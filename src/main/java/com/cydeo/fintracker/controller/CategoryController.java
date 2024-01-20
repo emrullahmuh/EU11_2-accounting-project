@@ -26,7 +26,7 @@ public class CategoryController {
     }
 
     @GetMapping("/update/{id}")
-    public String editCategory(@PathVariable("id") Long id, Model model) throws CategoryNotFoundException {
+    public String editCategory(@PathVariable("id") Long id, Model model)  {
 
         model.addAttribute("category", categoryService.getById(id));
 
@@ -35,7 +35,7 @@ public class CategoryController {
     }
 
     @PostMapping("/update")
-    public String updateCategory(@ModelAttribute("category") CategoryDto category) throws CategoryNotFoundException {
+    public String updateCategory(@ModelAttribute("category") CategoryDto category)  {
 
         categoryService.update(category);
 
@@ -43,7 +43,7 @@ public class CategoryController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteCategory(@PathVariable("id") Long id) throws CategoryNotFoundException {
+    public String deleteCategory(@PathVariable("id") Long id)  {
 
         categoryService.delete(id);
 

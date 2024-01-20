@@ -23,7 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto getById(Long id) throws CategoryNotFoundException {
+    public CategoryDto getById(Long id)  {
 
        Category category = categoryRepository.findByIdAndIsDeleted(id,false)
                .orElseThrow(()-> new CategoryNotFoundException("Category Not Found"));
@@ -40,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void update(CategoryDto category) throws CategoryNotFoundException {
+    public void update(CategoryDto category)  {
 
         Category category1=categoryRepository.findByIdAndIsDeleted(category.getId(),false)
                 .orElseThrow(()->new CategoryNotFoundException("Category Not Found"));
@@ -55,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void delete(Long id) throws CategoryNotFoundException {
+    public void delete(Long id)  {
 
         Category category = categoryRepository.findByIdAndIsDeleted(id,false)
                 .orElseThrow(()->new CategoryNotFoundException("Category Not Found"));

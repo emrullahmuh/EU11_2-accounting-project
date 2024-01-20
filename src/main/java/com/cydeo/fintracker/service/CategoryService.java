@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface CategoryService {
 
-    CategoryDto getById(Long id) throws CategoryNotFoundException;
+    CategoryDto getById(Long id) ;
     List<CategoryDto> listAllCategories();
-    void update(CategoryDto category) throws CategoryNotFoundException;
-    void delete(Long id) throws CategoryNotFoundException;
+    void update(CategoryDto category) ;
+    void delete(Long id) ;
     void save(CategoryDto category);
 
 
