@@ -6,12 +6,15 @@ import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.repository.CategoryRepository;
 import com.cydeo.fintracker.service.CategoryService;
 import com.cydeo.fintracker.util.MapperUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -27,7 +30,12 @@ public class CategoryServiceImpl implements CategoryService {
 
        Category category = categoryRepository.findByIdAndIsDeleted(id,false)
                .orElseThrow(()-> new CategoryNotFoundException("Category Not Found"));
-        return mapperUtil.convert(category, new CategoryDto()) ;
+
+       CategoryDto categoryResponse = mapperUtil.convert(category, new CategoryDto()) ;
+
+       log.info("Category found by id: '{}', '{}'", id, categoryResponse);
+
+       return categoryResponse;
     }
 
     @Override
@@ -40,16 +48,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void update(CategoryDto category)  {
+    public CategoryDto update(CategoryDto category)  {
 
-        Category category1=categoryRepository.findByIdAndIsDeleted(category.getId(),false)
+        Category storedCategory = categoryRepository.findByIdAndIsDeleted(category.getId(),false)
                 .orElseThrow(()->new CategoryNotFoundException("Category Not Found"));
 
         Category convertedCategory = mapperUtil.convert(category, new Category());
 
-        convertedCategory.setId(category1.getId());
+        convertedCategory.setId(storedCategory.getId());
 
         categoryRepository.save(convertedCategory);
+        log.info("Category is updated '{}', '{}'", convertedCategory.getDescription(), convertedCategory);
+
+        return getById(category.getId());
 
 
     }
@@ -65,16 +76,23 @@ public class CategoryServiceImpl implements CategoryService {
             category.setIsDeleted(true);
 
             categoryRepository.save(category);
+            log.info("Category is deleted '{}', '{}'", category.getDescription(), category);
         }
     }
 
     @Override
-    public void save(CategoryDto category) {
+    public CategoryDto save(CategoryDto category) {
 
-        Category category1 = mapperUtil.convert(category, new Category());
+        Category convertedCategory = mapperUtil.convert(category, new Category());
 
-        categoryRepository.save(category1);
+        categoryRepository.save(convertedCategory);
+        log.info("Category is saved with description: '{}'", convertedCategory.getDescription());
 
+        CategoryDto createdCategory = mapperUtil.convert(convertedCategory, new CategoryDto());
+        log.info("Category is created: '{}'", createdCategory.getDescription());
+
+
+        return createdCategory;
     }
 
     private boolean checkIfCategoryCanBeDeleted(Category category){
