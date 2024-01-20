@@ -7,9 +7,9 @@
 <div class="splash-container">
     <div class="card">
         <div class="card-header text-center">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                 style="width: 200px; color: mediumblue; padding: 20px 30px" alt="logo">
-            <h2>ACCOUNTING</h2>
+            <img th:src="@{/images/fin-tracker-logo.webp}"
+                 style="width: 300px; color: mediumblue; padding: 20px 30px" alt="logo">
+            <h2>FIN TRACKER</h2>
         </div>
         <div class="card-body">
             <form th:action="@{/login}" method="post">

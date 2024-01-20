@@ -1,6 +1,5 @@
 package com.cydeo.fintracker.dto;
 
-
 import com.cydeo.fintracker.enums.ClientVendorType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

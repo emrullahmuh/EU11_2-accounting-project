@@ -1,4 +1,4 @@
-package com.cydeo;
+package com.cydeo.fintracker;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
@@ -20,7 +20,7 @@ public class FinTrackerApplication {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 

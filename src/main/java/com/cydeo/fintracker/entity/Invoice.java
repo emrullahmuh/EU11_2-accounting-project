@@ -1,17 +1,12 @@
 package com.cydeo.fintracker.entity;
 
-
 import com.cydeo.fintracker.entity.common.BaseEntity;
 import com.cydeo.fintracker.enums.InvoiceStatus;
 import com.cydeo.fintracker.enums.InvoiceType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

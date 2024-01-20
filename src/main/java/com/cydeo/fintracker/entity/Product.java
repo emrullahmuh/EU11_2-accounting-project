@@ -1,11 +1,11 @@
 package com.cydeo.fintracker.entity;
 
-
 import com.cydeo.fintracker.entity.common.BaseEntity;
 import com.cydeo.fintracker.enums.ProductUnit;
 import lombok.*;
 
 import javax.persistence.*;
+
 
 @Getter
 @Setter

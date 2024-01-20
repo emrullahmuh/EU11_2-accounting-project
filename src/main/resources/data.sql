@@ -70,7 +70,7 @@ values
 ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
  'admin@redtech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
  'John', 'Doe', '+1 (659) 756-1265', 2, 4, true);
---
+
 insert into clients_vendors(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                             client_vendor_type, client_vendor_name, phone, website, address_id, company_id)
 values
@@ -100,12 +100,12 @@ values
 insert into products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                      name, quantity_in_stock, low_limit_alert, product_unit, category_id)
  VALUES
--- COMPANY-2 / Green Tech
+--     COMPANY-2 / Green Tech
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'HP Elite 800G1 Desktop Computer Package', 8, 5,'PCS', 1),
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, '2021 Apple MacBook Pro', 0, 5,'PCS', 1),
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'Apple iPhone-13', 0, 5,'PCS', 2),
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'SAMSUNG Galaxy S22',0, 5,'PCS', 2),
--- COMPANY-3 / Blue Tech
+--     COMPANY-3 / Blue Tech
     ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S20 (renewed)', 30, 5, 'PCS', 3),
     ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S22', 20, 5, 'PCS', 3),
     ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Moto G Power', 0, 5, 'PCS', 3);
@@ -130,7 +130,7 @@ values
 ('2022-11-20 00:00', 3, 'false', '2022-11-20 00:00', 3, '2022-11-20', 'S-004', 'SALES', 'AWAITING_APPROVAL', 6, 3),
 ('2022-11-21 00:00', 3, 'false', '2022-11-21 00:00', 3, '2022-11-21', 'S-005', 'SALES', 'AWAITING_APPROVAL', 6, 3),
 ('2022-12-15 00:00', 3, 'false', '2022-12-15 00:00', 3, '2022-12-15', 'P-003', 'PURCHASE', 'AWAITING_APPROVAL', 6, 3);
---
+
 insert into invoice_products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                              price,quantity, remaining_quantity, tax, profit_loss, invoice_id, product_id)
 values

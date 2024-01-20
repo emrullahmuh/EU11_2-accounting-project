@@ -1,7 +1,5 @@
 package com.cydeo.fintracker.entity;
 
-
-
 import com.cydeo.fintracker.entity.common.BaseEntity;
 import com.cydeo.fintracker.enums.ClientVendorType;
 import lombok.AllArgsConstructor;
@@ -27,7 +25,7 @@ public class ClientVendor extends BaseEntity {
     private ClientVendorType clientVendorType;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @JoinColumn(name = "address_id")
     private Address address;
 
     @ManyToOne

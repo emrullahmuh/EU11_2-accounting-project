@@ -1,12 +1,8 @@
 package com.cydeo.fintracker.entity;
 
-
 import com.cydeo.fintracker.entity.common.BaseEntity;
 import com.cydeo.fintracker.enums.CompanyStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -27,12 +23,12 @@ public class Company extends BaseEntity {
     @Column(name = "website")
     private String website;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "company_status")
     private CompanyStatus companyStatus;
-
-    @OneToOne
-    @JoinColumn(name = "address_id")
-    private Address address;
 
 }

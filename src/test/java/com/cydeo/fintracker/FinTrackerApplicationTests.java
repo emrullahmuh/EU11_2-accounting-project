@@ -1,4 +1,4 @@
-package com.cydeo.my_accounting_project;
+package com.cydeo.fintracker;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
