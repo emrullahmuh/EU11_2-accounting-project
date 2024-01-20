@@ -8,7 +8,6 @@ import com.cydeo.fintracker.entity.ClientVendor;
 import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.repository.ClientVendorRepository;
 import com.cydeo.fintracker.service.ClientVendorService;
-
 import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.util.MapperUtil;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     }
 
     @Override
-    public List<ClientVendorDto> listAllClientVendor() {
+    public List<ClientVendorDto> getAllClientVendors() {
 
         List<ClientVendor> clientVendorlist = clientVendorRepository.findAll();
         return clientVendorlist.stream().map(clientVendor ->

@@ -20,6 +20,7 @@ public class ClientVendorDTOConverter implements Converter<String, ClientVendorD
     @Override
     public ClientVendorDto convert(String  source){
 
+        if(source.equals("")) return null;
         Long id = Long.valueOf(source);
         return clientVendorService.findById(id);
     }
