@@ -22,7 +22,7 @@ public class CategoryController {
 
         model.addAttribute("categories", categoryService.listAllCategories());
 
-        return "/category/category-list";
+        return "category/category-list";
     }
 
     @GetMapping("/update/{id}")
@@ -30,7 +30,7 @@ public class CategoryController {
 
         model.addAttribute("category", categoryService.getById(id));
 
-        return "/category/category-update";
+        return "category/category-update";
 
     }
 
