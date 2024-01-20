@@ -32,7 +32,7 @@ public class UserController {
 
         model.addAttribute("users", userService.listAllUsers());
 
-        return "/user/user-list";
+        return "user/user-list";
 
     }
 
@@ -43,7 +43,7 @@ public class UserController {
         model.addAttribute("userRoles", roleService.listAllRoles());
         model.addAttribute("companies", companyService.getCompanies());
 
-        return "/user/user-create";
+        return "user/user-create";
 
     }
 
@@ -57,7 +57,7 @@ public class UserController {
             model.addAttribute("userRoles", roleService.listAllRoles());
             model.addAttribute("companies", companyService.getCompanies());
 
-            return "/user/user-create";
+            return "user/user-create";
 
         }
 
@@ -74,7 +74,7 @@ public class UserController {
         model.addAttribute("userRoles", roleService.listAllRoles());
         model.addAttribute("companies", companyService.getCompanies());
 
-        return "/user/user-update";
+        return "user/user-update";
 
     }
 
@@ -86,7 +86,7 @@ public class UserController {
             model.addAttribute("userRoles", roleService.listAllRoles());
             model.addAttribute("companies", companyService.getCompanies());
 
-            return "/user/user-update";
+            return "user/user-update";
 
         }
 
