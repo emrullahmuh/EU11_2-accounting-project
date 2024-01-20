@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,28 +25,32 @@ public class ClientVendorController {
     @GetMapping("/list")
     public String listClientVendors(Model model){
 
-      //  List<ClientVendorDto> clientVendors = clientVendorService.getAllClientVendors();
-        model.addAttribute("clientVendor", clientVendorService.getAllClientVendors());
-        return "/clientVendor/clientVendor-list";
+        List<ClientVendorDto> clientVendor = clientVendorService.getAllClientVendors();
+        model.addAttribute("clientVendors",clientVendor);
+        return "clientVendor/clientVendor-list";
     }
 
     @GetMapping("/create")
     public String showCreateVendor(Model model){
 
+        List<String> countries = new ArrayList<>(Arrays.asList("UK", "USA"));
+
         model.addAttribute("newClientVendor", new ClientVendorDto());
         model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
+        model.addAttribute("countries", countries);
 
-        return "/clientVendor/clientVendor-create";
+        return "clientVendor/clientVendor-create";
     }
 
     @PostMapping("/create")
-    public String editCreateVendor(@ModelAttribute("newClientVendor") ClientVendorDto newClientVendor, BindingResult bindingResult, Model model){
+    public String editCreateVendor( @ModelAttribute("newClientVendor") ClientVendorDto newClientVendor,
+                                   BindingResult bindingResult, Model model){
 
         if (bindingResult.hasFieldErrors()){
+            model.addAttribute("countries",List.of("USA","UK"));
             model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
             return "clientVendor/clientVendor-create";
         }
-
         clientVendorService.saveClientVendor(newClientVendor);
 
         return "redirect:/clientVendors/list";
@@ -55,6 +60,9 @@ public class ClientVendorController {
     public String showUpdateClientVendor(@PathVariable("id") Long id, Model model){
 
         ClientVendorDto clientVendor=clientVendorService.findById(id);
+        List<String> countries = new ArrayList<>(Arrays.asList("UK", "USA"));
+
+        model.addAttribute("countries", countries);
         model.addAttribute("clientVendor", clientVendor);
         model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
 
@@ -62,10 +70,12 @@ public class ClientVendorController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateClientVendor(@PathVariable("id") Long id, @ModelAttribute("clientVendor") ClientVendorDto clientVendor,BindingResult bindingResult, Model model){
+    public String updateClientVendor(@PathVariable("id") Long id, @ModelAttribute("clientVendor")
+    ClientVendorDto clientVendor,BindingResult bindingResult, Model model){
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
+            model.addAttribute("countries", Arrays.asList("USA", "UK"));
             return "clientVendor/clientVendor-update";
         }
 
@@ -75,7 +85,7 @@ public class ClientVendorController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id){
+    public String deleteClientVendor(@PathVariable("id") Long id){
 
         clientVendorService.delete(id);
         return  "redirect:/clientVendors/list";
