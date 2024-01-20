@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -37,13 +38,10 @@ public class CategoryServiceImplUnitTest {
     @Test
     public void should_throw_an_exception_when_category_doesnt_exist(){
 
-        when(categoryRepository.findByIdAndIsDeleted(1L,false)).thenReturn(Optional.empty());
+        when(categoryRepository.findByIdAndIsDeleted(1L, false)).thenReturn(Optional.empty());
 
-        Throwable throwable = catchThrowable(()->categoryService.getById(1L));
-
-        assertThat(throwable).isInstanceOf(CategoryNotFoundException.class);
-
-        assertThat(throwable).hasMessage("Category Not Found");
+        assertThrows(CategoryNotFoundException.class,
+                () -> categoryService.getById(1L));
     }
 
     @Test
@@ -75,7 +73,7 @@ public class CategoryServiceImplUnitTest {
         categoryList.add(category2);
 
         when(categoryRepository.findAllByIsDeleted(false)).thenReturn(categoryList);
-        when(mapperUtil.convert(Mockito.any(Category.class),Mockito.any(CategoryDto.class)))
+        when(mapperUtil.convert(any(Category.class),any(CategoryDto.class)))
                 .thenAnswer(invocation -> {
                     Category category = invocation.getArgument(0);
                     CategoryDto categoryDto =new CategoryDto();
