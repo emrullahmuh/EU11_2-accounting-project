@@ -1,6 +1,7 @@
 package com.cydeo.fintracker.converter;
 
 import com.cydeo.fintracker.dto.UserDto;
+import com.cydeo.fintracker.service.UserService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -8,11 +9,11 @@ import org.springframework.stereotype.Component;
 //@ConfigurationPropertiesBinding
 public class UserDtoConverter implements Converter<String, UserDto> {
 
-//    UserService userService;
-//
-//    public UserDtoConverter(UserService userService) {
-//        this.userService = userService;
-//    }
+    UserService userService;
+
+    public UserDtoConverter(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public UserDto convert(String source) {
@@ -20,8 +21,8 @@ public class UserDtoConverter implements Converter<String, UserDto> {
         if (source == null || source.equals("")) {
             return null;
         }
-return null;
-//        return userService.findById(Long.parseLong(source));
+
+        return userService.findUserById(Long.parseLong(source));
 
     }
 

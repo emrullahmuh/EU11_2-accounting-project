@@ -3,7 +3,6 @@ package com.cydeo.fintracker.service.impl;
 import com.cydeo.fintracker.dto.RoleDto;
 import com.cydeo.fintracker.entity.Role;
 import com.cydeo.fintracker.util.MapperUtil;
-import com.cydeo.fintracker.util.RoleMapper;
 import com.cydeo.fintracker.repository.RoleRepository;
 import com.cydeo.fintracker.service.RoleService;
 import org.springframework.stereotype.Service;
@@ -15,12 +14,10 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
-    private final RoleMapper roleMapper;
     private final MapperUtil mapperUtil;
 
-    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper, MapperUtil mapperUtil) {
+    public RoleServiceImpl(RoleRepository roleRepository, MapperUtil mapperUtil) {
         this.roleRepository = roleRepository;
-        this.roleMapper = roleMapper;
         this.mapperUtil = mapperUtil;
     }
 
@@ -38,6 +35,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleDto findById(Long id) {
-        return roleMapper.convertToDto(roleRepository.findById(id).get());
+        return mapperUtil.convert(roleRepository.findById(id).get(),new RoleDto());
     }
 }

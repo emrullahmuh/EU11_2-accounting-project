@@ -9,7 +9,9 @@ import com.cydeo.fintracker.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findUserById(Long id) {
-        return null;
+        return mapperUtil.convert(userRepository.findById(id),new UserDto());
     }
 
     @Override
@@ -33,4 +35,39 @@ public class UserServiceImpl implements UserService {
         }
         return mapperUtil.convert(user, new UserDto());
     }
+
+    @Override
+    public List<UserDto> listAllUsers() {
+
+        List<User> userList = userRepository.findAllByIsDeleted(false);
+
+        return userList.stream().map(user -> mapperUtil.convert(user,new UserDto())).collect(Collectors.toList());
+    }
+
+    @Override
+    public void save(UserDto user) {
+        userRepository.save(mapperUtil.convert(user, new User()));
+    }
+
+    @Override
+    public void update(UserDto user) {
+        User user1 = userRepository.findByUsername(user.getUsername());
+
+        User convertedUser = mapperUtil.convert(user, new User());
+
+        convertedUser.setId(user1.getId());
+
+        userRepository.save(convertedUser);
+    }
+
+    @Override
+    public void delete(Long userId) {
+        User user = userRepository.findById(userId).get();
+
+        user.setIsDeleted(true);
+
+        userRepository.save(user);
+    }
+
+
 }
