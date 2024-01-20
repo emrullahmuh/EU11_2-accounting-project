@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,7 @@ public class ClientVendorController {
     }
 
     @PostMapping("/create")
-    public String editCreateVendor( @ModelAttribute("newClientVendor") ClientVendorDto newClientVendor,
+    public String editCreateVendor(@Valid @ModelAttribute("newClientVendor") ClientVendorDto newClientVendor,
                                    BindingResult bindingResult, Model model){
 
         if (bindingResult.hasFieldErrors()){
