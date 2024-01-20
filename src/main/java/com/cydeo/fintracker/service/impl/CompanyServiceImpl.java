@@ -25,7 +25,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<CompanyDto> getCompanies() {
 
-      Sort sort = Sort.by(
+        Sort sort = Sort.by(
                 Sort.Order.asc("companyStatus"),
                 Sort.Order.asc("title")
         );
