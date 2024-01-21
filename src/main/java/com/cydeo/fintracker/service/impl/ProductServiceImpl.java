@@ -49,9 +49,9 @@ public class ProductServiceImpl implements ProductService {
 
         Optional product = productRepository.findById(id);
 
-        ProductDto productResponse= mapperUtil.convert(product, new ProductDto());
+        ProductDto productConvert= mapperUtil.convert(product, new ProductDto());
 
-        return productResponse;
+        return productConvert;
     }
 
     @Override
