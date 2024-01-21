@@ -45,9 +45,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> findById(Long id) {
+    public ProductDto findById(Long id) {
 
-        return productRepository.findById(id);
+        Optional product = productRepository.findById(id);
+
+        ProductDto productResponse= mapperUtil.convert(product, new ProductDto());
+
+        return productResponse;
     }
 
     @Override
