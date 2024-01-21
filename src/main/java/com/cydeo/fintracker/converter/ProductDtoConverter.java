@@ -1,5 +1,6 @@
 package com.cydeo.fintracker.converter;
 
+import com.cydeo.fintracker.dto.ProductDto;
 import com.cydeo.fintracker.entity.Product;
 import com.cydeo.fintracker.service.ProductService;
 import org.springframework.context.annotation.Lazy;
@@ -7,7 +8,7 @@ import org.springframework.core.convert.converter.Converter;
 
 import java.util.Optional;
 
-public class ProductDtoConverter implements Converter<String, Optional<Product>> {
+public class ProductDtoConverter implements Converter<String, ProductDto> {
 
     private final ProductService productService;
 
@@ -15,12 +16,14 @@ public class ProductDtoConverter implements Converter<String, Optional<Product>>
         this.productService = productService;
     }
 
-    @Override
-    public Optional<Product> convert(String id) {
 
-        if(id==null || id.equals("")){
+    @Override
+    public ProductDto convert(String id) {
+
+        if (id==null || id.equals("")){
             return null;
         }
-        return productService.findById(Long.parseLong(id));
+
+        return (ProductDto) productService.findById(Long.parseLong(id));
     }
 }
