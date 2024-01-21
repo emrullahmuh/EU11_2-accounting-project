@@ -29,14 +29,6 @@ public class ProductController {
     @GetMapping("/list")
     public String getProductList(Model model){
 
-//        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-//
-//        UserPrincipal userPrincipal=(UserPrincipal) authentication.getPrincipal();
-//
-//        String userCompanyId=userPrincipal.getCompanyTitleForProfile();
-//
-//        List<Product> userProducts=productService.getProductsByCompanyId(userPrincipal.getId());
-
         model.addAttribute("products",productService.getProducts());
 
         return "product/product-list";
