@@ -6,8 +6,16 @@ import java.util.List;
 
 public interface CompanyService {
 
+    CompanyDto findById(Long companyId);
+
     List<CompanyDto> getCompanies();
 
-    CompanyDto findById(Long companyId);
+    CompanyDto createCompany(CompanyDto newCompany);
+
+    CompanyDto updateCompany(CompanyDto companyDto);
+
+    void activateCompany(Long companyId);
+
+    void deactivateCompany(Long companyId);
 
 }
