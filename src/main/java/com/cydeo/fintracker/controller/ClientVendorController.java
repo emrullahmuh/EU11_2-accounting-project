@@ -26,8 +26,8 @@ public class ClientVendorController {
     @GetMapping("/list")
     public String listClientVendors(Model model){
 
-        List<ClientVendorDto> clientVendor = clientVendorService.getAllClientVendors();
-        model.addAttribute("clientVendors",clientVendor);
+        List<ClientVendorDto> clientVendors = clientVendorService.getAllClientVendors();
+        model.addAttribute("clientVendors",clientVendors);
         return "clientVendor/clientVendor-list";
     }
 
@@ -67,7 +67,7 @@ public class ClientVendorController {
         model.addAttribute("clientVendor", clientVendor);
         model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
 
-        return "/clientVendor/clientVendor-update";
+        return "clientVendor/clientVendor-update";
     }
 
     @PostMapping("/update/{id}")
