@@ -18,4 +18,6 @@ public interface CompanyService {
 
     void deactivateCompany(Long companyId);
 
+    List<CompanyDto> getCompanyDtoByLoggedInUser();
+
 }
