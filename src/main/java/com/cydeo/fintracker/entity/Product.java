@@ -2,7 +2,6 @@ package com.cydeo.fintracker.entity;
 
 import com.cydeo.fintracker.entity.common.BaseEntity;
 import com.cydeo.fintracker.enums.ProductUnit;
-import jdk.dynalink.linker.LinkerServices;
 import lombok.*;
 
 import javax.persistence.*;
