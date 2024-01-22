@@ -9,12 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public interface ProductRepository extends JpaRepository<Product,Long> {
 
     List<Product> findAll();
 
-
+    @Transactional
     void deleteProductById(Long id);
 
     List<Product> getProductsById(Long companyId);
