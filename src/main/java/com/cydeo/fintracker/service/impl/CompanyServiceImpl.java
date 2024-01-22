@@ -8,6 +8,7 @@ import com.cydeo.fintracker.enums.CompanyStatus;
 import com.cydeo.fintracker.repository.CompanyRepository;
 import com.cydeo.fintracker.service.CompanyService;
 
+import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final MapperUtil mapperUtil;
     private final CompanyRepository companyRepository;
+    private final SecurityService securityService;
 
     @Override
     public CompanyDto findById(Long companyId) {
@@ -113,4 +115,27 @@ public class CompanyServiceImpl implements CompanyService {
 
     }
 
+    @Override
+    public List<CompanyDto> getCompanyDtoByLoggedInUser() {
+
+        UserDto loggedInUser = securityService.getLoggedInUser();
+
+        if(loggedInUser.getRole().getId()==1){
+            List<Company> companies = companyRepository.getAllCompaniesForRoot(loggedInUser.getCompany().getId());
+            List<CompanyDto> companyDtoList = companies.stream().map(company -> mapperUtil.convert(company, new CompanyDto()))
+                    .collect(Collectors.toList());
+
+            log.info("Companies are retrieved by root user '{}'", companyDtoList );
+
+            return companyDtoList;
+
+        } else {
+            Company company = companyRepository.getCompanyForCurrent(loggedInUser.getCompany().getId());
+            List<CompanyDto> companyDtoList = Collections.singletonList(mapperUtil.convert(company,new CompanyDto()));
+
+            log.info("Company is retrieved by logged in user '{}'",companyDtoList);
+
+            return companyDtoList;
+        }
+    }
 }
