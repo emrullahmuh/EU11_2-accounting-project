@@ -5,6 +5,7 @@ import com.cydeo.fintracker.enums.ProductUnit;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Getter
@@ -25,6 +26,10 @@ public class Product extends BaseEntity {
 
     @ManyToOne
     private Category category;
+
+    @OneToMany
+    @JoinColumn(name = "product_id")
+    private List<InvoiceProduct> invoiceProducts;
 
 
 }

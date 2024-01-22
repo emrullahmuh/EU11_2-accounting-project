@@ -1,6 +1,5 @@
 package com.cydeo.fintracker.converter;
 
-
 import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.service.CompanyService;
 import org.springframework.context.annotation.Lazy;

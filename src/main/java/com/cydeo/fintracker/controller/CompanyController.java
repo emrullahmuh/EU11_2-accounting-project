@@ -1,6 +1,5 @@
 package com.cydeo.fintracker.controller;
 
-
 import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.service.CompanyService;
 import lombok.RequiredArgsConstructor;
