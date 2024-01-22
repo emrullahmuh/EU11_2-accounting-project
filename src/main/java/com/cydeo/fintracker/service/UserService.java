@@ -14,7 +14,7 @@ public interface UserService {
 
     List<UserDto> listAllUsers();
 
-    void save(UserDto user);
+    UserDto save(UserDto user);
 
     UserDto update(UserDto user);
 
