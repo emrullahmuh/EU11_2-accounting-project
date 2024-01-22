@@ -32,7 +32,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public List<ClientVendorDto> getAllClientVendors() {
 
-        List<ClientVendor> clientVendorlist = clientVendorRepository.findAll();
+        List<ClientVendor> clientVendorlist = clientVendorRepository.findAllByIsDeleted(false);
         return clientVendorlist.stream().map(clientVendor ->
                 mapperUtil.convert(clientVendor,new ClientVendorDto())).collect(Collectors.toList());
     }
