@@ -28,20 +28,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findUserById(Long id) {
 
-        User user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User not found."));
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found."));
 
         log.info(String.valueOf(user));
 
-        return mapperUtil.convert(user,new UserDto());
+        return mapperUtil.convert(user, new UserDto());
     }
 
     @Override
     public UserDto findByUsername(String username) {
 
-        User user = userRepository.findByUsername(username).get();
-        if (user == null) {
-            throw new NoSuchElementException("There is no user with given username");
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("There is no user with given username: " + username);
         }
+
+        User storedUser = user.get();
+        log.info("User found by username : '{}'", storedUser.getUsername());
         return mapperUtil.convert(user, new UserDto());
     }
 
@@ -50,13 +54,16 @@ public class UserServiceImpl implements UserService {
 
         List<User> userList = userRepository.findAllByIsDeleted(false);
 
-        return userList.stream().map(user -> mapperUtil.convert(user,new UserDto())).collect(Collectors.toList());
+        return userList.stream().map(user -> mapperUtil.convert(user, new UserDto())).collect(Collectors.toList());
     }
 
     @Override
-    public void save(UserDto user) {
-        userRepository.save(mapperUtil.convert(user, new User()));
-    }
+    public UserDto save(UserDto userDto) {
+        User user = mapperUtil.convert(userDto, new User());
+        User storedUser = userRepository.save(user);
+        log.info("User has been created with username: '{}'", storedUser.getUsername());
+        return mapperUtil.convert(user, new UserDto()); }
+
 
     @Override
     public UserDto update(UserDto user) {

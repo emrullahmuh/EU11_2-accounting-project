@@ -27,7 +27,7 @@ public class RoleServiceImpl implements RoleService {
 
         List<Role> roleList = roleRepository.findAll();
 
-        log.info(roleList.toString());
+        log.info("List of roles: '{}'",roleList.toString());
 
         return roleList.stream().map(role -> mapperUtil.convert(role, new RoleDto())).collect(Collectors.toList());
 
@@ -39,7 +39,7 @@ public class RoleServiceImpl implements RoleService {
 
         Role role = roleRepository.findById(id).orElseThrow(()-> new RoleNotFoundException("Role not found."));
 
-        log.info(String.valueOf(role));
+        log.info("Role found by id : '{}', '{}' ", id, role);
 
         return mapperUtil.convert(role,new RoleDto());
     }
