@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto findById(Long id) {
 
-        Optional product = productRepository.findById(id);
+        Optional<Product> product = productRepository.findById(id);
 
         ProductDto productConvert= mapperUtil.convert(product, new ProductDto());
         log.info("Product is found by id: '{}', '{}'", id, productConvert);
