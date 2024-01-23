@@ -1,6 +1,8 @@
 package com.cydeo.fintracker.service.impl;
 
+import com.cydeo.fintracker.dto.CategoryDto;
 import com.cydeo.fintracker.dto.ProductDto;
+import com.cydeo.fintracker.entity.Category;
 import com.cydeo.fintracker.entity.Product;
 import com.cydeo.fintracker.repository.ProductRepository;
 import com.cydeo.fintracker.service.ProductService;
@@ -73,5 +75,14 @@ public class ProductServiceImpl implements ProductService {
 
         return productRepository.getProductsById(companyId);
 
+    }
+
+    @Override
+    public List<ProductDto> getProductsByCategory(Long id) {
+
+        List<Product> products = productRepository.findByCategory(id);
+
+        return products.stream().map(product-> mapperUtil.convert(product, new ProductDto()))
+                .collect(Collectors.toList());
     }
 }
