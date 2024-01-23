@@ -1,11 +1,13 @@
 package com.cydeo.fintracker.controller;
 
 import com.cydeo.fintracker.dto.CategoryDto;
-import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/categories")
@@ -35,7 +37,18 @@ public class CategoryController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateCategory(@ModelAttribute("category") CategoryDto category,@PathVariable ("id") Long id)  {
+    public String updateCategory(@Valid @ModelAttribute("category") CategoryDto category, BindingResult bindingResult,
+                                 @PathVariable ("id") Long id, Model model)  {
+
+        if(categoryService.hasProducts(category)){
+
+         bindingResult.rejectValue("description", " ","This category already has product/products! Make sure the new description that will be provided is proper.");
+
+        }
+
+        if(bindingResult.hasErrors()){
+            return "category/category-update";
+        }
 
         categoryService.update(category,id);
 
