@@ -1,11 +1,13 @@
 package com.cydeo.fintracker.controller;
 
 import com.cydeo.fintracker.dto.CategoryDto;
-import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/categories")
@@ -59,7 +61,17 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public String insertCategory(@ModelAttribute("newCategory") CategoryDto category){
+    public String insertCategory(@Valid @ModelAttribute("newCategory") CategoryDto category, BindingResult bindingResult){
+
+        boolean categoryDescriptionUnique = categoryService.isCategoryDescriptionUnique(category.getDescription());
+
+        if(!categoryDescriptionUnique){
+            bindingResult.rejectValue("description"," ","This category description is already exists");
+        }
+
+        if (bindingResult.hasErrors()){
+            return "category/category-create";
+        }
 
         categoryService.save(category);
 
