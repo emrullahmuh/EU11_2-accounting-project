@@ -5,8 +5,11 @@ import com.cydeo.fintracker.service.CompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -29,14 +32,24 @@ public class CompanyController {
     public String createCompany(Model model) {
 
         model.addAttribute("newCompany", new CompanyDto());
-        model.addAttribute("countries", List.of("United States"));
+        model.addAttribute("countries", companyService.getAllCountries());
 
         return "company/company-create";
 
     }
 
     @PostMapping("/create")
-    public String createCompany(@ModelAttribute("newCompany") CompanyDto newCompany) {
+    public String createCompany(@Valid @ModelAttribute("newCompany") CompanyDto newCompany, BindingResult bindingResult, Model model) {
+
+        bindingResult = companyService.createUniqueTitle(newCompany.getTitle(), bindingResult);
+
+        if (bindingResult.hasFieldErrors()) {
+
+            model.addAttribute("countries", companyService.getAllCountries());
+
+            return "company/company-create";
+
+        }
 
         companyService.createCompany(newCompany);
 

@@ -1,10 +1,11 @@
 package com.cydeo.fintracker.service.impl;
 
-
 import com.cydeo.fintracker.dto.CompanyDto;
+import com.cydeo.fintracker.dto.CountryDto;
 import com.cydeo.fintracker.dto.UserDto;
 import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.enums.CompanyStatus;
+import com.cydeo.fintracker.feignclient.CountryFeignClient;
 import com.cydeo.fintracker.repository.CompanyRepository;
 import com.cydeo.fintracker.service.CompanyService;
 
@@ -12,7 +13,12 @@ import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,11 +31,15 @@ public class CompanyServiceImpl implements CompanyService {
     private final MapperUtil mapperUtil;
     private final CompanyRepository companyRepository;
     private final SecurityService securityService;
+    private final CountryFeignClient countryFeignClient;
+
+    @Value("${API_COUNTRIES_KEY}")
+    private String apiCountriesKey;
 
     @Override
     public CompanyDto findById(Long companyId) {
 
-        Optional company = companyRepository.findById(companyId);
+        Optional<Company> company = companyRepository.findById(companyId);
         CompanyDto companyResponse = mapperUtil.convert(company, new CompanyDto());
         log.info("Company found by id: '{}', '{}'", companyId, companyResponse);
 
@@ -40,7 +50,12 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<CompanyDto> getCompanies() {
 
-        List<Company> companies = companyRepository.getCompanies();
+        Sort sort = Sort.by(
+                Sort.Order.asc("companyStatus"),
+                Sort.Order.asc("title")
+        );
+
+        List<Company> companies = companyRepository.getCompanies(sort);
 
         if (!companies.isEmpty()) {
             return companies.stream()
@@ -100,8 +115,6 @@ public class CompanyServiceImpl implements CompanyService {
         companyRepository.save(companyToBeActivate);
         log.info("Company status has changed: '{}'", companyToBeActivate.getCompanyStatus());
 
-        mapperUtil.convert(companyToBeActivate, new CompanyDto());
-
     }
 
     @Override
@@ -115,7 +128,32 @@ public class CompanyServiceImpl implements CompanyService {
         companyRepository.save(companyToBeDeactivate);
         log.info("Company status has changed: '{}'", companyToBeDeactivate.getCompanyStatus());
 
-        mapperUtil.convert(companyToBeDeactivate, new CompanyDto());
+    }
+
+    @Override
+    public BindingResult createUniqueTitle(String title, BindingResult bindingResult) {
+
+        if (companyRepository.existsByTitle(title)){
+            bindingResult.addError(new FieldError("newCompany", "title", "This title already exists."));
+        }
+
+        return bindingResult;
+
+    }
+
+
+    @Override
+    public List<String> getAllCountries() {
+
+        ResponseEntity<List<CountryDto>> apiCountries = countryFeignClient.getApiCountries(apiCountriesKey);
+
+        if (apiCountries.getStatusCode().is2xxSuccessful()) {
+            return apiCountries.getBody().stream()
+                    .map(CountryDto::getName)
+                    .collect(Collectors.toList());
+        }
+
+        return Collections.emptyList();
 
     }
 
@@ -142,4 +180,5 @@ public class CompanyServiceImpl implements CompanyService {
             return companyDtoList;
         }
     }
+
 }
