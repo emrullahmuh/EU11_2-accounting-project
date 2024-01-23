@@ -96,6 +96,13 @@ public class CategoryServiceImpl implements CategoryService {
         return createdCategory;
     }
 
+    @Override
+    public boolean isCategoryDescriptionUnique(String description) {
+
+        Category category = categoryRepository.findByDescription(description);
+        return category == null;
+    }
+
     private boolean checkIfCategoryCanBeDeleted(Category category){
 
        CategoryDto categoryDto = mapperUtil.convert(category,new CategoryDto());
