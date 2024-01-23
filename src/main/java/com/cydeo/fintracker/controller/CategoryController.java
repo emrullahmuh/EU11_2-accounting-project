@@ -38,7 +38,7 @@ public class CategoryController {
 
     @PostMapping("/update/{id}")
     public String updateCategory(@Valid @ModelAttribute("category") CategoryDto category, BindingResult bindingResult,
-                                 @PathVariable ("id") Long id, Model model)  {
+                                 @PathVariable ("id") Long id)  {
 
         if(categoryService.hasProducts(category)){
 
