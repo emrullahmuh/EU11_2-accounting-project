@@ -50,7 +50,7 @@
                                                                 <tr th:each="invoice,comStat : ${invoices}">
                                                                     <td th:text="${comStat.count}"></td>
                                                                     <td th:text="${invoice.invoiceNo}"></td>
-                                                                    <td th:text="${invoice.client.getClientVendorName()}"></td>
+                                                                    <td th:text="${invoice.clientVendor.getClientVendorName()}"></td>
                                                                     <td th:text="${#temporals.format(invoice.date, 'MMMM dd, yyyy')}"></td>
                                                                     <td th:text="${invoice.price}"></td>
                                                                     <td th:text="${invoice.tax}"></td>
