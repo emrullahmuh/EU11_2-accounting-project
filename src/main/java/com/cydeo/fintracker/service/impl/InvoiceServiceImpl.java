@@ -51,7 +51,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public List<InvoiceDto> listAllInvoices(InvoiceType invoiceType) {
 
-        CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser();
+        CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser().get(0);
         Company company = mapperUtil.convert(companyDto,new Company());
 
         return invoiceRepository.findAllByInvoiceTypeAndCompanyAndIsDeletedOrderByInvoiceNoDesc(invoiceType,company,false).stream()
@@ -93,7 +93,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public InvoiceDto createNewPurchaseInvoice() {
-        CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser();
+        CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser().get(0);
         Company company=mapperUtil.convert(companyDto,new Company());
         InvoiceDto invoiceDto = new InvoiceDto();
         int no = invoiceRepository.findAllByInvoiceTypeAndCompanyOrderByInvoiceNoDesc(InvoiceType.PURCHASE,company).size() + 1;
@@ -122,7 +122,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public InvoiceDto createNewSalesInvoice() {
-        CompanyDto companyDTO = companyService.getCompanyDtoByLoggedInUser();
+        CompanyDto companyDTO = companyService.getCompanyDtoByLoggedInUser().get(0);
         Company company = mapperUtil.convert(companyDTO,new Company());
         InvoiceDto invoiceDto = new InvoiceDto();
         int no = invoiceRepository.retrieveInvoiceByTypeAndCompany(InvoiceType.SALES, company).size() + 1;

@@ -48,7 +48,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
     @Override
     public InvoiceProductDto save(InvoiceProductDto invoiceProductDto, Long id) {
-        CompanyDto companyDto=companyService.getCompanyDtoByLoggedInUser();
+        CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser().get(0);
         InvoiceDto invoice = invoiceService.findById(id);
         invoice.setCompany(companyDto);
         invoiceProductDto.setInvoice(invoice);
@@ -57,16 +57,16 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         return mapperUtil.convert(invoiceProduct, new InvoiceProductDto());
     }
 
-    private InvoiceProductDto calculateTotalInvoiceProduct(Long invoiceProductId){
-        InvoiceProductDto invoiceProductDTO=findById(invoiceProductId);
-        BigDecimal total=BigDecimal.ZERO;
-        if (invoiceProductDTO.getQuantity() == null || invoiceProductDTO.getPrice() == null || invoiceProductDTO.getTax()==null) {
+    private InvoiceProductDto calculateTotalInvoiceProduct(Long invoiceProductId) {
+        InvoiceProductDto invoiceProductDTO = findById(invoiceProductId);
+        BigDecimal total = BigDecimal.ZERO;
+        if (invoiceProductDTO.getQuantity() == null || invoiceProductDTO.getPrice() == null || invoiceProductDTO.getTax() == null) {
             throw new NoSuchElementException("Quantity or price is null");
         }
-        List<InvoiceProduct> list =invoiceProductRepository.findAllByIdAndIsDeleted(invoiceProductDTO.getId(),false);
+        List<InvoiceProduct> list = invoiceProductRepository.findAllByIdAndIsDeleted(invoiceProductDTO.getId(), false);
         for (InvoiceProduct each : list) {
-            total=total.add(each.getPrice().multiply(BigDecimal.valueOf(each.getQuantity())));//15
-            total=total.add(total.multiply(BigDecimal.valueOf(each.getTax()).divide(BigDecimal.valueOf(100))));
+            total = total.add(each.getPrice().multiply(BigDecimal.valueOf(each.getQuantity())));//15
+            total = total.add(total.multiply(BigDecimal.valueOf(each.getTax()).divide(BigDecimal.valueOf(100))));
         }
         invoiceProductDTO.setTotal(total);
 
