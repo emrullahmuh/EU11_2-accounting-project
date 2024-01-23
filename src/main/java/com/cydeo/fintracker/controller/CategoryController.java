@@ -5,7 +5,10 @@ import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/categories")
@@ -59,7 +62,18 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public String insertCategory(@ModelAttribute("newCategory") CategoryDto category){
+    public String insertCategory(@Valid @ModelAttribute("newCategory") CategoryDto category, BindingResult bindingResult, Model model){
+
+        boolean categoryDescriptionUnique = categoryService.isCategoryDescriptionUnique(category.getDescription());
+
+        if(!categoryDescriptionUnique){
+            model.addAttribute("message","This Description is already exists");
+            return "error";
+        }
+
+        if (bindingResult.hasErrors()){
+            return "category/category-create";
+        }
 
         categoryService.save(category);
 
