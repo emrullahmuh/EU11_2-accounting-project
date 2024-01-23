@@ -1,7 +1,6 @@
 package com.cydeo.fintracker.controller;
 
 import com.cydeo.fintracker.dto.CategoryDto;
-import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -68,7 +67,6 @@ public class CategoryController {
 
         if(!categoryDescriptionUnique){
             bindingResult.rejectValue("description"," ","This category description is already exists");
-
         }
 
         if (bindingResult.hasErrors()){
