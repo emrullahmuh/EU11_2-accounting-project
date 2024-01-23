@@ -61,7 +61,7 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public String insertCategory(@Valid @ModelAttribute("newCategory") CategoryDto category, BindingResult bindingResult, Model model){
+    public String insertCategory(@Valid @ModelAttribute("newCategory") CategoryDto category, BindingResult bindingResult){
 
         boolean categoryDescriptionUnique = categoryService.isCategoryDescriptionUnique(category.getDescription());
 
