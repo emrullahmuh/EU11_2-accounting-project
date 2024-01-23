@@ -1,5 +1,6 @@
 package com.cydeo.fintracker.entity.common;
 
+import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.User;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -80,7 +81,9 @@ public class UserPrincipal implements UserDetails {
      * @return The title of logged-in user's Company in String
      */
     public String getCompanyTitleForProfile() {
+
         return this.user.getCompany().getTitle().toUpperCase();
     }
+
 
 }

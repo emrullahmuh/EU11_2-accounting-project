@@ -23,7 +23,7 @@
                                                  aria-labelledby="account-tab">
 
                                                 <!--                        form starts -->
-                                                <form th:action="@{/users/update/{id}(id=${user.id})}" th:method="post"
+                                                <form th:action="@{/users/update}" method="post"
                                                       th:object="${user}">
                                                     <div class="row">
                                                         <div class="col-12 col-md-4">

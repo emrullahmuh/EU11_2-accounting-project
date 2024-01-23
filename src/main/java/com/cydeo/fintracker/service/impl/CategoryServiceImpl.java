@@ -48,19 +48,20 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto update(CategoryDto category)  {
+    public CategoryDto update(CategoryDto category,Long id)  {
 
-        Category storedCategory = categoryRepository.findByIdAndIsDeleted(category.getId(),false)
+        Category storedCategory = categoryRepository.findByIdAndIsDeleted(id,false)
                 .orElseThrow(()->new CategoryNotFoundException("Category Not Found"));
 
         Category convertedCategory = mapperUtil.convert(category, new Category());
 
         convertedCategory.setId(storedCategory.getId());
+        convertedCategory.setCompany(storedCategory.getCompany());
 
-        categoryRepository.save(convertedCategory);
-        log.info("Category is updated '{}', '{}'", convertedCategory.getDescription(), convertedCategory);
+        Category savedCategory = categoryRepository.save(convertedCategory);
+        log.info("Category is updated '{}', '{}'", savedCategory.getDescription(), savedCategory);
 
-        return getById(category.getId());
+        return mapperUtil.convert(savedCategory,new CategoryDto());
 
 
     }

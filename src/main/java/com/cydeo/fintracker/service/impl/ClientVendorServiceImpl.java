@@ -6,6 +6,7 @@ import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.dto.UserDto;
 import com.cydeo.fintracker.entity.ClientVendor;
 import com.cydeo.fintracker.entity.Company;
+import com.cydeo.fintracker.exception.ClientVendorNotFoundException;
 import com.cydeo.fintracker.repository.ClientVendorRepository;
 import com.cydeo.fintracker.service.ClientVendorService;
 import com.cydeo.fintracker.service.SecurityService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,8 +34,14 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public List<ClientVendorDto> getAllClientVendors() {
 
-        List<ClientVendor> clientVendorlist = clientVendorRepository.findAll();
-        return clientVendorlist.stream().map(clientVendor ->
+        Optional<List<ClientVendor>> clientVendorlist = clientVendorRepository.findAllByIsDeleted(false);
+
+        if(clientVendorlist.isEmpty()){
+            throw new ClientVendorNotFoundException("There are no ClientVendor found");
+        }
+
+        List<ClientVendor> storedClientVendorList = clientVendorlist.get();
+        return storedClientVendorList.stream().map(clientVendor ->
                 mapperUtil.convert(clientVendor,new ClientVendorDto())).collect(Collectors.toList());
     }
 
