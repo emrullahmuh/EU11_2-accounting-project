@@ -1,12 +1,13 @@
 package com.cydeo.fintracker.service.impl;
 
 import com.cydeo.fintracker.dto.CategoryDto;
+import com.cydeo.fintracker.dto.ProductDto;
 import com.cydeo.fintracker.entity.Category;
 import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.repository.CategoryRepository;
 import com.cydeo.fintracker.service.CategoryService;
+import com.cydeo.fintracker.service.ProductService;
 import com.cydeo.fintracker.util.MapperUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +20,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final MapperUtil mapperUtil;
+    private final ProductService productService;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, ProductService productService) {
         this.categoryRepository = categoryRepository;
         this.mapperUtil = mapperUtil;
+        this.productService = productService;
     }
 
     @Override
@@ -94,6 +97,14 @@ public class CategoryServiceImpl implements CategoryService {
 
 
         return createdCategory;
+    }
+
+    @Override
+    public boolean hasProducts(CategoryDto category) {
+
+        List<ProductDto> productDtoList = productService.getProductsByCategory(category.getId());
+
+        return !productDtoList.isEmpty();
     }
 
     private boolean checkIfCategoryCanBeDeleted(Category category){
