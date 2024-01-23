@@ -34,12 +34,12 @@ public class CategoryController {
 
     }
 
-    @PostMapping("/update")
-    public String updateCategory(@ModelAttribute("category") CategoryDto category)  {
+    @PostMapping("/update/{id}")
+    public String updateCategory(@ModelAttribute("category") CategoryDto category,@PathVariable ("id") Long id)  {
 
-        categoryService.update(category);
+        categoryService.update(category,id);
 
-        return "redirect:/category/category-list";
+        return "redirect:/categories/list";
     }
 
     @GetMapping("/delete/{id}")
@@ -47,7 +47,7 @@ public class CategoryController {
 
         categoryService.delete(id);
 
-        return "redirect:/category/category-list";
+        return "redirect:/categories/list";
     }
 
     @GetMapping("/create")
@@ -63,7 +63,7 @@ public class CategoryController {
 
         categoryService.save(category);
 
-        return "redirect:/category/category-list";
+        return "redirect:/categories/list";
     }
 
 
