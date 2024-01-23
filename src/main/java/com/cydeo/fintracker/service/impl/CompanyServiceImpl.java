@@ -100,6 +100,8 @@ public class CompanyServiceImpl implements CompanyService {
         companyRepository.save(companyToBeActivate);
         log.info("Company status has changed: '{}'", companyToBeActivate.getCompanyStatus());
 
+        mapperUtil.convert(companyToBeActivate, new CompanyDto());
+
     }
 
     @Override
@@ -112,6 +114,8 @@ public class CompanyServiceImpl implements CompanyService {
 
         companyRepository.save(companyToBeDeactivate);
         log.info("Company status has changed: '{}'", companyToBeDeactivate.getCompanyStatus());
+
+        mapperUtil.convert(companyToBeDeactivate, new CompanyDto());
 
     }
 
