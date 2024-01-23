@@ -16,4 +16,9 @@ public interface CompanyRepository extends JpaRepository<Company,Long> {
     @Query("select c from Company c")
     List<Company> getCompanies();
 
+    @Query("select c from Company c where c.id != ?1")
+    List<Company> getAllCompaniesForRoot(Long id);
+    @Query("select c from Company c where c.id = ?1")
+    Company getCompanyForCurrent(Long id);
+
 }
