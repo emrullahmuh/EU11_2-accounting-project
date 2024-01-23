@@ -120,12 +120,12 @@ public class CompanyServiceImpl implements CompanyService {
 
         UserDto loggedInUser = securityService.getLoggedInUser();
 
-        if(loggedInUser.getRole().getId()==1){
+        if(loggedInUser.getRole().getDescription().equals("Root User")){
             List<Company> companies = companyRepository.getAllCompaniesForRoot(loggedInUser.getCompany().getId());
             List<CompanyDto> companyDtoList = companies.stream().map(company -> mapperUtil.convert(company, new CompanyDto()))
                     .collect(Collectors.toList());
 
-            log.info("Companies are retrieved by root user '{}'", companyDtoList );
+            log.info("Companies are retrieved by root user '{}'", companyDtoList.size() );
 
             return companyDtoList;
 
@@ -133,7 +133,7 @@ public class CompanyServiceImpl implements CompanyService {
             Company company = companyRepository.getCompanyForCurrent(loggedInUser.getCompany().getId());
             List<CompanyDto> companyDtoList = Collections.singletonList(mapperUtil.convert(company,new CompanyDto()));
 
-            log.info("Company is retrieved by logged in user '{}'",companyDtoList);
+            log.info("Company is retrieved by logged in user '{}'",companyDtoList.size());
 
             return companyDtoList;
         }
