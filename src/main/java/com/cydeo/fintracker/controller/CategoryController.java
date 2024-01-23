@@ -67,8 +67,8 @@ public class CategoryController {
         boolean categoryDescriptionUnique = categoryService.isCategoryDescriptionUnique(category.getDescription());
 
         if(!categoryDescriptionUnique){
-            model.addAttribute("message","This Description is already exists");
-            return "error";
+            bindingResult.rejectValue("description"," ","This category description is already exists");
+
         }
 
         if (bindingResult.hasErrors()){
