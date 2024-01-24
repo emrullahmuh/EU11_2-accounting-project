@@ -22,18 +22,19 @@ public class DashboardServiceImpl implements DashboardService {
 
         Map<String, BigDecimal> summaryCalculations = new HashMap<>();
 
+        //Later delete-template;
         // Total Cost:
+        BigDecimal totalCost = new BigDecimal(25000);
 
         // Total Sales:
+        BigDecimal totalSales = new BigDecimal(35000);
 
-        // Profit:
+        // Profit/Loss:
+        BigDecimal profitLoss = totalSales.subtract(totalCost);
 
-
-        /*
         summaryCalculations.put("totalCost", totalCost);
         summaryCalculations.put("totalSales",totalSales);
         summaryCalculations.put("profitLoss",profitLoss);
-        */
 
         return summaryCalculations;
     }
