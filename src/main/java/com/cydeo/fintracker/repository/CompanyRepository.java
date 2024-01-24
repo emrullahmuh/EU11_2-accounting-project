@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CompanyRepository extends JpaRepository<Company, Long> {
+public interface CompanyRepository extends JpaRepository<Company,Long> {
 
     Optional<Company> findById(Long companyId);
 
@@ -18,6 +18,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     List<Company> getCompanies(Sort sort);
 
     boolean existsByTitle(String title);
+
+    boolean existsByTitleAndIdNot(String title, Long id);
 
     @Query("select c from Company c where c.id != ?1")
     List<Company> getAllCompaniesForRoot(Long id);

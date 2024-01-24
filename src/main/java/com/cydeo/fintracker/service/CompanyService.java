@@ -21,6 +21,8 @@ public interface CompanyService {
 
     public BindingResult createUniqueTitle(String title, BindingResult bindingResult);
 
+    public BindingResult updateUniqueTitle(CompanyDto companyDto, BindingResult bindingResult);
+
     public List<String> getAllCountries();
 
     List<CompanyDto> getCompanyDtoByLoggedInUser();

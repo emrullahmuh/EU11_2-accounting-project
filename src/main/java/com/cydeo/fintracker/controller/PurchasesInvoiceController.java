@@ -5,14 +5,13 @@ import com.cydeo.fintracker.dto.InvoiceDto;
 import com.cydeo.fintracker.dto.InvoiceProductDto;
 import com.cydeo.fintracker.enums.ClientVendorType;
 import com.cydeo.fintracker.enums.InvoiceType;
-import com.cydeo.fintracker.service.ClientVendorService;
-import com.cydeo.fintracker.service.InvoiceProductService;
-import com.cydeo.fintracker.service.InvoiceService;
-import com.cydeo.fintracker.service.ProductService;
+import com.cydeo.fintracker.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/purchaseInvoices")
@@ -22,12 +21,14 @@ public class PurchasesInvoiceController {
     private final ClientVendorService clientVendorService;
     private final InvoiceProductService invoiceProductService;
     private final ProductService productService;
+    private final CompanyService companyService;
 
-    public PurchasesInvoiceController(InvoiceService invoiceService, ClientVendorService clientVendorService, InvoiceProductService invoiceProductService, ProductService productService) {
+    public PurchasesInvoiceController(InvoiceService invoiceService, ClientVendorService clientVendorService, InvoiceProductService invoiceProductService, ProductService productService, CompanyService companyService) {
         this.invoiceService = invoiceService;
         this.clientVendorService = clientVendorService;
         this.invoiceProductService = invoiceProductService;
         this.productService = productService;
+        this.companyService = companyService;
     }
 
     @GetMapping("/list")
@@ -47,9 +48,9 @@ public class PurchasesInvoiceController {
     }
 
     @PostMapping("/create")
-    public String savePurchaseInvoice(@ModelAttribute("newPurchaseInvoice") InvoiceDto invoice, BindingResult bindingResult, Model model) {
+    public String savePurchaseInvoice(@ModelAttribute("newPurchaseInvoice") InvoiceDto invoice, BindingResult bindingResult, Model model){
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()){
             model.addAttribute("vendors", clientVendorService.getAllClientVendors(ClientVendorType.VENDOR));
             return "/invoice/purchase-invoice-create";
         }
@@ -78,6 +79,22 @@ public class PurchasesInvoiceController {
         return "invoice/purchase-invoice-update";
     }
 
+    @PostMapping("/addInvoiceProduct/{id}")
+    public String addInvoiceProduct(@PathVariable("id") Long id, @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()){
+            model.addAttribute("invoice", invoiceService.findById(id));
+            model.addAttribute("vendors", clientVendorService.getAllClientVendors(ClientVendorType.VENDOR));
+            model.addAttribute("products", productService.getProducts());
+            model.addAttribute("invoiceProducts", invoiceProductService.listAllInvoiceProduct(id));
+            return "invoice/purchase-invoice-update";
+        }
+        invoiceProductService.save(invoiceProductDto, id);
+        model.addAttribute("invoiceProducts", invoiceProductService.listAllInvoiceProduct(id));
+        return "redirect:/purchaseInvoices/update/" + id;
+
+    }
+
     @GetMapping("/delete/{id}")
     public String deletePurchaseInvoice(@PathVariable("id") Long id) {
         invoiceService.delete(id);
@@ -88,6 +105,22 @@ public class PurchasesInvoiceController {
     public String getApproved(@PathVariable("id") Long id) {
         invoiceService.approve(id);
         return "redirect:/purchaseInvoices/list";
+    }
+
+    @GetMapping("/print/{invoiceId}")
+    public String printInvoice(@PathVariable("invoiceId") Long invoiceId, Model model){
+        model.addAttribute("invoice",invoiceService.findById(invoiceId));
+        model.addAttribute("invoiceProducts", invoiceProductService.listAllInvoiceProduct(invoiceId));
+        model.addAttribute("company", companyService.getCompanyDtoByLoggedInUser().get(0));
+        return "invoice/invoice_print";
+    }
+
+
+    @GetMapping("/removeInvoiceProduct/{invoiceId1}/{invoiceProductId}")
+    public String removeInvoiceProduct(@PathVariable("invoiceId1") Long id, @PathVariable("invoiceProductId") Long invoiceProductId) {
+        invoiceProductService.delete(invoiceProductId);
+
+        return "redirect:/purchaseInvoices/update/"+id;
     }
 
 }

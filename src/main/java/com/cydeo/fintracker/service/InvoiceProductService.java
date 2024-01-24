@@ -11,6 +11,8 @@ public interface InvoiceProductService {
     List<InvoiceProductDto> listAllInvoiceProduct(Long id);
 
     InvoiceProductDto save(InvoiceProductDto invoiceProductDto, Long id);
+    InvoiceProductDto delete(Long invoiceProductId);
+
 
 
 }

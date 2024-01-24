@@ -1,13 +1,13 @@
 package com.cydeo.fintracker.converter;
 
 import com.cydeo.fintracker.dto.ProductDto;
-import com.cydeo.fintracker.entity.Product;
 import com.cydeo.fintracker.service.ProductService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;
-
+import org.springframework.stereotype.Component;
 import java.util.Optional;
 
+@Component
 public class ProductDtoConverter implements Converter<String, ProductDto> {
 
     private final ProductService productService;
