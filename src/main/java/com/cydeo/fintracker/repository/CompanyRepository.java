@@ -18,8 +18,12 @@ public interface CompanyRepository extends JpaRepository<Company,Long> {
     List<Company> getCompanies(Sort sort);
 
     boolean existsByTitle(String title);
+
+    boolean existsByTitleAndIdNot(String title, Long id);
+
     @Query("select c from Company c where c.id != ?1")
     List<Company> getAllCompaniesForRoot(Long id);
+
     @Query("select c from Company c where c.id = ?1")
     Company getCompanyForCurrent(Long id);
 

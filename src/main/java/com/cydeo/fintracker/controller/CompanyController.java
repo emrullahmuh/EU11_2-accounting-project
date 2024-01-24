@@ -68,7 +68,17 @@ public class CompanyController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateCompany(@ModelAttribute("company") CompanyDto companyDto) {
+    public String updateCompany(@Valid @ModelAttribute("company") CompanyDto companyDto, BindingResult bindingResult, Model model) {
+
+        bindingResult = companyService.updateUniqueTitle(companyDto, bindingResult);
+
+        if (bindingResult.hasFieldErrors()) {
+
+            model.addAttribute("countries", companyService.getAllCountries());
+
+            return "company/company-create";
+
+        }
 
         companyService.updateCompany(companyDto);
 
