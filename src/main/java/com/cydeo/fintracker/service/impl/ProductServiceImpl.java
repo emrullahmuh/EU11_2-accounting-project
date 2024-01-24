@@ -1,5 +1,6 @@
 package com.cydeo.fintracker.service.impl;
 
+import com.cydeo.fintracker.dto.InvoiceProductDto;
 import com.cydeo.fintracker.dto.ProductDto;
 import com.cydeo.fintracker.entity.Product;
 import com.cydeo.fintracker.repository.ProductRepository;
@@ -76,6 +77,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+
+    public boolean checkInventory(InvoiceProductDto invoiceProductDto) {
+        if (invoiceProductDto.getProduct() == null) {
+            return false;
+        }
+        Product product = productRepository.findByName(invoiceProductDto.getProduct().getName());
+        return product.getQuantityInStock() < invoiceProductDto.getQuantity();
+      
     public ProductDto save(ProductDto product) {
 
         Product convertedProduct= mapperUtil.convert(product, new Product());
@@ -87,5 +96,6 @@ public class ProductServiceImpl implements ProductService {
         log.info("Product is created with description: '{}'", createdProduct.getName());
 
         return createdProduct;
+
     }
 }
