@@ -18,4 +18,5 @@ public interface ProductService {
 
     List<Product> getProductsByCompanyId(Long id);
 
+    ProductDto save(ProductDto product);
 }

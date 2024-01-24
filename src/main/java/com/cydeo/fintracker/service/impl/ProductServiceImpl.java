@@ -74,4 +74,18 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.getProductsById(companyId);
 
     }
+
+    @Override
+    public ProductDto save(ProductDto product) {
+
+        Product convertedProduct= mapperUtil.convert(product, new Product());
+
+        productRepository.save(convertedProduct);
+        log.info("Product is saved with description: '{}'", convertedProduct.getName());
+
+        ProductDto createdProduct = mapperUtil.convert(convertedProduct,new ProductDto());
+        log.info("Product is created with description: '{}'", createdProduct.getName());
+
+        return createdProduct;
+    }
 }
