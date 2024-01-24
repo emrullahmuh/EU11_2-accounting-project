@@ -1,18 +1,13 @@
 package com.cydeo.fintracker.entity.common;
 
-import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.User;
-
+import com.cydeo.fintracker.enums.CompanyStatus;
 import org.springframework.security.core.GrantedAuthority;
-
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
-
 import java.util.Collection;
-
 import java.util.List;
 
 public class UserPrincipal implements UserDetails {
@@ -51,7 +46,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return CompanyStatus.ACTIVE.equals(user.getCompany().getCompanyStatus());
     }
 
     @Override
@@ -64,7 +59,7 @@ public class UserPrincipal implements UserDetails {
         return true;
     }
 
-    public Long getId(){
+    public Long getId() {
         return this.user.getId();
     }
 

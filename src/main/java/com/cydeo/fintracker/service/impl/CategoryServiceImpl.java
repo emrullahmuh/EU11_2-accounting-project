@@ -96,9 +96,16 @@ public class CategoryServiceImpl implements CategoryService {
         return createdCategory;
     }
 
-    private boolean checkIfCategoryCanBeDeleted(Category category){
+    @Override
+    public boolean isCategoryDescriptionUnique(String description) {
 
-       CategoryDto categoryDto = mapperUtil.convert(category,new CategoryDto());
+        Category category = categoryRepository.findByDescription(description);
+        return category == null;
+    }
+
+    private boolean checkIfCategoryCanBeDeleted(Category category) {
+
+        CategoryDto categoryDto = mapperUtil.convert(category, new CategoryDto());
 
         return !categoryDto.isHasProduct();
     }

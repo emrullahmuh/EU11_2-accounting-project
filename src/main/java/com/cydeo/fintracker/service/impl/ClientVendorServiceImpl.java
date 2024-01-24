@@ -6,6 +6,7 @@ import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.dto.UserDto;
 import com.cydeo.fintracker.entity.ClientVendor;
 import com.cydeo.fintracker.entity.Company;
+import com.cydeo.fintracker.enums.ClientVendorType;
 import com.cydeo.fintracker.exception.ClientVendorNotFoundException;
 import com.cydeo.fintracker.repository.ClientVendorRepository;
 import com.cydeo.fintracker.service.ClientVendorService;
@@ -31,18 +32,35 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         this.securityService = securityService;
     }
 
+
     @Override
-    public List<ClientVendorDto> getAllClientVendors() {
+    public List<ClientVendorDto> getAllClientVendors(ClientVendorType clientVendorType) {
+
+        Optional<List<ClientVendor>> storedClientVendors = clientVendorRepository.findByClientVendorType(clientVendorType);
+
+        if (storedClientVendors.isEmpty()) {
+            throw new NoSuchElementException();
+
+        }
+        List<ClientVendor> clientVendors = storedClientVendors.get();
+        return clientVendors.stream()
+                .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<ClientVendorDto> getAll() {
 
         Optional<List<ClientVendor>> clientVendorlist = clientVendorRepository.findAllByIsDeleted(false);
 
-        if(clientVendorlist.isEmpty()){
+        if (clientVendorlist.isEmpty()) {
             throw new ClientVendorNotFoundException("There are no ClientVendor found");
         }
 
         List<ClientVendor> storedClientVendorList = clientVendorlist.get();
         return storedClientVendorList.stream().map(clientVendor ->
-                mapperUtil.convert(clientVendor,new ClientVendorDto())).collect(Collectors.toList());
+                mapperUtil.convert(clientVendor, new ClientVendorDto())).collect(Collectors.toList());
     }
 
     @Override

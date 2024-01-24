@@ -4,6 +4,7 @@ package com.cydeo.fintracker.controller;
 import com.cydeo.fintracker.dto.ClientVendorDto;
 import com.cydeo.fintracker.enums.ClientVendorType;
 import com.cydeo.fintracker.service.ClientVendorService;
+import com.cydeo.fintracker.service.SecurityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,15 +20,18 @@ import java.util.List;
 public class ClientVendorController {
 
     private final ClientVendorService clientVendorService;
-    public ClientVendorController(ClientVendorService clientVendorService) {
+    private final SecurityService securityService;
+
+    public ClientVendorController(ClientVendorService clientVendorService, SecurityService securityService) {
         this.clientVendorService = clientVendorService;
+        this.securityService = securityService;
     }
 
     @GetMapping("/list")
-    public String listClientVendors(Model model){
+    public String listClientVendors(Model model) {
 
-        List<ClientVendorDto> clientVendors = clientVendorService.getAllClientVendors();
-        model.addAttribute("clientVendors",clientVendors);
+        List<ClientVendorDto> clientVendors = clientVendorService.getAll();
+        model.addAttribute("clientVendors", clientVendors);
         return "clientVendor/clientVendor-list";
     }
 

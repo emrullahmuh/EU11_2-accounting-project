@@ -14,5 +14,7 @@ public interface CategoryService {
     void delete(Long id) ;
     CategoryDto save(CategoryDto category);
 
+    boolean isCategoryDescriptionUnique(String description);
+
 
 }
