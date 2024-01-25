@@ -57,6 +57,16 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         return mapperUtil.convert(invoiceProduct, new InvoiceProductDto());
     }
 
+    @Override
+    public InvoiceProductDto delete(Long id) {
+        InvoiceProduct invoiceProduct = invoiceProductRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Invoice Product not found."));
+        invoiceProduct.setIsDeleted(true);
+        invoiceProductRepository.save(invoiceProduct);
+        InvoiceProductDto invoiceProductDto = mapperUtil.convert(invoiceProduct, new InvoiceProductDto());
+        return invoiceProductDto;
+    }
+
     private InvoiceProductDto calculateTotalInvoiceProduct(Long invoiceProductId) {
         InvoiceProductDto invoiceProductDTO = findById(invoiceProductId);
         BigDecimal total = BigDecimal.ZERO;
