@@ -146,9 +146,16 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public void delete(Long id) {
 
-        ClientVendor clientVendorId = clientVendorRepository.findById(id).orElseThrow();
-        clientVendorId.setIsDeleted(Boolean.TRUE);
-        clientVendorRepository.save(clientVendorId);
+        Optional<ClientVendor> clientVendorToBeDeleted = clientVendorRepository.findById(id);
+        if (clientVendorToBeDeleted.isPresent()){
+            if (!invoiceService.existsByClientVendorId(id)) {
+                clientVendorToBeDeleted.get().setIsDeleted(true);
+                clientVendorRepository.save(clientVendorToBeDeleted.get());
+            }else {
+                ClientVendorDto clientVendorDto =mapperUtil.convert(clientVendorToBeDeleted, new ClientVendorDto());
+                clientVendorDto.setHasInvoice(true);
+            }
+        }
 
     }
 }
