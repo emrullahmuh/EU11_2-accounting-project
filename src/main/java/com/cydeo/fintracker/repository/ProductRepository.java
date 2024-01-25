@@ -20,6 +20,12 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     void deleteProductById(Long id);
 
     List<Product> getProductsById(Long companyId);
+ 
     @Query("select p from Product p where p.category.id = ?1 ")
     List<Product> findByCategory(Long id);
+
+
+    Product findByName(String name);
+
+ 
 }

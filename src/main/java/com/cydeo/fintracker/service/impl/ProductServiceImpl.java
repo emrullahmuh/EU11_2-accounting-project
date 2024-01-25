@@ -1,6 +1,10 @@
 package com.cydeo.fintracker.service.impl;
 
+
 import com.cydeo.fintracker.dto.CategoryDto;
+
+import com.cydeo.fintracker.dto.InvoiceProductDto;
+
 import com.cydeo.fintracker.dto.ProductDto;
 import com.cydeo.fintracker.entity.Category;
 import com.cydeo.fintracker.entity.Product;
@@ -78,11 +82,34 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+
     public List<ProductDto> getProductsByCategory(Long id) {
 
         List<Product> products = productRepository.findByCategory(id);
 
         return products.stream().map(product-> mapperUtil.convert(product, new ProductDto()))
                 .collect(Collectors.toList());
+
+
+    public boolean checkInventory(InvoiceProductDto invoiceProductDto) {
+        if (invoiceProductDto.getProduct() == null) {
+            return false;
+        }
+        Product product = productRepository.findByName(invoiceProductDto.getProduct().getName());
+        return product.getQuantityInStock() < invoiceProductDto.getQuantity();
+      
+    public ProductDto save(ProductDto product) {
+
+        Product convertedProduct= mapperUtil.convert(product, new Product());
+
+        productRepository.save(convertedProduct);
+        log.info("Product is saved with description: '{}'", convertedProduct.getName());
+
+        ProductDto createdProduct = mapperUtil.convert(convertedProduct,new ProductDto());
+        log.info("Product is created with description: '{}'", createdProduct.getName());
+
+        return createdProduct;
+
+
     }
 }

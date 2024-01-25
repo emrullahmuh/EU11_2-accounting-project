@@ -1,16 +1,24 @@
 package com.cydeo.fintracker.service.impl;
 
 import com.cydeo.fintracker.dto.CompanyDto;
+import com.cydeo.fintracker.dto.CountryDto;
+import com.cydeo.fintracker.dto.UserDto;
 import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.enums.CompanyStatus;
+import com.cydeo.fintracker.feignclient.CountryFeignClient;
 import com.cydeo.fintracker.repository.CompanyRepository;
 import com.cydeo.fintracker.service.CompanyService;
 
+import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,6 +30,22 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final MapperUtil mapperUtil;
     private final CompanyRepository companyRepository;
+    private final SecurityService securityService;
+    private final CountryFeignClient countryFeignClient;
+
+    @Value("${API_COUNTRIES_KEY}")
+    private String apiCountriesKey;
+
+    @Override
+    public CompanyDto findById(Long companyId) {
+
+        Optional<Company> company = companyRepository.findById(companyId);
+        CompanyDto companyResponse = mapperUtil.convert(company, new CompanyDto());
+        log.info("Company found by id: '{}', '{}'", companyId, companyResponse);
+
+        return companyResponse;
+
+    }
 
     @Override
     public List<CompanyDto> getCompanies() {
@@ -31,23 +55,14 @@ public class CompanyServiceImpl implements CompanyService {
                 Sort.Order.asc("title")
         );
 
-        List<Company> companyList = companyRepository.findAll(sort);
+        List<Company> companies = companyRepository.getCompanies(sort);
 
-        return companyList.stream()
-                .filter(company -> company.getId() != 1)
-                .map(company -> mapperUtil.convert(company, new CompanyDto()))
-                .collect(Collectors.toList());
-
-    }
-
-    @Override
-    public CompanyDto findById(Long companyId) {
-
-        Optional company = companyRepository.findById(companyId);
-        CompanyDto companyResponse = mapperUtil.convert(company, new CompanyDto());
-        log.info("Company found by id: '{}', '{}'", companyId, companyResponse);
-
-        return companyResponse;
+        if (!companies.isEmpty()) {
+            return companies.stream()
+                    .map(company -> mapperUtil.convert(company, new CompanyDto()))
+                    .collect(Collectors.toList());
+        }
+        return Collections.singletonList(mapperUtil.convert(companies, new CompanyDto()));
 
     }
 
@@ -113,6 +128,68 @@ public class CompanyServiceImpl implements CompanyService {
         companyRepository.save(companyToBeDeactivate);
         log.info("Company status has changed: '{}'", companyToBeDeactivate.getCompanyStatus());
 
+    }
+
+    @Override
+    public BindingResult createUniqueTitle(String title, BindingResult bindingResult) {
+
+        if (companyRepository.existsByTitle(title)){
+            bindingResult.addError(new FieldError("newCompany", "title", "This title already exists."));
+        }
+
+        return bindingResult;
+
+    }
+
+    @Override
+    public BindingResult updateUniqueTitle(CompanyDto companyDto, BindingResult bindingResult) {
+
+        if (companyRepository.existsByTitleAndIdNot(companyDto.getTitle(),companyDto.getId())){
+            bindingResult.addError(new FieldError("newCompany", "title", "This title already exists."));
+        }
+
+        return bindingResult;
+
+    }
+
+
+    @Override
+    public List<String> getAllCountries() {
+
+        ResponseEntity<List<CountryDto>> apiCountries = countryFeignClient.getApiCountries(apiCountriesKey);
+
+        if (apiCountries.getStatusCode().is2xxSuccessful()) {
+            return apiCountries.getBody().stream()
+                    .map(CountryDto::getName)
+                    .collect(Collectors.toList());
+        }
+
+        return Collections.emptyList();
+
+    }
+
+    @Override
+    public List<CompanyDto> getCompanyDtoByLoggedInUser() {
+
+        UserDto loggedInUser = securityService.getLoggedInUser();
+
+        if(loggedInUser.getRole().getDescription().equals("Root User")){
+            List<Company> companies = companyRepository.getAllCompaniesForRoot(loggedInUser.getCompany().getId());
+            List<CompanyDto> companyDtoList = companies.stream().map(company -> mapperUtil.convert(company, new CompanyDto()))
+                    .collect(Collectors.toList());
+
+            log.info("Companies are retrieved by root user '{}'", companyDtoList.size() );
+
+            return companyDtoList;
+
+        } else {
+            Company company = companyRepository.getCompanyForCurrent(loggedInUser.getCompany().getId());
+            List<CompanyDto> companyDtoList = Collections.singletonList(mapperUtil.convert(company,new CompanyDto()));
+
+            log.info("Company is retrieved by logged in user '{}'",companyDtoList.size());
+
+            return companyDtoList;
+        }
     }
 
 }

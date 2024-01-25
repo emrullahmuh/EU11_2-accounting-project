@@ -15,6 +15,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table(name = "categories")
+@Builder
 public class Category extends BaseEntity {
 
     @Column(name = "description")
