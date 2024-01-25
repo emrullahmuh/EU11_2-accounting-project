@@ -26,7 +26,7 @@ public class ClientVendorController {
     @GetMapping("/list")
     public String listClientVendors(Model model){
 
-        List<ClientVendorDto> clientVendors = clientVendorService.getAll();
+        List<ClientVendorDto> clientVendors = clientVendorService.getAllClientVendorsCompany();
         model.addAttribute("clientVendors",clientVendors);
         return "clientVendor/clientVendor-list";
     }

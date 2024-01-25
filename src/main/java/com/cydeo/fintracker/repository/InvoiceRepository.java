@@ -16,4 +16,5 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     @Query("SELECT i FROM Invoice i WHERE i.invoiceType = ?1 AND i.company = ?2 ORDER BY i.invoiceNo DESC ")
     List<Invoice> retrieveInvoiceByTypeAndCompany(InvoiceType invoiceType, Company company);
 
+    boolean existsByClientVendorId (Long id);
 }

@@ -11,6 +11,7 @@ public interface ClientVendorService {
 
     List<ClientVendorDto> getAllClientVendors(ClientVendorType clientVendorType);
     List<ClientVendorDto> getAll();
+    List<ClientVendorDto> getAllClientVendorsCompany();
     ClientVendorDto findById(Long id);
     ClientVendorDto findByClientVendorName(String username);
     ClientVendorDto saveClientVendor(ClientVendorDto clientVendorDto);
