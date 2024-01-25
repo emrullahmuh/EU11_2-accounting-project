@@ -17,4 +17,5 @@ public interface ClientVendorService {
     ClientVendorDto saveClientVendor(ClientVendorDto clientVendorDto);
     ClientVendorDto update(Long id,ClientVendorDto clientVendor);
     void delete(Long id);
+    boolean isClientHasInvoice(Long id);
 }
