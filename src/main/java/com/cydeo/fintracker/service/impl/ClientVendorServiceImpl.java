@@ -14,6 +14,7 @@ import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.util.MapperUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -38,44 +39,46 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
         Optional<List<ClientVendor>> storedClientVendors = clientVendorRepository.findByClientVendorType(clientVendorType);
 
-        if(storedClientVendors.isEmpty()){
+        if (storedClientVendors.isEmpty()) {
             throw new NoSuchElementException();
 
         }
         List<ClientVendor> clientVendors = storedClientVendors.get();
         return clientVendors.stream()
-                .map(each -> mapperUtil.convert(each,new ClientVendorDto()))
+                .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
                 .collect(Collectors.toList());
 
     }
 
     @Override
     public List<ClientVendorDto> getAll() {
+        Long loggedUserCompanyId = securityService.getLoggedInUser().getCompany().getId();
 
-        Optional<List<ClientVendor>> clientVendorlist = clientVendorRepository.findAllByIsDeleted(false);
+        List<ClientVendor> clientVendorListByCompanyId = clientVendorRepository.findAllByCompany_IdAndIsDeleted(loggedUserCompanyId, false);
 
-        if(clientVendorlist.isEmpty()){
+        List<ClientVendor> clientVendorlist = clientVendorRepository.findAllByCompany_IdAndIsDeleted(loggedUserCompanyId, false);
+
+        if (clientVendorlist.isEmpty()) {
             throw new ClientVendorNotFoundException("There are no ClientVendor found");
         }
 
-        List<ClientVendor> storedClientVendorList = clientVendorlist.get();
-        return storedClientVendorList.stream().map(clientVendor ->
-                mapperUtil.convert(clientVendor,new ClientVendorDto())).collect(Collectors.toList());
+        return clientVendorlist.stream().sorted(Comparator.comparing(ClientVendor::getClientVendorType).reversed().thenComparing(ClientVendor::getClientVendorName)).map(clientVendor ->
+                mapperUtil.convert(clientVendor, new ClientVendorDto())).collect(Collectors.toList());
     }
 
     @Override
     public ClientVendorDto findById(Long id) {
 
-        ClientVendor clientVendor = clientVendorRepository.findById(id).orElseThrow(()->
-                new NoSuchElementException("Client vendor cannot be found: "+id));
-        return mapperUtil.convert(clientVendor,new ClientVendorDto());
+        ClientVendor clientVendor = clientVendorRepository.findById(id).orElseThrow(() ->
+                new NoSuchElementException("Client vendor cannot be found: " + id));
+        return mapperUtil.convert(clientVendor, new ClientVendorDto());
     }
 
     @Override
     public ClientVendorDto findByClientVendorName(String username) {
 
-        ClientVendor clientVendor= clientVendorRepository.findByClientVendorNameAndIsDeleted(username,false);
-        return mapperUtil.convert(clientVendor,new ClientVendorDto());
+        ClientVendor clientVendor = clientVendorRepository.findByClientVendorNameAndIsDeleted(username, false);
+        return mapperUtil.convert(clientVendor, new ClientVendorDto());
     }
 
     @Override
@@ -103,7 +106,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     }
 
     @Override
-    public ClientVendorDto update(Long id,ClientVendorDto clientVendor) {
+    public ClientVendorDto update(Long id, ClientVendorDto clientVendor) {
 
         //Find current ClientVendor
         ClientVendor clientVendor1 = clientVendorRepository.findById(id).orElseThrow();
@@ -118,7 +121,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         clientVendorRepository.save(convertedClientVendor);
 
         ClientVendor saved = clientVendorRepository.save(convertedClientVendor);
-        return mapperUtil.convert(saved,new ClientVendorDto());
+        return mapperUtil.convert(saved, new ClientVendorDto());
     }
 
     @Override
