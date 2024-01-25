@@ -61,7 +61,7 @@ public class CompanyController {
     public String updateCompany(@PathVariable("id") Long companyId, Model model) {
 
         model.addAttribute("company", companyService.findById(companyId));
-        model.addAttribute("countries", List.of("United States"));
+        model.addAttribute("countries", companyService.getAllCountries());
 
         return "company/company-update";
 
@@ -76,7 +76,7 @@ public class CompanyController {
 
             model.addAttribute("countries", companyService.getAllCountries());
 
-            return "company/company-create";
+            return "company/company-update";
 
         }
 
