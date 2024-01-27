@@ -4,7 +4,6 @@ import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.Role;
 import com.cydeo.fintracker.entity.User;
 
-import feign.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,12 +15,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Override
     Optional<User> findById(Long aLong);
 
-    Optional<User> findByUsername(String username);
+    User findByUsername(String username);
 
     List<User> findAllByIsDeleted(Boolean deleted);
 
+    @Query("SELECT COUNT(u) FROM User u WHERE u.company = ?1 AND u.role.id = 2")
+    Integer isUserOnlyAdmin(Company company, Role role);
 
-@Query("SELECT COUNT(u) FROM User u WHERE u.company = :company AND u.role.id = :roleId")
-Integer isUserOnlyAdmin(@Param("company") Company company, @Param("roleId") Long roleId);
+    @Query("SELECT u FROM User u WHERE u.company=?1 AND u.isDeleted=?2 ORDER BY u.role.description asc ")
+    List<User> findAllUserWithCompanyAndIsDeleted(Company company,Boolean isDeleted);
 
+    @Query("SELECT u FROM User u WHERE u.role.description=?1 AND u.isDeleted=?2")
+    List<User>findAllAdminRole(String role, Boolean isDeleted);
 }
