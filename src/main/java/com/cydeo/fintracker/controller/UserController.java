@@ -29,7 +29,7 @@ public class UserController {
     @GetMapping("/list")
     public String listAllUsers(Model model) {
 
-
+        model.addAttribute("roles", roleService.listAllRoles());
         model.addAttribute("users", userService.listAllUsers());
 
         return "user/user-list";
