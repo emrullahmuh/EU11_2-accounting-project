@@ -62,7 +62,8 @@ public class UserServiceImpl implements UserService {
         User user = mapperUtil.convert(userDto, new User());
         User storedUser = userRepository.save(user);
         log.info("User has been created with username: '{}'", storedUser.getUsername());
-        return mapperUtil.convert(user, new UserDto()); }
+        return mapperUtil.convert(user, new UserDto());
+    }
 
 
     @Override
@@ -78,16 +79,23 @@ public class UserServiceImpl implements UserService {
         return findByUsername(user.getUsername());
     }
 
-    @Override
-    public void delete(Long userId) {
-        User user = userRepository.findById(userId).get();
-        user.setUsername(user.getUsername() + " deleted" + user.getId());
-        user.setIsDeleted(true);
-
-
-
-        userRepository.save(user);
+    private boolean isOnlyAdmin(UserDto userDto) {
+        User user = mapperUtil.convert(userDto, new User());
+        Integer userOnlyAdmin = userRepository.isUserOnlyAdmin(user.getCompany(), user.getRole().getId());
+        return userOnlyAdmin != null && userOnlyAdmin == 1;
     }
 
 
+
+
+
+    @Override
+    public void delete(Long id) {
+        User user = userRepository.findById(id).get();
+        user.setIsDeleted(true);
+        user.setUsername(user.getUsername() + " deleted" + user.getId());
+        userRepository.save(user);
+    }
+
 }
+
