@@ -2,13 +2,18 @@ package com.cydeo.fintracker.service.impl;
 
 
 import com.cydeo.fintracker.dto.UserDto;
+import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.User;
+import com.cydeo.fintracker.exception.CompanyNotFoundException;
 import com.cydeo.fintracker.exception.UserNotFoundException;
+import com.cydeo.fintracker.repository.CompanyRepository;
 import com.cydeo.fintracker.repository.UserRepository;
 import com.cydeo.fintracker.service.UserService;
 import com.cydeo.fintracker.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,10 +24,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final MapperUtil mapperUtil;
+    private final CompanyRepository companyRepository;
 
 
     @Override
@@ -38,25 +44,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findByUsername(String username) {
 
-        Optional<User> user = userRepository.findByUsername(username);
-
-        if (user.isEmpty()) {
-            throw new UserNotFoundException("There is no user with given username: " + username);
-        }
-
-        User storedUser = user.get();
-        log.info("User found by username : '{}'", storedUser.getUsername());
+        User user = userRepository.findByUsername(username);
         return mapperUtil.convert(user, new UserDto());
     }
 
+
     @Override
     public List<UserDto> listAllUsers() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User LoggedInUser = userRepository.findByUsername(auth.getName());
 
-        List<User> userList = userRepository.findAllByIsDeleted(false);
+        if (LoggedInUser.getId() != 1) {
+            Company company = companyRepository
+                    .findById(LoggedInUser.getCompany().getId())
+                    .orElseThrow(() -> new CompanyNotFoundException("Company can't found with id " + LoggedInUser.getCompany().getId()));
 
-        return userList.stream().map(user -> mapperUtil.convert(user, new UserDto())).collect(Collectors.toList());
+            List<User> userList = userRepository.findAllUserWithCompanyAndIsDeleted(company, false);
+            return userList.stream().map(user -> mapperUtil.convert(user, new UserDto())).
+                    collect(Collectors.toList());
+        } else {
+            List<User> userList = userRepository.findAllAdminRole("Admin",false);
+            return userList.stream()
+                    .map(user -> mapperUtil.convert(user, new UserDto()))
+                    .peek(dto -> dto.setOnlyAdmin(isOnlyAdmin(dto)))
+                    .collect(Collectors.toList());
+        }
     }
-
     @Override
     public UserDto save(UserDto userDto) {
         User user = mapperUtil.convert(userDto, new User());
@@ -68,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UserDto user) {
-        User storedUser = userRepository.findByUsername(user.getUsername()).get();
+        User storedUser = userRepository.findByUsername(user.getUsername());
 
         User convertedUser = mapperUtil.convert(user, new User());
 
@@ -79,11 +92,13 @@ public class UserServiceImpl implements UserService {
         return findByUsername(user.getUsername());
     }
 
-    private boolean isOnlyAdmin(UserDto userDto) {
-        User user = mapperUtil.convert(userDto, new User());
-        Integer userOnlyAdmin = userRepository.isUserOnlyAdmin(user.getCompany(), user.getRole().getId());
-        return userOnlyAdmin != null && userOnlyAdmin == 1;
+    private boolean isOnlyAdmin(UserDto userDTO) {
+        User user = mapperUtil.convert(userDTO, new User());
+        Integer userOnlyAdmin = userRepository.isUserOnlyAdmin(user.getCompany(), user.getRole());
+        return userOnlyAdmin == 1;
+
     }
+
 
 
 
