@@ -17,6 +17,6 @@ public interface InvoiceService {
     String findInvoiceId();
     InvoiceDto approve(Long id);
     InvoiceDto createNewSalesInvoice();
-
+    boolean existsByClientVendorId (Long id);
 
 }

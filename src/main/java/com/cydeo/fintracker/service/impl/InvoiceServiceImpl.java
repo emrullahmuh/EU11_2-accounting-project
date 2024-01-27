@@ -132,6 +132,11 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceDto;
     }
 
+    @Override
+    public boolean existsByClientVendorId(Long id) {
+        return invoiceRepository.existsByClientVendorId(id);
+    }
+
     private InvoiceDto calculateTotal(Long id) {
         InvoiceDto invoiceDto=findById(id);
         List<InvoiceProductDto> productList = invoiceProductService.listAllInvoiceProduct(id);

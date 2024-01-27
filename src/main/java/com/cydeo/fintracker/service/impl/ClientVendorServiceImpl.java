@@ -3,6 +3,7 @@ package com.cydeo.fintracker.service.impl;
 
 import com.cydeo.fintracker.dto.ClientVendorDto;
 import com.cydeo.fintracker.dto.CompanyDto;
+import com.cydeo.fintracker.dto.CountryDto;
 import com.cydeo.fintracker.dto.UserDto;
 import com.cydeo.fintracker.entity.ClientVendor;
 import com.cydeo.fintracker.entity.Company;
@@ -10,6 +11,7 @@ import com.cydeo.fintracker.enums.ClientVendorType;
 import com.cydeo.fintracker.exception.ClientVendorNotFoundException;
 import com.cydeo.fintracker.repository.ClientVendorRepository;
 import com.cydeo.fintracker.service.ClientVendorService;
+import com.cydeo.fintracker.service.InvoiceService;
 import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.util.MapperUtil;
 import org.springframework.stereotype.Service;
@@ -26,11 +28,13 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     private final ClientVendorRepository clientVendorRepository;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
+    private final InvoiceService invoiceService;
 
-    public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, MapperUtil mapperUtil, SecurityService securityService) {
+    public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, MapperUtil mapperUtil, SecurityService securityService, InvoiceService invoiceService) {
         this.clientVendorRepository = clientVendorRepository;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
+        this.invoiceService = invoiceService;
     }
 
 
@@ -64,6 +68,23 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
         return clientVendorlist.stream().sorted(Comparator.comparing(ClientVendor::getClientVendorType).reversed().thenComparing(ClientVendor::getClientVendorName)).map(clientVendor ->
                 mapperUtil.convert(clientVendor, new ClientVendorDto())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ClientVendorDto> getAllClientVendorsCompany() {
+        UserDto loggedInUser = securityService.getLoggedInUser();
+        List<ClientVendor> clientVendors = clientVendorRepository.findByCompanyIdAndIsDeleted(loggedInUser.getCompany().getId(),false);
+        return clientVendors.stream().map(clientVendor -> {
+                    boolean hasInvoice = isClientHasInvoice(clientVendor.getId());
+                    ClientVendorDto convert = mapperUtil.convert(clientVendor, new ClientVendorDto());
+                    convert.setHasInvoice(hasInvoice);
+                    return convert;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public boolean isClientHasInvoice(Long id) {
+        return invoiceService.existsByClientVendorId(id);
     }
 
     @Override
@@ -116,6 +137,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
         //set id to the converted object
         convertedClientVendor.setId(clientVendor1.getId());
+        convertedClientVendor.setCompany( clientVendor1.getCompany() );
 
         //save the updated clientVendor in the db
         clientVendorRepository.save(convertedClientVendor);
@@ -127,9 +149,16 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public void delete(Long id) {
 
-        ClientVendor clientVendorId = clientVendorRepository.findById(id).orElseThrow();
-        clientVendorId.setIsDeleted(Boolean.TRUE);
-        clientVendorRepository.save(clientVendorId);
+        Optional<ClientVendor> clientVendorToBeDeleted = clientVendorRepository.findById(id);
+        if (clientVendorToBeDeleted.isPresent()){
+            if (!invoiceService.existsByClientVendorId(id)) {
+                clientVendorToBeDeleted.get().setIsDeleted(true);
+                clientVendorRepository.save(clientVendorToBeDeleted.get());
+            }else {
+                ClientVendorDto clientVendorDto =mapperUtil.convert(clientVendorToBeDeleted, new ClientVendorDto());
+                clientVendorDto.setHasInvoice(true);
+            }
+        }
 
     }
 }
