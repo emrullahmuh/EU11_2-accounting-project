@@ -73,7 +73,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public List<ClientVendorDto> getAllClientVendorsCompany() {
         UserDto loggedInUser = securityService.getLoggedInUser();
-        List<ClientVendor> clientVendors = clientVendorRepository.findAllByCompanyId(loggedInUser.getCompany().getId());
+        List<ClientVendor> clientVendors = clientVendorRepository.findByCompanyIdAndIsDeleted(loggedInUser.getCompany().getId(),false);
         return clientVendors.stream().map(clientVendor -> {
                     boolean hasInvoice = isClientHasInvoice(clientVendor.getId());
                     ClientVendorDto convert = mapperUtil.convert(clientVendor, new ClientVendorDto());
