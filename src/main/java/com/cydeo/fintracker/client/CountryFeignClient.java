@@ -1,4 +1,4 @@
-package com.cydeo.fintracker.feignclient;
+package com.cydeo.fintracker.client;
 
 import com.cydeo.fintracker.dto.CountryDto;
 import org.springframework.cloud.openfeign.FeignClient;

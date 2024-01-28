@@ -13,6 +13,8 @@ public interface ClientVendorService {
 
     List<ClientVendorDto> getAll();
 
+    List<ClientVendorDto> getAllClientVendorsCompany();
+
     ClientVendorDto findById(Long id);
 
     ClientVendorDto findByClientVendorName(String username);
@@ -22,4 +24,6 @@ public interface ClientVendorService {
     ClientVendorDto update(Long id, ClientVendorDto clientVendor);
 
     void delete(Long id);
+  
+    boolean isClientHasInvoice(Long id);
 }

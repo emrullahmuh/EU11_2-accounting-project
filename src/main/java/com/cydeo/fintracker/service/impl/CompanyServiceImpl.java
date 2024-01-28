@@ -5,7 +5,7 @@ import com.cydeo.fintracker.dto.CountryDto;
 import com.cydeo.fintracker.dto.UserDto;
 import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.enums.CompanyStatus;
-import com.cydeo.fintracker.feignclient.CountryFeignClient;
+import com.cydeo.fintracker.client.CountryFeignClient;
 import com.cydeo.fintracker.repository.CompanyRepository;
 import com.cydeo.fintracker.service.CompanyService;
 import com.cydeo.fintracker.service.SecurityService;
@@ -112,10 +112,9 @@ public class CompanyServiceImpl implements CompanyService {
         Company companyToBeActivate = companyRepository.findById(companyId).get();
 
         companyToBeActivate.setCompanyStatus(CompanyStatus.ACTIVE);
-        log.info("Company status has changed to 'Activated' : '{}'", companyToBeActivate);
 
         companyRepository.save(companyToBeActivate);
-        log.info("Company status has changed: '{}'", companyToBeActivate.getCompanyStatus());
+        log.info("Company: '{}' status has changed to '{}'", companyToBeActivate.getTitle(), companyToBeActivate.getCompanyStatus());
 
     }
 

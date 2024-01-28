@@ -21,11 +21,11 @@ public class CompanyDto {
     private String title;
 
     @NotBlank(message = "Phone Number is a required field.")
-    @Pattern(regexp = "(\\+\\d{1,3}( )?)?\\(?(\\d{3})\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}$", message = "Phone number should have a valid format. Ex: +1 (957) 463-7174")
+    @Pattern(regexp = "(\\+\\d{1,3} )?\\d{3}-\\d{3}-\\d{4}", message = "Phone number should have a valid format. Ex: +1 222-333-4444 or 222-333-4444")
     private String phone;
 
     @NotBlank(message = "Website is a required field.")
-    @Pattern(regexp = "^https?://[a-zA-Z0-9/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9/\\&\\?\\=\\-\\.\\~\\%]*", message = "Website should have a valid format.")
+    @Pattern(regexp = "^(www\\.)?[a-zA-Z0-9\\-]+\\.[a-zA-Z]{2,5}$", message = "Website should have a valid format. Ex: www.cydeo.com or cydeo.com")
     private String website;
 
     @Valid

@@ -24,6 +24,6 @@ public interface InvoiceService {
     InvoiceDto approve(Long id);
 
     InvoiceDto createNewSalesInvoice();
-
+    boolean existsByClientVendorId (Long id);
 
 }
