@@ -1,10 +1,7 @@
 package com.cydeo.fintracker.repository;
 
-import com.cydeo.fintracker.dto.CategoryDto;
-import com.cydeo.fintracker.entity.Category;
 import com.cydeo.fintracker.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -20,6 +17,9 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     void deleteProductById(Long id);
 
     List<Product> getProductsById(Long companyId);
+
+    Product findByName(String name);
+
     @Query("select p from Product p where p.category.id = ?1 ")
     List<Product> findByCategory(Long id);
 }

@@ -1,13 +1,12 @@
 package com.cydeo.fintracker.service.impl;
 
 import com.cydeo.fintracker.dto.CategoryDto;
-import com.cydeo.fintracker.dto.ProductDto;
 import com.cydeo.fintracker.entity.Category;
 import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.repository.CategoryRepository;
 import com.cydeo.fintracker.service.CategoryService;
-import com.cydeo.fintracker.service.ProductService;
 import com.cydeo.fintracker.util.MapperUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +19,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final MapperUtil mapperUtil;
-    private final ProductService productService;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, ProductService productService) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil) {
         this.categoryRepository = categoryRepository;
         this.mapperUtil = mapperUtil;
-        this.productService = productService;
     }
 
     @Override
@@ -100,16 +97,15 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean hasProducts(CategoryDto category) {
+    public boolean isCategoryDescriptionUnique(String description) {
 
-        List<ProductDto> productDtoList = productService.getProductsByCategory(category.getId());
-
-        return !productDtoList.isEmpty();
+        Category category = categoryRepository.findByDescription(description);
+        return category == null;
     }
 
-    private boolean checkIfCategoryCanBeDeleted(Category category){
+    private boolean checkIfCategoryCanBeDeleted(Category category) {
 
-       CategoryDto categoryDto = mapperUtil.convert(category,new CategoryDto());
+        CategoryDto categoryDto = mapperUtil.convert(category, new CategoryDto());
 
         return !categoryDto.isHasProduct();
     }

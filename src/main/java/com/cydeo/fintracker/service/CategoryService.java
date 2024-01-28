@@ -16,5 +16,7 @@ public interface CategoryService {
     CategoryDto save(CategoryDto category);
     boolean hasProducts(CategoryDto category);
 
+    boolean isCategoryDescriptionUnique(String description);
+
 
 }

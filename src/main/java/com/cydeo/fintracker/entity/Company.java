@@ -5,8 +5,10 @@ import com.cydeo.fintracker.enums.CompanyStatus;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,4 +33,6 @@ public class Company extends BaseEntity {
     @Column(name = "company_status")
     private CompanyStatus companyStatus;
 
+    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
+    private List<User> users;
 }
