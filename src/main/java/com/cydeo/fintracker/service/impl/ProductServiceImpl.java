@@ -76,6 +76,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDto> getProductsByCategory(Long id) {
+        List<Product> products = productRepository.findByCategory(id);
+
+        return products.stream().map(product-> mapperUtil.convert(product, new ProductDto()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
 
     public boolean checkInventory(InvoiceProductDto invoiceProductDto) {
         if (invoiceProductDto.getProduct() == null) {
