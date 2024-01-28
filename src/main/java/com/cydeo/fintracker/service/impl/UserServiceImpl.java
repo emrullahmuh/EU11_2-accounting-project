@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final MapperUtil mapperUtil;
@@ -58,9 +58,6 @@ public class UserServiceImpl implements UserService{
     }
 
 
-
-
-
     @Override
     public UserDto save(UserDto userDto) {
         User user = mapperUtil.convert(userDto, new User());
@@ -68,7 +65,6 @@ public class UserServiceImpl implements UserService{
         log.info("User has been created with username: '{}'", storedUser.getUsername());
         return mapperUtil.convert(user, new UserDto());
     }
-
 
 
     @Override
@@ -90,6 +86,7 @@ public class UserServiceImpl implements UserService{
         return userOnlyAdmin == 1;
 
     }
+
     public List<UserDto> listAllUsers() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User loggedInUser = userRepository.findByUsername(auth.getName())
@@ -112,9 +109,6 @@ public class UserServiceImpl implements UserService{
     }
 
 
-
-
-
     @Override
     public void delete(Long id) {
         User user = userRepository.findById(id).get();
@@ -124,4 +118,5 @@ public class UserServiceImpl implements UserService{
     }
 
 }
+
 
