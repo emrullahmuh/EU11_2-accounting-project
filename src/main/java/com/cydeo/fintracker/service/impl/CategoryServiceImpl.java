@@ -1,12 +1,13 @@
 package com.cydeo.fintracker.service.impl;
 
 import com.cydeo.fintracker.dto.CategoryDto;
+import com.cydeo.fintracker.dto.ProductDto;
 import com.cydeo.fintracker.entity.Category;
 import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.repository.CategoryRepository;
 import com.cydeo.fintracker.service.CategoryService;
+import com.cydeo.fintracker.service.ProductService;
 import com.cydeo.fintracker.util.MapperUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,23 +20,25 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final MapperUtil mapperUtil;
+    private final ProductService productService;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, ProductService productService) {
         this.categoryRepository = categoryRepository;
         this.mapperUtil = mapperUtil;
+        this.productService = productService;
     }
 
     @Override
-    public CategoryDto getById(Long id)  {
+    public CategoryDto getById(Long id) {
 
-       Category category = categoryRepository.findByIdAndIsDeleted(id,false)
-               .orElseThrow(()-> new CategoryNotFoundException("Category Not Found"));
+        Category category = categoryRepository.findByIdAndIsDeleted(id, false)
+                .orElseThrow(() -> new CategoryNotFoundException("Category Not Found"));
 
-       CategoryDto categoryResponse = mapperUtil.convert(category, new CategoryDto()) ;
+        CategoryDto categoryResponse = mapperUtil.convert(category, new CategoryDto());
 
-       log.info("Category found by id: '{}', '{}'", id, categoryResponse);
+        log.info("Category found by id: '{}', '{}'", id, categoryResponse);
 
-       return categoryResponse;
+        return categoryResponse;
     }
 
     @Override
@@ -43,15 +46,15 @@ public class CategoryServiceImpl implements CategoryService {
 
         List<Category> categoryList = categoryRepository.findAllByIsDeleted(false);
         return categoryList.stream()
-                .map(category->mapperUtil.convert(category, new CategoryDto()))
+                .map(category -> mapperUtil.convert(category, new CategoryDto()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CategoryDto update(CategoryDto category,Long id)  {
+    public CategoryDto update(CategoryDto category, Long id) {
 
-        Category storedCategory = categoryRepository.findByIdAndIsDeleted(id,false)
-                .orElseThrow(()->new CategoryNotFoundException("Category Not Found"));
+        Category storedCategory = categoryRepository.findByIdAndIsDeleted(id, false)
+                .orElseThrow(() -> new CategoryNotFoundException("Category Not Found"));
 
         Category convertedCategory = mapperUtil.convert(category, new Category());
 
@@ -61,18 +64,18 @@ public class CategoryServiceImpl implements CategoryService {
         Category savedCategory = categoryRepository.save(convertedCategory);
         log.info("Category is updated '{}', '{}'", savedCategory.getDescription(), savedCategory);
 
-        return mapperUtil.convert(savedCategory,new CategoryDto());
+        return mapperUtil.convert(savedCategory, new CategoryDto());
 
 
     }
 
     @Override
-    public void delete(Long id)  {
+    public void delete(Long id) {
 
-        Category category = categoryRepository.findByIdAndIsDeleted(id,false)
-                .orElseThrow(()->new CategoryNotFoundException("Category Not Found"));
+        Category category = categoryRepository.findByIdAndIsDeleted(id, false)
+                .orElseThrow(() -> new CategoryNotFoundException("Category Not Found"));
 
-        if(checkIfCategoryCanBeDeleted(category)){
+        if (checkIfCategoryCanBeDeleted(category)) {
 
             category.setIsDeleted(true);
 
@@ -97,10 +100,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+
+    public boolean hasProducts(CategoryDto category) {
+
+        List<ProductDto> productDtoList = productService.getProductsByCategory(category.getId());
+
+        return !productDtoList.isEmpty();
+    }
+
     public boolean isCategoryDescriptionUnique(String description) {
 
         Category category = categoryRepository.findByDescription(description);
         return category == null;
+
     }
 
     private boolean checkIfCategoryCanBeDeleted(Category category) {
@@ -110,3 +122,4 @@ public class CategoryServiceImpl implements CategoryService {
         return !categoryDto.isHasProduct();
     }
 }
+

@@ -1,7 +1,12 @@
 package com.cydeo.fintracker.service;
 
+
+import com.cydeo.fintracker.dto.CategoryDto;
+
 import com.cydeo.fintracker.dto.InvoiceProductDto;
+
 import com.cydeo.fintracker.dto.ProductDto;
+
 import com.cydeo.fintracker.entity.Product;
 
 import java.util.List;
@@ -18,6 +23,7 @@ public interface ProductService {
     void delete(Long id);
 
     List<Product> getProductsByCompanyId(Long id);
+    List<ProductDto> getProductsByCategory(Long id);
 
     boolean checkInventory(InvoiceProductDto invoiceProductDTO);
 

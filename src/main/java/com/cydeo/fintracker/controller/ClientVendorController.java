@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-@RequiredArgsConstructor
+
 @RequestMapping("/clientVendors")
 public class ClientVendorController {
 
