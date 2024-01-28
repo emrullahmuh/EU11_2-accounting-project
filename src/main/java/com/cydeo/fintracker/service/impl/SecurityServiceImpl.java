@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
+
 
 @Service
 public class SecurityServiceImpl implements SecurityService {
@@ -26,10 +26,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).get();
-        if (user == null) {
-            throw new NoSuchElementException("This user does not exist");
-        }
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("This user does not exist"));
         return new UserPrincipal(user);
     }
 

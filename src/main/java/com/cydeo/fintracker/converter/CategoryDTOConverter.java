@@ -2,6 +2,7 @@ package com.cydeo.fintracker.converter;
 
 import com.cydeo.fintracker.dto.CategoryDto;
 import com.cydeo.fintracker.service.CategoryService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ public class CategoryDTOConverter implements Converter<Object, CategoryDto> {
 
     private final CategoryService categoryService;
 
-    public CategoryDTOConverter(CategoryService categoryService) {
+    public CategoryDTOConverter(@Lazy CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
