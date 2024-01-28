@@ -100,22 +100,23 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+
     public boolean hasProducts(CategoryDto category) {
+
         List<ProductDto> productDtoList = productService.getProductsByCategory(category.getId());
 
         return !productDtoList.isEmpty();
-    }
 
-    @Override
     public boolean isCategoryDescriptionUnique(String description) {
 
         Category category = categoryRepository.findByDescription(description);
         return category == null;
+
     }
 
-    private boolean checkIfCategoryCanBeDeleted(Category category) {
+    private boolean checkIfCategoryCanBeDeleted(Category category){
 
-        CategoryDto categoryDto = mapperUtil.convert(category, new CategoryDto());
+       CategoryDto categoryDto = mapperUtil.convert(category,new CategoryDto());
 
         return !categoryDto.isHasProduct();
     }

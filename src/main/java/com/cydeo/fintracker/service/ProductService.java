@@ -1,7 +1,12 @@
 package com.cydeo.fintracker.service;
 
+
+import com.cydeo.fintracker.dto.CategoryDto;
+
 import com.cydeo.fintracker.dto.InvoiceProductDto;
+
 import com.cydeo.fintracker.dto.ProductDto;
+
 import com.cydeo.fintracker.entity.Product;
 
 import java.util.List;

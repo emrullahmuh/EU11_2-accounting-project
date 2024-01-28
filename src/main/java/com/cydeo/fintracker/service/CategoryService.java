@@ -14,9 +14,11 @@ public interface CategoryService {
     CategoryDto update(CategoryDto category, Long id) ;
     void delete(Long id) ;
     CategoryDto save(CategoryDto category);
+
     boolean hasProducts(CategoryDto category);
 
     boolean isCategoryDescriptionUnique(String description);
+
 
 
 }
