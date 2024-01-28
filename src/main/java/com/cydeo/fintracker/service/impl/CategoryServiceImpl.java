@@ -103,9 +103,9 @@ public class CategoryServiceImpl implements CategoryService {
         return category == null;
     }
 
-    private boolean checkIfCategoryCanBeDeleted(Category category){
+    private boolean checkIfCategoryCanBeDeleted(Category category) {
 
-       CategoryDto categoryDto = mapperUtil.convert(category,new CategoryDto());
+        CategoryDto categoryDto = mapperUtil.convert(category, new CategoryDto());
 
         return !categoryDto.isHasProduct();
     }

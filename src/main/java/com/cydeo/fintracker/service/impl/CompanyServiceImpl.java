@@ -8,19 +8,21 @@ import com.cydeo.fintracker.enums.CompanyStatus;
 import com.cydeo.fintracker.client.CountryFeignClient;
 import com.cydeo.fintracker.repository.CompanyRepository;
 import com.cydeo.fintracker.service.CompanyService;
-
 import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -132,7 +134,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public BindingResult createUniqueTitle(String title, BindingResult bindingResult) {
 
-        if (companyRepository.existsByTitle(title)){
+        if (companyRepository.existsByTitle(title)) {
             bindingResult.addError(new FieldError("newCompany", "title", "This title already exists."));
         }
 
@@ -172,20 +174,20 @@ public class CompanyServiceImpl implements CompanyService {
 
         UserDto loggedInUser = securityService.getLoggedInUser();
 
-        if(loggedInUser.getRole().getDescription().equals("Root User")){
+        if (loggedInUser.getRole().getDescription().equals("Root User")) {
             List<Company> companies = companyRepository.getAllCompaniesForRoot(loggedInUser.getCompany().getId());
             List<CompanyDto> companyDtoList = companies.stream().map(company -> mapperUtil.convert(company, new CompanyDto()))
                     .collect(Collectors.toList());
 
-            log.info("Companies are retrieved by root user '{}'", companyDtoList.size() );
+            log.info("Companies are retrieved by root user '{}'", companyDtoList.size());
 
             return companyDtoList;
 
         } else {
             Company company = companyRepository.getCompanyForCurrent(loggedInUser.getCompany().getId());
-            List<CompanyDto> companyDtoList = Collections.singletonList(mapperUtil.convert(company,new CompanyDto()));
+            List<CompanyDto> companyDtoList = Collections.singletonList(mapperUtil.convert(company, new CompanyDto()));
 
-            log.info("Company is retrieved by logged in user '{}'",companyDtoList.size());
+            log.info("Company is retrieved by logged in user '{}'", companyDtoList.size());
 
             return companyDtoList;
         }

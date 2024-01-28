@@ -60,11 +60,13 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
         List<ClientVendor> clientVendorListByCompanyId = clientVendorRepository.findAllByCompany_IdAndIsDeleted(loggedUserCompanyId, false);
 
+
         List<ClientVendor> clientVendorlist = clientVendorRepository.findAllByCompany_IdAndIsDeleted(loggedUserCompanyId, false);
 
         if (clientVendorlist.isEmpty()) {
             throw new ClientVendorNotFoundException("There are no ClientVendor found");
         }
+
 
         return clientVendorlist.stream().sorted(Comparator.comparing(ClientVendor::getClientVendorType).reversed().thenComparing(ClientVendor::getClientVendorName)).map(clientVendor ->
                 mapperUtil.convert(clientVendor, new ClientVendorDto())).collect(Collectors.toList());
@@ -162,3 +164,4 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     }
 }
+

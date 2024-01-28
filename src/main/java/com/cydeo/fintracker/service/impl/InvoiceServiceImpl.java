@@ -52,9 +52,9 @@ public class InvoiceServiceImpl implements InvoiceService {
     public List<InvoiceDto> listAllInvoices(InvoiceType invoiceType) {
 
         CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser().get(0);
-        Company company = mapperUtil.convert(companyDto,new Company());
+        Company company = mapperUtil.convert(companyDto, new Company());
 
-        return invoiceRepository.findAllByInvoiceTypeAndCompanyAndIsDeletedOrderByInvoiceNoDesc(invoiceType,company,false).stream()
+        return invoiceRepository.findAllByInvoiceTypeAndCompanyAndIsDeletedOrderByInvoiceNoDesc(invoiceType, company, false).stream()
                 .map(invoice -> calculateTotal(invoice.getId()))
                 .map(invoice -> mapperUtil.convert(invoice, new InvoiceDto()))
                 .collect(Collectors.toList());
@@ -94,12 +94,12 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceDto createNewPurchaseInvoice() {
         CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser().get(0);
-        Company company=mapperUtil.convert(companyDto,new Company());
+        Company company = mapperUtil.convert(companyDto, new Company());
         InvoiceDto invoiceDto = new InvoiceDto();
-        int no = invoiceRepository.findAllByInvoiceTypeAndCompanyOrderByInvoiceNoDesc(InvoiceType.PURCHASE,company).size() + 1;
-        if(no<10) invoiceDto.setInvoiceNo("P-00" + no);
-        else if(no<100 && no>=10)  invoiceDto.setInvoiceNo("P-0" + no);
-        else  invoiceDto.setInvoiceNo("P-" + no);
+        int no = invoiceRepository.findAllByInvoiceTypeAndCompanyOrderByInvoiceNoDesc(InvoiceType.PURCHASE, company).size() + 1;
+        if (no < 10) invoiceDto.setInvoiceNo("P-00" + no);
+        else if (no < 100 && no >= 10) invoiceDto.setInvoiceNo("P-0" + no);
+        else invoiceDto.setInvoiceNo("P-" + no);
         invoiceDto.setDate(LocalDate.now());
         invoiceDto.setInvoiceStatus(InvoiceStatus.AWAITING_APPROVAL);
         return invoiceDto;
@@ -113,7 +113,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceDto approve(Long id) {
         Invoice invoice = invoiceRepository.findById(id)
-                .orElseThrow(()->new NoSuchElementException("Invoice does not exist!."));
+                .orElseThrow(() -> new NoSuchElementException("Invoice does not exist!."));
         invoice.setInvoiceStatus(InvoiceStatus.APPROVED);
         invoiceRepository.save(invoice);
         return mapperUtil.convert(invoice, new InvoiceDto());
@@ -123,7 +123,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceDto createNewSalesInvoice() {
         CompanyDto companyDTO = companyService.getCompanyDtoByLoggedInUser().get(0);
-        Company company = mapperUtil.convert(companyDTO,new Company());
+        Company company = mapperUtil.convert(companyDTO, new Company());
         InvoiceDto invoiceDto = new InvoiceDto();
         int no = invoiceRepository.retrieveInvoiceByTypeAndCompany(InvoiceType.SALES, company).size() + 1;
         invoiceDto.setInvoiceNo(no < 10 ? "S-00" + no : no < 100 ? "S-0" + no : "S-" + no);
@@ -138,14 +138,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     private InvoiceDto calculateTotal(Long id) {
-        InvoiceDto invoiceDto=findById(id);
+        InvoiceDto invoiceDto = findById(id);
         List<InvoiceProductDto> productList = invoiceProductService.listAllInvoiceProduct(id);
         BigDecimal totalPrice = BigDecimal.valueOf(0);
-        BigDecimal totalWithTax=BigDecimal.valueOf(0);
-        BigDecimal tax=BigDecimal.valueOf(0);
+        BigDecimal totalWithTax = BigDecimal.valueOf(0);
+        BigDecimal tax = BigDecimal.valueOf(0);
         for (InvoiceProductDto each : productList) {
             totalPrice = totalPrice.add(BigDecimal.valueOf(each.getQuantity()).multiply(each.getPrice()));
-            tax=tax.add(BigDecimal.valueOf(each.getQuantity()).multiply(each.getPrice()).multiply(BigDecimal.valueOf(each.getTax()).divide(BigDecimal.valueOf(100))).setScale(2));
+            tax = tax.add(BigDecimal.valueOf(each.getQuantity()).multiply(each.getPrice()).multiply(BigDecimal.valueOf(each.getTax()).divide(BigDecimal.valueOf(100))).setScale(2));
             totalWithTax = totalPrice.add(tax);
 
         }

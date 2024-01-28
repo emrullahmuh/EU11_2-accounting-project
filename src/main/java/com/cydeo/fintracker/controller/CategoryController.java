@@ -61,15 +61,15 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public String insertCategory(@Valid @ModelAttribute("newCategory") CategoryDto category, BindingResult bindingResult){
+    public String insertCategory(@Valid @ModelAttribute("newCategory") CategoryDto category, BindingResult bindingResult) {
 
         boolean categoryDescriptionUnique = categoryService.isCategoryDescriptionUnique(category.getDescription());
 
-        if(!categoryDescriptionUnique){
-            bindingResult.rejectValue("description"," ","This category description is already exists");
+        if (!categoryDescriptionUnique) {
+            bindingResult.rejectValue("description", " ", "This category description is already exists");
         }
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "category/category-create";
         }
 

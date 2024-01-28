@@ -21,10 +21,10 @@ public class DashboardController {
     }
 
     @GetMapping
-    public String dashboardPage(Model model){
+    public String dashboardPage(Model model) {
 
-        model.addAttribute("summaryNumbers",dashboardService.summaryCalculation() );
-        model.addAttribute("exchangeRates",exchangeClient.getExchangesRates().getUsd());
+        model.addAttribute("summaryNumbers", dashboardService.summaryCalculation());
+        model.addAttribute("exchangeRates", exchangeClient.getExchangesRates().getUsd());
 
         return "/dashboard";
     }

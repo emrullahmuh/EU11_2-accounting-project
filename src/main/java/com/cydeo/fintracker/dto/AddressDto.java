@@ -29,8 +29,8 @@ public class AddressDto {
     @Size(min = 2, max = 50, message = "State should have 2-50 characters long.")
     private String state;
 
-    @NotBlank(message =  "Country is a required field.")
-    @Size(message ="Country should have 2-50 characters long.")
+    @NotBlank(message = "Country is a required field.")
+    @Size(message = "Country should have 2-50 characters long.")
     private String country;
 
     @NotBlank(message = "Zipcode is a required field.")

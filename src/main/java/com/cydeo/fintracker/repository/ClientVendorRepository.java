@@ -22,4 +22,5 @@ public interface ClientVendorRepository extends JpaRepository<ClientVendor, Long
     List<ClientVendor> findAllByCompany_IdAndIsDeleted(Long loggedUserCompanyId, boolean isDeleted);
 
     List<ClientVendor> findByCompanyIdAndIsDeleted(Long id,boolean deleted);
+
 }

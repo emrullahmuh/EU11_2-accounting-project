@@ -51,7 +51,7 @@ public class SalesInvoiceController {
         }
         invoiceService.save(invoice, InvoiceType.SALES);
         String id = invoiceService.findInvoiceId();
-        return "redirect:/salesInvoices/update/"+id;
+        return "redirect:/salesInvoices/update/" + id;
     }
 
     @GetMapping("/update/{id}")
@@ -65,8 +65,8 @@ public class SalesInvoiceController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateSalesInvoice(@PathVariable("id") Long id,@ModelAttribute("newPurchaseInvoice")InvoiceDto invoice) {
-        invoiceService.save(invoice,InvoiceType.SALES);
+    public String updateSalesInvoice(@PathVariable("id") Long id, @ModelAttribute("newPurchaseInvoice") InvoiceDto invoice) {
+        invoiceService.save(invoice, InvoiceType.SALES);
         invoiceService.createNewSalesInvoice();
         return "redirect:/salesInvoices/list";
     }
@@ -116,7 +116,6 @@ public class SalesInvoiceController {
         invoiceProductService.delete(invoiceProductId);
         return "redirect:/salesInvoices/update/"+id;
     }
-
 
 
 }

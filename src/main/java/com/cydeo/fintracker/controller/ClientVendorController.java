@@ -4,6 +4,7 @@ package com.cydeo.fintracker.controller;
 import com.cydeo.fintracker.dto.ClientVendorDto;
 import com.cydeo.fintracker.enums.ClientVendorType;
 import com.cydeo.fintracker.service.ClientVendorService;
+import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.service.CompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -21,13 +22,24 @@ import java.util.List;
 public class ClientVendorController {
 
     private final ClientVendorService clientVendorService;
+    private final SecurityService securityService;
     private final CompanyService companyService;
+    public ClientVendorController(ClientVendorService clientVendorService, SecurityService securityService, CompanyService companyService) {
+        this.clientVendorService = clientVendorService;
+        this.securityService = securityService;
+      this.companyService = companyService;
+    }
+
 
     @GetMapping("/list")
-    public String listClientVendors(Model model){
+    public String listClientVendors(Model model) {
 
-        List<ClientVendorDto> clientVendors = clientVendorService.getAllClientVendorsCompany();
-        model.addAttribute("clientVendors",clientVendors);
+        List<ClientVendorDto> clientVendors = clientVendorService.getAll();
+        model.addAttribute("clientVendors", clientVendors);
+
+       // List<ClientVendorDto> clientVendors = clientVendorService.getAllClientVendorsCompany();
+       // model.addAttribute("clientVendors",clientVendors);
+
         return "clientVendor/clientVendor-list";
     }
 
