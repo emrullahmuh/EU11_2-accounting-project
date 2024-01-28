@@ -50,12 +50,22 @@ public class UserServiceImpl implements UserService {
         return mapperUtil.convert(user, new UserDto());
     }
 
+
     @Override
     public UserDto findByUsername(String username) {
 
         Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("There is no user with given username: " + username);
+        }
+
+        User storedUser = user.get();
+        log.info("User found by username : '{}'", storedUser.getUsername());
         return mapperUtil.convert(user, new UserDto());
     }
+
+
 
 
     @Override
