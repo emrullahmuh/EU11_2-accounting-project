@@ -6,7 +6,11 @@ import com.cydeo.fintracker.entity.Category;
 import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.repository.CategoryRepository;
 import com.cydeo.fintracker.service.CategoryService;
+
+import com.cydeo.fintracker.service.SecurityService;
+
 import com.cydeo.fintracker.service.ProductService;
+
 import com.cydeo.fintracker.util.MapperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,12 +24,21 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final MapperUtil mapperUtil;
+
+    private final SecurityService securityService;
+
+    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, SecurityService securityService) {
+        this.categoryRepository = categoryRepository;
+        this.mapperUtil = mapperUtil;
+        this.securityService = securityService;
+
     private final ProductService productService;
 
     public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, ProductService productService) {
         this.categoryRepository = categoryRepository;
         this.mapperUtil = mapperUtil;
         this.productService = productService;
+
     }
 
     @Override
@@ -43,8 +56,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> listAllCategories() {
-
-        List<Category> categoryList = categoryRepository.findAllByIsDeleted(false);
+        Long companyId=securityService.getLoggedInUser().getCompany().getId();
+        List<Category> categoryList = categoryRepository.findAllByCompanyIdAndIsDeleted(companyId,false);
         return categoryList.stream()
                 .map(category -> mapperUtil.convert(category, new CategoryDto()))
                 .collect(Collectors.toList());
