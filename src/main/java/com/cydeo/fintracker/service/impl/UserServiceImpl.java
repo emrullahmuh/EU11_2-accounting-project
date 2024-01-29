@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final MapperUtil mapperUtil;
     private final CompanyService companyService;
 
+
     public UserServiceImpl(UserRepository userRepository, MapperUtil mapperUtil, @Lazy CompanyService companyService) {
         this.userRepository = userRepository;
         this.mapperUtil = mapperUtil;
@@ -96,27 +97,29 @@ public class UserServiceImpl implements UserService {
         return userOnlyAdmin == 1;
 
     }
-
     public List<UserDto> listAllUsers() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User loggedInUser = userRepository.findByUsername(auth.getName())
                 .orElseThrow(() -> new UserNotFoundException("User not found: " + auth.getName()));
 
-        if ("Root".equals(loggedInUser.getRole().getDescription())) {
-            // Root User can list only admins of all companies
-            return userRepository.findAllAdminRole("Admin", false).stream()
-                    .map(user -> {
-                        UserDto userDto = mapperUtil.convert(user, new UserDto());
-                        userDto.setOnlyAdmin(isOnlyAdmin(userDto));
-                        return userDto;
-                    })
+        if (!"Root".equals(loggedInUser.getRole().getDescription())) {
+            CompanyDto companyDto = companyService.findById(loggedInUser.getCompany().getId());
+            List<User> userList = userRepository.findAllUserWithCompanyAndIsDeleted(
+                    mapperUtil.convert(companyDto, new Company()), false);
+
+            return userList.stream()
+                    .map(user -> mapperUtil.convert(user, new UserDto()))
                     .collect(Collectors.toList());
         } else {
-            // Admin can only see his/her company's users
-            return null;
+            List<User> userList = userRepository.findAllAdminRole("Admin", false);
+            return userList.stream()
+                    .map(user -> mapperUtil.convert(user, new UserDto()))
+                    .peek(dto -> dto.setOnlyAdmin(isOnlyAdmin(dto)))
+                    .collect(Collectors.toList());
         }
-
     }
+
+
 
 
     @Override
