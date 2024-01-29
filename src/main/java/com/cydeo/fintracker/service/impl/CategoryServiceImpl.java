@@ -1,8 +1,10 @@
 package com.cydeo.fintracker.service.impl;
 
 import com.cydeo.fintracker.dto.CategoryDto;
+import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.dto.ProductDto;
 import com.cydeo.fintracker.entity.Category;
+import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.repository.CategoryRepository;
 import com.cydeo.fintracker.service.CategoryService;
@@ -12,6 +14,7 @@ import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.service.ProductService;
 
 import com.cydeo.fintracker.util.MapperUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,26 +23,15 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final MapperUtil mapperUtil;
-
     private final SecurityService securityService;
-
-    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, SecurityService securityService) {
-        this.categoryRepository = categoryRepository;
-        this.mapperUtil = mapperUtil;
-        this.securityService = securityService;
-
     private final ProductService productService;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, ProductService productService) {
-        this.categoryRepository = categoryRepository;
-        this.mapperUtil = mapperUtil;
-        this.productService = productService;
 
-    }
 
     @Override
     public CategoryDto getById(Long id) {
@@ -56,8 +48,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> listAllCategories() {
-        Long companyId=securityService.getLoggedInUser().getCompany().getId();
+        CompanyDto company = securityService.getLoggedInUser().getCompany();
+        Long companyId = company.getId();
         List<Category> categoryList = categoryRepository.findAllByCompanyIdAndIsDeleted(companyId,false);
+        log.info("Total :'{}' categories has been listed for company: '{}'", categoryList.size(), company.getTitle() );
         return categoryList.stream()
                 .map(category -> mapperUtil.convert(category, new CategoryDto()))
                 .collect(Collectors.toList());
