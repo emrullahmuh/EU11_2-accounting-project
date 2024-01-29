@@ -102,25 +102,21 @@ public class UserServiceImpl implements UserService {
         User loggedInUser = userRepository.findByUsername(auth.getName())
                 .orElseThrow(() -> new UserNotFoundException("User not found: " + auth.getName()));
 
-        if (!"Root".equals(loggedInUser.getRole().getDescription())) {
+        if (!"Root User".equals(loggedInUser.getRole().getDescription())) {
             CompanyDto companyDto = companyService.findById(loggedInUser.getCompany().getId());
             List<User> userList = userRepository.findAllUserWithCompanyAndIsDeleted(
                     mapperUtil.convert(companyDto, new Company()), false);
-
             return userList.stream()
                     .map(user -> mapperUtil.convert(user, new UserDto()))
                     .collect(Collectors.toList());
+
         } else {
             List<User> userList = userRepository.findAllAdminRole("Admin", false);
             return userList.stream()
                     .map(user -> mapperUtil.convert(user, new UserDto()))
-                    .peek(dto -> dto.setOnlyAdmin(isOnlyAdmin(dto)))
                     .collect(Collectors.toList());
         }
     }
-
-
-
 
     @Override
     public void delete(Long id) {
