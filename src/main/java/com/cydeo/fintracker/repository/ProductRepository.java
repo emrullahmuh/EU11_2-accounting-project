@@ -24,8 +24,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @Query("select p from Product p where p.category.id = ?1 ")
     List<Product> findByCategory(Long id);
 
-
     Product findByName(String name);
 
- 
+    boolean existsByName(String productName);
 }
