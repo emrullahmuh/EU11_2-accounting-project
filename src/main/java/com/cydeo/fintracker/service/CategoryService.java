@@ -1,6 +1,7 @@
 package com.cydeo.fintracker.service;
 
 
+import com.cydeo.fintracker.entity.Category;
 import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.dto.CategoryDto;
 
@@ -13,7 +14,11 @@ public interface CategoryService {
     CategoryDto update(CategoryDto category, Long id) ;
     void delete(Long id) ;
     CategoryDto save(CategoryDto category);
+
+    boolean hasProducts(CategoryDto category);
+
     boolean isCategoryDescriptionUnique(String description);
+
 
 
 }

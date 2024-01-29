@@ -31,7 +31,7 @@ public class RoleServiceImplUnitTest {
     private RoleServiceImpl roleService;
 
     @Test
-    public void testListAllRoles(){
+    public void testListAllRoles() {
 
         Role role = new Role();
         Role role1 = new Role();
@@ -54,7 +54,6 @@ public class RoleServiceImplUnitTest {
         verify(mapperUtil, times(2)).convert(any(Role.class), any(RoleDto.class));
 
         assertEquals(2, result.size());
-
 
 
     }

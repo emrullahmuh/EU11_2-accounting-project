@@ -1,7 +1,12 @@
 package com.cydeo.fintracker.service.impl;
 
+
+import com.cydeo.fintracker.dto.CategoryDto;
+
 import com.cydeo.fintracker.dto.InvoiceProductDto;
+
 import com.cydeo.fintracker.dto.ProductDto;
+import com.cydeo.fintracker.entity.Category;
 import com.cydeo.fintracker.entity.Product;
 import com.cydeo.fintracker.repository.ProductRepository;
 import com.cydeo.fintracker.service.ProductService;
@@ -9,6 +14,8 @@ import com.cydeo.fintracker.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import java.util.List;
 import java.util.Optional;
@@ -77,13 +84,21 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
 
+    public List<ProductDto> getProductsByCategory(Long id) {
+
+        List<Product> products = productRepository.findByCategory(id);
+
+        return products.stream().map(product -> mapperUtil.convert(product, new ProductDto()))
+                .collect(Collectors.toList());
+
+    }
+
     public boolean checkInventory(InvoiceProductDto invoiceProductDto) {
         if (invoiceProductDto.getProduct() == null) {
             return false;
         }
         Product product = productRepository.findByName(invoiceProductDto.getProduct().getName());
         return product.getQuantityInStock() < invoiceProductDto.getQuantity();
-
     }
 
     public ProductDto save(ProductDto product) {
@@ -98,5 +113,16 @@ public class ProductServiceImpl implements ProductService {
 
         return createdProduct;
 
+
+    }
+
+    @Override
+    public BindingResult uniqueName(ProductDto productDto, BindingResult bindingResult) {
+        if (productRepository.existsByName(productDto.getName())){
+            bindingResult.addError(new FieldError("newProduct","name","this product name already existed"));
+        }
+        return bindingResult;
+
     }
 }
+
