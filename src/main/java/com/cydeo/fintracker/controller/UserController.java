@@ -29,7 +29,7 @@ public class UserController {
     @GetMapping("/list")
     public String listAllUsers(Model model) {
 
-
+        model.addAttribute("roles", roleService.listAllRoles());
         model.addAttribute("users", userService.listAllUsers());
 
         return "user/user-list";
@@ -54,7 +54,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
 
             model.addAttribute("user", new UserDto());
-            model.addAttribute("userRoles", roleService.listAllRoles());
+            model.addAttribute("userRoles", roleService.getAllRolesForLoggedInUser());
             model.addAttribute("companies", companyService.getCompanyDtoByLoggedInUser());
 
             return "user/user-create";
