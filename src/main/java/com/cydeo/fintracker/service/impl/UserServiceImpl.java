@@ -14,11 +14,15 @@ import com.cydeo.fintracker.service.UserService;
 import com.cydeo.fintracker.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import net.bytebuddy.asm.Advice;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +36,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final MapperUtil mapperUtil;
+
+    private final PasswordEncoder passwordEncoder;
+
     private final CompanyService companyService;
+
 
 
     public UserServiceImpl(UserRepository userRepository, MapperUtil mapperUtil, @Lazy CompanyService companyService) {
@@ -73,12 +81,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto save(UserDto userDto) {
+
+
         User user = mapperUtil.convert(userDto, new User());
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         user.setEnabled(true);
         User storedUser = userRepository.save(user);
+
         log.info("User has been created with username: '{}'", storedUser.getUsername());
-        return mapperUtil.convert(user, new UserDto());
-    }
+
+        return mapperUtil.convert(storedUser, new UserDto()); }
 
 
     @Override

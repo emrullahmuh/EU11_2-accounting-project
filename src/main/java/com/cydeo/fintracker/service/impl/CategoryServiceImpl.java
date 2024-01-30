@@ -49,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> listAllCategories() {
+
         CompanyDto company = securityService.getLoggedInUser().getCompany();
         Long companyId = company.getId();
         List<Category> categoryList = categoryRepository.findAllByCompanyIdAndIsDeleted(companyId,false);
@@ -95,10 +96,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto save(CategoryDto category) {
 
-        UserDto loggedUser=securityService.getLoggedInUser();
-        CompanyDto companyDto=loggedUser.getCompany();
-        Company company=mapperUtil.convert(companyDto,new Company());
-
+        CompanyDto companyDto = securityService.getLoggedInUser().getCompany();
+        category.setCompany(companyDto);
 
         Category convertedCategory = mapperUtil.convert(category, new Category());
 
@@ -109,7 +108,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         CategoryDto createdCategory = mapperUtil.convert(convertedCategory, new CategoryDto());
         log.info("Category is created: '{}'", createdCategory.getDescription());
-
 
         return createdCategory;
     }

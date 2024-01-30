@@ -3,12 +3,15 @@ package com.cydeo.fintracker.service.impl;
 
 import com.cydeo.fintracker.dto.CategoryDto;
 
+import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.dto.InvoiceProductDto;
 
 import com.cydeo.fintracker.dto.ProductDto;
 import com.cydeo.fintracker.entity.Category;
+import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.Product;
 import com.cydeo.fintracker.repository.ProductRepository;
+import com.cydeo.fintracker.service.CompanyService;
 import com.cydeo.fintracker.service.ProductService;
 import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.util.MapperUtil;
@@ -29,16 +32,19 @@ public class ProductServiceImpl implements ProductService {
 
     private final MapperUtil mapperUtil;
     private final ProductRepository productRepository;
+    private final CompanyService companyService;
     private final SecurityService securityService;
+
 
 
     @Override
     public List<ProductDto> getProducts() {
 
-        Long loggedInUserId = securityService.getLoggedInUser().getId();
+        CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser().get(0);
 
+        Company company = mapperUtil.convert(companyDto, new Company());
 
-        List<Product> products = productRepository.getProductsByInsertUserIdAndIsDeleted(loggedInUserId, false);
+        List<Product> products = productRepository.findAllByCompany(company, false);
 
         return products.stream()
                 .map(product -> mapperUtil.convert(product, new ProductDto())).collect(Collectors.toList());

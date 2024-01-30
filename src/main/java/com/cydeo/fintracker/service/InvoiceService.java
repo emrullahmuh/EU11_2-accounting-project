@@ -11,7 +11,7 @@ public interface InvoiceService {
 
     List<InvoiceDto> listAllInvoices(InvoiceType invoiceType);
 
-    void save(InvoiceDto invoiceDto, InvoiceType invoiceType);
+    InvoiceDto save(InvoiceDto invoiceDto, InvoiceType invoiceType);
 
     InvoiceDto update(InvoiceDto invoiceDto);
 
