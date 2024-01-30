@@ -29,7 +29,6 @@ public class ClientVendorDto {
     @NotBlank(message = "Phone Number is required field and may be in any valid phone number format.")
     private String phone;
 
-    @NotBlank(message = "Website is a required field.")
     @Pattern(regexp = "^(www\\.)?[a-zA-Z0-9\\-]+\\.[a-zA-Z]{2,5}$", message = "Website should have a valid format. Ex: www.cydeo.com or cydeo.com")
     private String website;
 
