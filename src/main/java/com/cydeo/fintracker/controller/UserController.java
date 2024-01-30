@@ -50,11 +50,10 @@ public class UserController {
 
 
     @PostMapping("/create")
-    public String insertUser(@Valid @ModelAttribute("user") UserDto user, BindingResult bindingResult, Model model) {
+    public String insertUser(@Valid @ModelAttribute("newUser") UserDto user, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
 
-            model.addAttribute("user", new UserDto());
             model.addAttribute("userRoles", roleService.getAllRolesForLoggedInUser());
             model.addAttribute("companies", companyService.getCompanyDtoByLoggedInUser());
 
