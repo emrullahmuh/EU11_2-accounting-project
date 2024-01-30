@@ -57,9 +57,12 @@ public class UserServiceImpl implements UserService {
         return userList.stream().map(user -> mapperUtil.convert(user, new UserDto())).collect(Collectors.toList());
     }
 
+
+
     @Override
     public UserDto save(UserDto userDto) {
         User user = mapperUtil.convert(userDto, new User());
+        user.setEnabled(true);
         User storedUser = userRepository.save(user);
         log.info("User has been created with username: '{}'", storedUser.getUsername());
         return mapperUtil.convert(user, new UserDto()); }
