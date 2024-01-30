@@ -36,15 +36,5 @@ public class Company extends BaseEntity {
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
     private List<User> users;
 
-    @Override
-    public String toString() {
-        return "Company{" +
-                "title='" + title + '\'' +
-                ", phone='" + phone + '\'' +
-                ", website='" + website + '\'' +
-                ", address=" + address +
-                ", companyStatus=" + companyStatus +
-                ", users=" + (users != null ? users.size() : null) +
-                '}';
-    }
+
 }
