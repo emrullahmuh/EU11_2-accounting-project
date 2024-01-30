@@ -12,19 +12,21 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product,Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findAll();
 
-    @Transactional
-    void deleteProductById(Long id);
-
     List<Product> getProductsById(Long companyId);
- 
+
     @Query("select p from Product p where p.category.id = ?1 ")
+
     List<Product> findByCategory(Long id);
 
     Product findByName(String name);
 
     boolean existsByName(String productName);
+
+    List<Product> getProductsByInsertUserIdAndIsDeleted(Long id, boolean deleted);
+
+
 }
