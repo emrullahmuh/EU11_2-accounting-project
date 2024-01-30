@@ -48,7 +48,7 @@ public class UserDto {
     private CompanyDto company;
     private boolean enabled;
 
-    private boolean isOnlyAdmin; //(should be true if this user is only admin of any company.) I will write in business logic part
+    private boolean isOnlyAdmin; // Note from User Story: Should be true if this user is only admin of any company
 
     public void setPassword(String password) {
         this.password = password;
