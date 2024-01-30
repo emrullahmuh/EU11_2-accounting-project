@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.logging.Logger;
 
 
@@ -49,7 +50,7 @@ public class UserController {
 
 
     @PostMapping("/create")
-    public String insertUser(@ModelAttribute("user") UserDto user, BindingResult bindingResult, Model model) {
+    public String insertUser(@Valid @ModelAttribute("user") UserDto user, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
 
