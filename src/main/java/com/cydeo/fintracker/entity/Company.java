@@ -35,4 +35,5 @@ public class Company extends BaseEntity {
 
     @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
     private List<User> users;
+
 }
