@@ -3,6 +3,7 @@ package com.cydeo.fintracker.service.impl;
 import com.cydeo.fintracker.dto.CategoryDto;
 import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.dto.ProductDto;
+import com.cydeo.fintracker.dto.UserDto;
 import com.cydeo.fintracker.entity.Category;
 import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.exception.CategoryNotFoundException;
@@ -94,9 +95,16 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto save(CategoryDto category) {
 
+        UserDto loggedUser=securityService.getLoggedInUser();
+        CompanyDto companyDto=loggedUser.getCompany();
+        Company company=mapperUtil.convert(companyDto,new Company());
+
+
         Category convertedCategory = mapperUtil.convert(category, new Category());
 
+        convertedCategory.setCompany(company);
         categoryRepository.save(convertedCategory);
+
         log.info("Category is saved with description: '{}'", convertedCategory.getDescription());
 
         CategoryDto createdCategory = mapperUtil.convert(convertedCategory, new CategoryDto());
