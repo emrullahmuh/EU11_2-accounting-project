@@ -16,10 +16,7 @@ import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.util.MapperUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,13 +55,10 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     public List<ClientVendorDto> getAll() {
         Long loggedUserCompanyId = securityService.getLoggedInUser().getCompany().getId();
 
-        List<ClientVendor> clientVendorListByCompanyId = clientVendorRepository.findAllByCompany_IdAndIsDeleted(loggedUserCompanyId, false);
-
-
         List<ClientVendor> clientVendorlist = clientVendorRepository.findAllByCompany_IdAndIsDeleted(loggedUserCompanyId, false);
 
         if (clientVendorlist.isEmpty()) {
-            throw new ClientVendorNotFoundException("There are no ClientVendor found");
+            return Collections.emptyList();
         }
 
 
