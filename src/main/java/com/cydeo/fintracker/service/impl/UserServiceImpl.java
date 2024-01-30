@@ -5,28 +5,19 @@ import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.dto.UserDto;
 import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.User;
-import com.cydeo.fintracker.exception.CompanyNotFoundException;
 import com.cydeo.fintracker.exception.UserNotFoundException;
-import com.cydeo.fintracker.repository.CompanyRepository;
 import com.cydeo.fintracker.repository.UserRepository;
 import com.cydeo.fintracker.service.CompanyService;
 import com.cydeo.fintracker.service.UserService;
 import com.cydeo.fintracker.util.MapperUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import net.bytebuddy.asm.Advice;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Repository;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,16 +27,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final MapperUtil mapperUtil;
-
     private final PasswordEncoder passwordEncoder;
 
     private final CompanyService companyService;
 
-
-
-    public UserServiceImpl(UserRepository userRepository, MapperUtil mapperUtil, @Lazy CompanyService companyService) {
+    public UserServiceImpl(UserRepository userRepository, MapperUtil mapperUtil, PasswordEncoder passwordEncoder, @Lazy CompanyService companyService) {
         this.userRepository = userRepository;
         this.mapperUtil = mapperUtil;
+        this.passwordEncoder = passwordEncoder;
         this.companyService = companyService;
     }
 

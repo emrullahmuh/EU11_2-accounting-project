@@ -97,6 +97,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto save(CategoryDto category) {
 
         CompanyDto companyDto = securityService.getLoggedInUser().getCompany();
+        Company company = mapperUtil.convert(companyDto, new Company());
         category.setCompany(companyDto);
 
         Category convertedCategory = mapperUtil.convert(category, new Category());
