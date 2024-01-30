@@ -40,8 +40,8 @@ public class UserController {
     public String createUser(Model model) {
 
         model.addAttribute("newUser", new UserDto());
-        model.addAttribute("userRoles", roleService.listAllRoles());
-        model.addAttribute("companies", companyService.getCompanies());
+        model.addAttribute("userRoles", roleService.getAllRolesForLoggedInUser());
+        model.addAttribute("companies", companyService.getCompanyDtoByLoggedInUser());
 
         return "user/user-create";
 
@@ -55,7 +55,7 @@ public class UserController {
 
             model.addAttribute("user", new UserDto());
             model.addAttribute("userRoles", roleService.listAllRoles());
-            model.addAttribute("companies", companyService.getCompanies());
+            model.addAttribute("companies", companyService.getCompanyDtoByLoggedInUser());
 
             return "user/user-create";
 
