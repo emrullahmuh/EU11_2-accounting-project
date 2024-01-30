@@ -48,17 +48,23 @@ public class RoleServiceImpl implements RoleService{
         return mapperUtil.convert(role,new RoleDto());
     }
 
-    @Override
     public List<RoleDto> getAllRolesForLoggedInUser() {
         UserDto loggedInUser = securityService.getLoggedInUser();
+
         if ("Root User".equals(loggedInUser.getRole().getDescription())) {
+            log.info("Roles are retrieved by root user '{}'", loggedInUser.getUsername());
+
             Role role = roleRepository.getAllRoleForRoot();
             return Collections.singletonList(mapperUtil.convert(role, new RoleDto()));
         } else {
             List<Role> roleList = roleRepository.getAllRoleForAdmin();
-            return roleList.stream()
-                    .map(role1 -> mapperUtil.convert(role1, new RoleDto()))
+            List<RoleDto> roleDtoList = roleList.stream()
+                    .map(role -> mapperUtil.convert(role, new RoleDto()))
                     .collect(Collectors.toList());
+
+            log.info("Roles are retrieved by logged-in user '{}'. Number of roles: {}", loggedInUser.getUsername(), roleDtoList.size());
+
+            return roleDtoList;
         }
     }
 
