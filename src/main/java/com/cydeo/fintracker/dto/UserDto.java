@@ -6,6 +6,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
+@Setter
 public class UserDto {
 
     private Long id;
@@ -18,6 +20,6 @@ public class UserDto {
     private RoleDto role;
     private CompanyDto company;
     private boolean isOnlyAdmin; // Note from User Story: Should be true if this user is only admin of any company
-                                 // TO BE DONE DURING SECURITY
+
 
 }
