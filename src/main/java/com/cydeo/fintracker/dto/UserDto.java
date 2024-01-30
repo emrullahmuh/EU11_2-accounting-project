@@ -49,6 +49,7 @@ public class UserDto {
     private boolean enabled;
 
     private boolean isOnlyAdmin; // Note from User Story: Should be true if this user is only admin of any company
+
     public void setPassword(String password) {
         this.password = password;
         checkConfirmPassword();
