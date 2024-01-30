@@ -71,20 +71,20 @@ public class UserController {
     public String editUser(@PathVariable("userid") long userId, Model model) {
 
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("userRoles", roleService.listAllRoles());
-        model.addAttribute("companies", companyService.getCompanies());
+        model.addAttribute("userRoles", roleService.getAllRolesForLoggedInUser());
+        model.addAttribute("companies", companyService.getCompanyDtoByLoggedInUser());
 
         return "user/user-update";
 
     }
 
     @PostMapping("/update")
-    public String updateUser( @ModelAttribute("user") UserDto user, BindingResult bindingResult, Model model) {
+    public String updateUser(@Valid @ModelAttribute("user") UserDto user, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
 
-            model.addAttribute("userRoles", roleService.listAllRoles());
-            model.addAttribute("companies", companyService.getCompanies());
+            model.addAttribute("userRoles", roleService.getAllRolesForLoggedInUser());
+            model.addAttribute("companies", companyService.getCompanyDtoByLoggedInUser());
 
             return "user/user-update";
 
