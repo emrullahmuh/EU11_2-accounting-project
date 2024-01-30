@@ -23,13 +23,12 @@ public interface ProductService {
 
     void delete(Long id);
 
-    List<Product> getProductsByCompanyId(Long id);
     List<ProductDto> getProductsByCategory(Long id);
 
     boolean checkInventory(InvoiceProductDto invoiceProductDTO);
 
     ProductDto save(ProductDto product);
 
-BindingResult uniqueName(ProductDto productDto,BindingResult bindingResult);
+    BindingResult uniqueName(ProductDto productDto, BindingResult bindingResult);
 
 }
