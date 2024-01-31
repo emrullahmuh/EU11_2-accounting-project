@@ -2,6 +2,7 @@ package com.cydeo.fintracker.service;
 
 
 import com.cydeo.fintracker.dto.InvoiceProductDto;
+import com.cydeo.fintracker.entity.InvoiceProduct;
 
 import java.util.List;
 
@@ -12,6 +13,10 @@ public interface InvoiceProductService {
 
     InvoiceProductDto save(InvoiceProductDto invoiceProductDto, Long id);
     InvoiceProductDto delete(Long invoiceProductId);
+
+    List<InvoiceProductDto> findAll();
+
+    List<InvoiceProductDto> findAllByInvoiceIdAndIsDeleted(Long id, Boolean isDeleted);
 
 
 
