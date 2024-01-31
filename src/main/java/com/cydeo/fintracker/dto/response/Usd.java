@@ -14,7 +14,7 @@ public class Usd {
     private BigDecimal gbp;
     private BigDecimal cad;
     private BigDecimal jpy;
-    private BigDecimal inr;
+    private BigDecimal tr;
 
     public BigDecimal getEuro() {
         return eur;
@@ -32,7 +32,7 @@ public class Usd {
         return jpy;
     }
 
-    public BigDecimal getIndianRupee() {
-        return inr;
+    public BigDecimal getTurkishLira() {
+        return tr;
     }
 }
