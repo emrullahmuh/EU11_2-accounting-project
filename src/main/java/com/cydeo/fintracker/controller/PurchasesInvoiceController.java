@@ -67,7 +67,7 @@ public class PurchasesInvoiceController {
         model.addAttribute("vendors", clientVendorService.getAllClientVendors(ClientVendorType.VENDOR));
         model.addAttribute("newInvoiceProduct", new InvoiceProductDto());
         model.addAttribute("products", productService.getProducts());
-        model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceIdAndIsDeleted(id, false));
+        model.addAttribute("invoiceProducts", invoiceProductService.listAllInvoiceProduct(id));
 
         return "invoice/purchase-invoice-update";
     }
@@ -86,11 +86,11 @@ public class PurchasesInvoiceController {
             model.addAttribute("invoice", invoiceService.findById(id));
             model.addAttribute("vendors", clientVendorService.getAllClientVendors(ClientVendorType.VENDOR));
             model.addAttribute("products", productService.getProducts());
-            model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceIdAndIsDeleted(id, false));
+            model.addAttribute("invoiceProducts", invoiceProductService.listAllInvoiceProduct(id));
             return "invoice/purchase-invoice-update";
         }
         invoiceProductService.save(invoiceProductDto, id);
-        model.addAttribute("invoiceProducts", invoiceProductService.findAllByInvoiceIdAndIsDeleted(id, false));
+        model.addAttribute("invoiceProducts", invoiceProductService.listAllInvoiceProduct(id));
         return "redirect:/purchaseInvoices/update/" + id;
 
     }

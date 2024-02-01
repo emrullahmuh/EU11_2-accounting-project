@@ -61,7 +61,6 @@ public class CompanyServiceImpl implements CompanyService {
 
         if (!companies.isEmpty()) {
             return companies.stream()
-                    .filter(company -> !company.getTitle().equalsIgnoreCase("CYDEO"))
                     .map(company -> mapperUtil.convert(company, new CompanyDto()))
                     .collect(Collectors.toList());
         }

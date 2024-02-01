@@ -14,5 +14,4 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findAllByIsDeleted(boolean isDeleted);
 
     Category findByDescription(String description);
-    List<Category>findAllByCompanyIdAndIsDeleted(Long companyId,boolean isDeleted);
 }

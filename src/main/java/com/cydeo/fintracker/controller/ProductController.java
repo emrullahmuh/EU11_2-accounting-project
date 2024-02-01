@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+
 
 
 @Controller
@@ -44,14 +44,14 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public String insertProduct(@Valid @ModelAttribute("newProduct") ProductDto product, BindingResult bindingResult, Model model) {
-        bindingResult = productService.uniqueName(product, bindingResult);
-        if (bindingResult.hasFieldErrors()) {
+    public String insertProduct(@ModelAttribute("newProduct") ProductDto product, BindingResult bindingResult,Model model) {
 
-            model.addAttribute("categories", categoryService.listAllCategories());
+        if (bindingResult.hasErrors()){
+
+            model.addAttribute("categories",categoryService.listAllCategories());
             model.addAttribute("productUnits", ProductUnit.values());
 
-            return "product/product-create";
+            return "product/product-list";
 
         }
 
@@ -72,34 +72,15 @@ public class ProductController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateProduct(@ModelAttribute("product") ProductDto product, BindingResult bindingResult, Model model) {
+    public String updateProduct(@ModelAttribute("product") ProductDto productDto) {
 
-        if (bindingResult.hasErrors()) {
-
-            model.addAttribute("product", productService.findById(product.getId()));
-            model.addAttribute("categories", categoryService.listAllCategories());
-            model.addAttribute("productUnits", ProductUnit.values());
-
-            return "product/product-update";
-
-        }
-
-        productService.updateProduct(product);
+        productService.updateProduct(productDto);
 
         return "redirect:/products/list";
-
     }
 
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable("id") Long id) {
-
-        ProductDto existingProduct = productService.findById(id);
-
-        if (existingProduct.getQuantityInStock() > 0) {
-
-            return "redirect:/products/list";
-        }
-
 
         productService.delete(id);
 

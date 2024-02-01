@@ -17,9 +17,9 @@ import com.cydeo.fintracker.util.MapperUtil;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,6 +59,56 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     }
 
+    private BigDecimal calculatePriceWithoutTax(List<InvoiceProductDto> invoiceProductDtoList) {
+
+        BigDecimal priceWithoutTax = invoiceProductDtoList.stream()
+                .map(invoiceProductDto ->
+                        invoiceProductDto.getPrice().multiply(BigDecimal.valueOf(invoiceProductDto.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return priceWithoutTax;
+    }
+
+    private BigDecimal calculateTaxForProduct(InvoiceProductDto invoiceProductDto) {
+        BigDecimal price = invoiceProductDto.getPrice();
+        BigDecimal tax = BigDecimal.valueOf(invoiceProductDto.getTax());
+        BigDecimal quantity = BigDecimal.valueOf(invoiceProductDto.getQuantity());
+
+        BigDecimal taxAmount = price.multiply(quantity).multiply(tax).divide(BigDecimal.valueOf(100));
+
+        taxAmount = taxAmount.setScale(2, RoundingMode.HALF_UP);
+
+        return taxAmount;
+    }
+
+    private BigDecimal calculateTaxForList(List<InvoiceProductDto> invoiceProductDtoList) {
+
+        BigDecimal taxAmount = invoiceProductDtoList.stream()
+                .map(this::calculateTaxForProduct)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return taxAmount;
+    }
+
+    private BigDecimal calculateTotalList(InvoiceDto invoiceDto, List<InvoiceProductDto> productList) {
+        BigDecimal totalPrice = productList.stream()
+                .map(product -> BigDecimal.valueOf(product.getQuantity()).multiply(product.getPrice()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal tax = productList.stream()
+                .map(product -> BigDecimal.valueOf(product.getQuantity())
+                        .multiply(product.getPrice())
+                        .multiply(BigDecimal.valueOf(product.getTax()).divide(BigDecimal.valueOf(100))))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalWithTax = totalPrice.add(tax);
+
+        invoiceDto.setTax(tax);
+        invoiceDto.setPrice(totalPrice);
+        invoiceDto.setTotal(totalWithTax.setScale(2));
+        return totalWithTax;
+    }
+
     @Override
     public InvoiceDto save(InvoiceDto invoiceDto, InvoiceType invoiceType) {
 
@@ -75,6 +125,31 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice savedInvoice = invoiceRepository.save(invoice);
 
         return mapperUtil.convert(savedInvoice, new InvoiceDto());
+    }
+
+    @Override
+    public List<InvoiceDto> getLast3ApprovedInvoices() {
+        List<Invoice> last3Invoices = invoiceRepository.findByInvoiceStatusOrderByDateDesc(InvoiceStatus.APPROVED);
+
+        return last3Invoices.stream()
+                .map(invoice -> {
+                    InvoiceDto invoiceDto = mapperUtil.convert(invoice, new InvoiceDto());
+
+                    List<InvoiceProductDto> invoiceProductDtoList =
+                            invoiceProductService.findByInvoiceId(invoiceDto.getId());
+
+                    BigDecimal priceWithoutTax = calculatePriceWithoutTax(invoiceProductDtoList);
+                    BigDecimal taxAmount = calculateTaxForList(invoiceProductDtoList);
+                    BigDecimal total = calculateTotalList(invoiceDto, invoiceProductDtoList);
+
+                    invoiceDto.setTax(taxAmount);
+                    invoiceDto.setPrice(priceWithoutTax);
+                    invoiceDto.setTotal(total.setScale(2));
+
+                    return invoiceDto;
+                })
+                .limit(3)
+                .collect(Collectors.toList());
     }
 
     @Override

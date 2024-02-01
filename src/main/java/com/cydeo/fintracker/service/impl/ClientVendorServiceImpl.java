@@ -3,6 +3,7 @@ package com.cydeo.fintracker.service.impl;
 
 import com.cydeo.fintracker.dto.ClientVendorDto;
 import com.cydeo.fintracker.dto.CompanyDto;
+import com.cydeo.fintracker.dto.CountryDto;
 import com.cydeo.fintracker.dto.UserDto;
 import com.cydeo.fintracker.entity.ClientVendor;
 import com.cydeo.fintracker.entity.Company;
@@ -10,13 +11,15 @@ import com.cydeo.fintracker.enums.ClientVendorType;
 import com.cydeo.fintracker.exception.ClientVendorNotFoundException;
 import com.cydeo.fintracker.repository.ClientVendorRepository;
 import com.cydeo.fintracker.service.ClientVendorService;
-import com.cydeo.fintracker.service.CompanyService;
 import com.cydeo.fintracker.service.InvoiceService;
 import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.util.MapperUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,25 +29,19 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
     private final InvoiceService invoiceService;
-    private final CompanyService companyService;
 
-    public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, MapperUtil mapperUtil, SecurityService securityService, InvoiceService invoiceService, CompanyService companyService) {
+    public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, MapperUtil mapperUtil, SecurityService securityService, InvoiceService invoiceService) {
         this.clientVendorRepository = clientVendorRepository;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
         this.invoiceService = invoiceService;
-        this.companyService = companyService;
     }
 
 
     @Override
     public List<ClientVendorDto> getAllClientVendors(ClientVendorType clientVendorType) {
 
-        CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser().get(0);
-
-        Company company = mapperUtil.convert(companyDto, new Company());
-
-        Optional<List<ClientVendor>> storedClientVendors = clientVendorRepository.findAllByClientVendorTypeAndCompanyOrderByClientVendorName(ClientVendorType.VENDOR, company);
+        Optional<List<ClientVendor>> storedClientVendors = clientVendorRepository.findByClientVendorType(clientVendorType);
 
         if (storedClientVendors.isEmpty()) {
             throw new NoSuchElementException();
@@ -61,10 +58,13 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     public List<ClientVendorDto> getAll() {
         Long loggedUserCompanyId = securityService.getLoggedInUser().getCompany().getId();
 
+        List<ClientVendor> clientVendorListByCompanyId = clientVendorRepository.findAllByCompany_IdAndIsDeleted(loggedUserCompanyId, false);
+
+
         List<ClientVendor> clientVendorlist = clientVendorRepository.findAllByCompany_IdAndIsDeleted(loggedUserCompanyId, false);
 
         if (clientVendorlist.isEmpty()) {
-            return Collections.emptyList();
+            throw new ClientVendorNotFoundException("There are no ClientVendor found");
         }
 
 

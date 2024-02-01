@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.logging.Logger;
 
 
@@ -30,7 +29,7 @@ public class UserController {
     @GetMapping("/list")
     public String listAllUsers(Model model) {
 
-        model.addAttribute("roles", roleService.listAllRoles());
+
         model.addAttribute("users", userService.listAllUsers());
 
         return "user/user-list";
@@ -41,8 +40,8 @@ public class UserController {
     public String createUser(Model model) {
 
         model.addAttribute("newUser", new UserDto());
-        model.addAttribute("userRoles", roleService.getAllRolesForLoggedInUser());
-        model.addAttribute("companies", companyService.getCompanyDtoByLoggedInUser());
+        model.addAttribute("userRoles", roleService.listAllRoles());
+        model.addAttribute("companies", companyService.getCompanies());
 
         return "user/user-create";
 
@@ -50,12 +49,13 @@ public class UserController {
 
 
     @PostMapping("/create")
-    public String insertUser(@Valid @ModelAttribute("newUser") UserDto user, BindingResult bindingResult, Model model) {
+    public String insertUser(@ModelAttribute("user") UserDto user, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
 
-            model.addAttribute("userRoles", roleService.getAllRolesForLoggedInUser());
-            model.addAttribute("companies", companyService.getCompanyDtoByLoggedInUser());
+            model.addAttribute("user", new UserDto());
+            model.addAttribute("userRoles", roleService.listAllRoles());
+            model.addAttribute("companies", companyService.getCompanies());
 
             return "user/user-create";
 
@@ -71,20 +71,20 @@ public class UserController {
     public String editUser(@PathVariable("userid") long userId, Model model) {
 
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("userRoles", roleService.getAllRolesForLoggedInUser());
-        model.addAttribute("companies", companyService.getCompanyDtoByLoggedInUser());
+        model.addAttribute("userRoles", roleService.listAllRoles());
+        model.addAttribute("companies", companyService.getCompanies());
 
         return "user/user-update";
 
     }
 
     @PostMapping("/update")
-    public String updateUser(@Valid @ModelAttribute("user") UserDto user, BindingResult bindingResult, Model model) {
+    public String updateUser( @ModelAttribute("user") UserDto user, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
 
-            model.addAttribute("userRoles", roleService.getAllRolesForLoggedInUser());
-            model.addAttribute("companies", companyService.getCompanyDtoByLoggedInUser());
+            model.addAttribute("userRoles", roleService.listAllRoles());
+            model.addAttribute("companies", companyService.getCompanies());
 
             return "user/user-update";
 
@@ -96,9 +96,10 @@ public class UserController {
 
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") Long id) {
-        userService.delete(id);
+    @GetMapping("/delete/{userId}")
+    public String deleteUser(@PathVariable("userId") Long userId) {
+        userService.delete(userId);
+
         return "redirect:/users/list";
     }
 

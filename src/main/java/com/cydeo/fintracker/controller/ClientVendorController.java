@@ -30,20 +30,15 @@ public class ClientVendorController {
       this.companyService = companyService;
     }
 
-    @GetMapping("/list/v1")
+
+    @GetMapping("/list")
     public String listClientVendors(Model model) {
 
         List<ClientVendorDto> clientVendors = clientVendorService.getAll();
         model.addAttribute("clientVendors", clientVendors);
 
-        return "clientVendor/clientVendor-list";
-    }
-
-    @GetMapping("/list")
-    public String listClientVendorsCompany(Model model) {
-
-        List<ClientVendorDto> clientVendors = clientVendorService.getAllClientVendorsCompany();
-        model.addAttribute("clientVendors",clientVendors);
+       // List<ClientVendorDto> clientVendors = clientVendorService.getAllClientVendorsCompany();
+       // model.addAttribute("clientVendors",clientVendors);
 
         return "clientVendor/clientVendor-list";
     }

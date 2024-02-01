@@ -11,6 +11,8 @@ public interface InvoiceService {
 
     List<InvoiceDto> listAllInvoices(InvoiceType invoiceType);
 
+    List<InvoiceDto> getLast3ApprovedInvoices();
+
     InvoiceDto save(InvoiceDto invoiceDto, InvoiceType invoiceType);
 
     InvoiceDto update(InvoiceDto invoiceDto);

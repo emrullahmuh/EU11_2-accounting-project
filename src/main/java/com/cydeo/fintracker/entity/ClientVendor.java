@@ -16,6 +16,7 @@ import javax.persistence.*;
 @Data
 @Builder
 public class ClientVendor extends BaseEntity {
+
     private String clientVendorName;
     private String phone;
     private String website;

@@ -1,6 +1,5 @@
 package com.cydeo.fintracker.dto;
 
-import com.cydeo.fintracker.entity.Company;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +20,6 @@ public class CategoryDto {
     @NotBlank(message = "Description is a required field")
     @Size(max = 100, min = 2, message = "Description should have 2-100 characters long")
     private String description;
-    private CompanyDto company;
+    private String company;
     private boolean hasProduct;
 }

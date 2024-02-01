@@ -1,21 +1,13 @@
 package com.cydeo.fintracker.service.impl;
 
 import com.cydeo.fintracker.dto.CategoryDto;
-import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.dto.ProductDto;
-import com.cydeo.fintracker.dto.UserDto;
 import com.cydeo.fintracker.entity.Category;
-import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.repository.CategoryRepository;
 import com.cydeo.fintracker.service.CategoryService;
-
-import com.cydeo.fintracker.service.SecurityService;
-
 import com.cydeo.fintracker.service.ProductService;
-
 import com.cydeo.fintracker.util.MapperUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +16,17 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final MapperUtil mapperUtil;
-    private final SecurityService securityService;
     private final ProductService productService;
 
-
+    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, ProductService productService) {
+        this.categoryRepository = categoryRepository;
+        this.mapperUtil = mapperUtil;
+        this.productService = productService;
+    }
 
     @Override
     public CategoryDto getById(Long id) {
@@ -50,10 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDto> listAllCategories() {
 
-        CompanyDto company = securityService.getLoggedInUser().getCompany();
-        Long companyId = company.getId();
-        List<Category> categoryList = categoryRepository.findAllByCompanyIdAndIsDeleted(companyId,false);
-        log.info("Total :'{}' categories has been listed for company: '{}'", categoryList.size(), company.getTitle() );
+        List<Category> categoryList = categoryRepository.findAllByIsDeleted(false);
         return categoryList.stream()
                 .map(category -> mapperUtil.convert(category, new CategoryDto()))
                 .collect(Collectors.toList());
@@ -96,19 +87,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto save(CategoryDto category) {
 
-        CompanyDto companyDto = securityService.getLoggedInUser().getCompany();
-        Company company = mapperUtil.convert(companyDto, new Company());
-        category.setCompany(companyDto);
-
         Category convertedCategory = mapperUtil.convert(category, new Category());
 
-        convertedCategory.setCompany(company);
         categoryRepository.save(convertedCategory);
-
         log.info("Category is saved with description: '{}'", convertedCategory.getDescription());
 
         CategoryDto createdCategory = mapperUtil.convert(convertedCategory, new CategoryDto());
         log.info("Category is created: '{}'", createdCategory.getDescription());
+
 
         return createdCategory;
     }
