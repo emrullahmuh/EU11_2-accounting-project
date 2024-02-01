@@ -3,17 +3,23 @@ package com.cydeo.fintracker.service.impl;
 
 import com.cydeo.fintracker.dto.CategoryDto;
 
+import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.dto.InvoiceProductDto;
 
 import com.cydeo.fintracker.dto.ProductDto;
 import com.cydeo.fintracker.entity.Category;
+import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.Product;
 import com.cydeo.fintracker.repository.ProductRepository;
+import com.cydeo.fintracker.service.CompanyService;
 import com.cydeo.fintracker.service.ProductService;
+import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,32 +32,41 @@ public class ProductServiceImpl implements ProductService {
 
     private final MapperUtil mapperUtil;
     private final ProductRepository productRepository;
+    private final CompanyService companyService;
+    private final SecurityService securityService;
+
 
 
     @Override
     public List<ProductDto> getProducts() {
 
-        List<Product> products = productRepository.findAll();
+        CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser().get(0);
+
+        Company company = mapperUtil.convert(companyDto, new Company());
+
+        List<Product> products = productRepository.findAllByCompany(company, false);
+
         return products.stream()
-                .map(product -> mapperUtil.convert(product, new ProductDto()))
-                .collect(Collectors.toList());
+                .map(product -> mapperUtil.convert(product, new ProductDto())).collect(Collectors.toList());
     }
 
     @Override
     public ProductDto updateProduct(ProductDto productDto) {
 
-        Optional<Product> oldProduct = productRepository.findById(productDto.getId());
+        Optional<Product> oldProductOptional = productRepository.findById(productDto.getId());
 
-        Product product = oldProduct.get();
+        Product product = mapperUtil.convert(productDto, new Product());
 
-        log.info("Product will be updated : '{}'", product);
+        product.setId(oldProductOptional.get().getId());
+        product.setQuantityInStock(oldProductOptional.get().getQuantityInStock());
 
-        Product newProduct = productRepository.save(mapperUtil.convert(productDto, new Product()));
+        Product savedProduct = productRepository.save(product);
+        log.info("Product will be updated : '{}'", savedProduct);
 
-        ProductDto updatedProduct = mapperUtil.convert(newProduct, productDto);
-        log.info("Product is updated '{}', '{}': ", updatedProduct.getName(), updatedProduct);
+        ProductDto savedProductDto = mapperUtil.convert(savedProduct, new ProductDto());
+        log.info("Product is updated '{}', '{}': ", savedProductDto.getName(), savedProductDto);
 
-        return updatedProduct;
+        return savedProductDto;
     }
 
     @Override
@@ -68,20 +83,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Long id) {
 
-        productRepository.deleteProductById(id);
+        Optional<Product> product = productRepository.findById(id);
+
+        product.get().setIsDeleted(true);
+        productRepository.save(product.get());
         log.info("Product is deleted '{}', '{}'", id, id);
 
     }
 
     @Override
-    public List<Product> getProductsByCompanyId(Long companyId) {
-
-        return productRepository.getProductsById(companyId);
-
-    }
-
-    @Override
-
     public List<ProductDto> getProductsByCategory(Long id) {
 
         List<Product> products = productRepository.findByCategory(id);
@@ -111,6 +121,15 @@ public class ProductServiceImpl implements ProductService {
 
         return createdProduct;
 
+
+    }
+
+    @Override
+    public BindingResult uniqueName(ProductDto productDto, BindingResult bindingResult) {
+        if (productRepository.existsByName(productDto.getName())){
+            bindingResult.addError(new FieldError("newProduct","name","this product name already existed"));
+        }
+        return bindingResult;
 
     }
 }
