@@ -14,21 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class DashboardController {
 
     private final DashboardService dashboardService;
-    private final ExchangeClient exchangeClient;
-    private final ExchangeClientTr exchangeClientTr;
 
-    public DashboardController(DashboardService dashboardService, ExchangeClient exchangeClient, ExchangeClientTr exchangeClientTr) {
+
+    public DashboardController(DashboardService dashboardService) {
         this.dashboardService = dashboardService;
-        this.exchangeClient = exchangeClient;
-        this.exchangeClientTr = exchangeClientTr;
+
     }
 
     @GetMapping
     public String dashboardPage(Model model) {
 
         model.addAttribute("summaryNumbers", dashboardService.summaryCalculation());
-        model.addAttribute("exchangeRates", exchangeClient.getExchangesRates().getUsd());
-        model.addAttribute("exchangeRates", exchangeClientTr.getExchangesRatesTr().getUsd());
+        model.addAttribute("exchangeRates", dashboardService.getAllMoney());
+        model.addAttribute("exchangeRates", dashboardService.getMoneyTr());
 
         return "/dashboard";
     }

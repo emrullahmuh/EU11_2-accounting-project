@@ -1,5 +1,9 @@
 package com.cydeo.fintracker.service.impl;
 
+import com.cydeo.fintracker.client.ExchangeClient;
+import com.cydeo.fintracker.client.ExchangeClientTr;
+import com.cydeo.fintracker.dto.response.ExchangeResponse;
+import com.cydeo.fintracker.dto.response.Usd;
 import com.cydeo.fintracker.service.DashboardService;
 import com.cydeo.fintracker.service.InvoiceService;
 import org.springframework.stereotype.Service;
@@ -12,9 +16,13 @@ import java.util.Map;
 public class DashboardServiceImpl implements DashboardService {
 
     private final InvoiceService invoiceService;
+    private final ExchangeClient exchangeClient;
+    private final ExchangeClientTr exchangeClientTr;
 
-    public DashboardServiceImpl(InvoiceService invoiceService) {
+    public DashboardServiceImpl(InvoiceService invoiceService, ExchangeClient exchangeClient, ExchangeClientTr exchangeClientTr) {
         this.invoiceService = invoiceService;
+        this.exchangeClient = exchangeClient;
+        this.exchangeClientTr = exchangeClientTr;
     }
 
     @Override
@@ -37,5 +45,19 @@ public class DashboardServiceImpl implements DashboardService {
         summaryCalculations.put("profitLoss",profitLoss);
 
         return summaryCalculations;
+    }
+
+    @Override
+    public Usd getAllMoney() {
+
+        ExchangeResponse apiExchange = exchangeClient.getExchangesRates();
+        return apiExchange.getUsd();
+    }
+
+    @Override
+    public Usd getMoneyTr() {
+
+        ExchangeResponse apiExchangeTr = exchangeClientTr.getExchangesRatesTr();
+        return apiExchangeTr.getUsd();
     }
 }
