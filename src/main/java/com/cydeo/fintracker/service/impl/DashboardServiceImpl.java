@@ -1,7 +1,6 @@
 package com.cydeo.fintracker.service.impl;
 
 import com.cydeo.fintracker.client.ExchangeClient;
-import com.cydeo.fintracker.client.ExchangeClientTr;
 import com.cydeo.fintracker.dto.response.ExchangeResponse;
 import com.cydeo.fintracker.dto.response.Usd;
 import com.cydeo.fintracker.service.DashboardService;
@@ -17,12 +16,10 @@ public class DashboardServiceImpl implements DashboardService {
 
     private final InvoiceService invoiceService;
     private final ExchangeClient exchangeClient;
-    private final ExchangeClientTr exchangeClientTr;
 
-    public DashboardServiceImpl(InvoiceService invoiceService, ExchangeClient exchangeClient, ExchangeClientTr exchangeClientTr) {
+    public DashboardServiceImpl(InvoiceService invoiceService, ExchangeClient exchangeClient) {
         this.invoiceService = invoiceService;
         this.exchangeClient = exchangeClient;
-        this.exchangeClientTr = exchangeClientTr;
     }
 
     @Override
@@ -54,10 +51,4 @@ public class DashboardServiceImpl implements DashboardService {
         return apiExchange.getUsd();
     }
 
-    @Override
-    public Usd getMoneyTr() {
-
-        ExchangeResponse apiExchangeTr = exchangeClientTr.getExchangesRatesTr();
-        return apiExchangeTr.getUsd();
-    }
 }

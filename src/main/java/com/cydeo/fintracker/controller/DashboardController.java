@@ -1,8 +1,6 @@
 package com.cydeo.fintracker.controller;
 
 
-import com.cydeo.fintracker.client.ExchangeClient;
-import com.cydeo.fintracker.client.ExchangeClientTr;
 import com.cydeo.fintracker.service.DashboardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +13,8 @@ public class DashboardController {
 
     private final DashboardService dashboardService;
 
-
     public DashboardController(DashboardService dashboardService) {
         this.dashboardService = dashboardService;
-
     }
 
     @GetMapping
@@ -26,7 +22,6 @@ public class DashboardController {
 
         model.addAttribute("summaryNumbers", dashboardService.summaryCalculation());
         model.addAttribute("exchangeRates", dashboardService.getAllMoney());
-        model.addAttribute("exchangeRates", dashboardService.getMoneyTr());
 
         return "/dashboard";
     }

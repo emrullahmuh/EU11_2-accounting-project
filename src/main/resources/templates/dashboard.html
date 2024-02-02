@@ -240,23 +240,23 @@
                                             <tbody>
                                             <tr>
                                                 <td>Euro</td>
-                                                <td th:text="${exchangeRates.getEuro()}"></td>
+                                                <td th:text="${#numbers.formatDecimal(exchangeRates.getEuro, 1, 3)}"></td>
                                             </tr>
                                             <tr>
                                                 <td>British Pound</td>
-                                                <td th:text="${exchangeRates.getBritishPound()}"></td>
+                                                <td th:text="${#numbers.formatDecimal(exchangeRates.getBritishPound, 1, 3)}"></td>
                                             </tr>
                                             <tr>
                                                 <td>Canadian Dollar</td>
-                                                <td th:text="${exchangeRates.getCanadianDollar()}"></td>
+                                                <td th:text="${#numbers.formatDecimal(exchangeRates.canadianDollar, 0, 3)}"></td>
                                             </tr>
                                             <tr>
                                                 <td>Japanese Yen</td>
-                                                <td th:text="${exchangeRates.getJapaneseYen()}"></td>
+                                                <td th:text="${#numbers.formatDecimal(exchangeRates.japaneseYen, 0, 3)}"></td>
                                             </tr>
                                             <tr>
                                                 <td>Turkish Lira</td>
-                                                <td th:text="${exchangeRates.getTurkishLira()}"></td>
+                                                <td th:text="${#numbers.formatDecimal(exchangeRates.turkishLira, 0, 3)}"></td>
                                             </tr>
                                             </tbody>
                                         </table>
