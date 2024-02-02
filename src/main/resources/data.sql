@@ -99,7 +99,7 @@ values
 
 insert into products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                      name, quantity_in_stock, low_limit_alert, product_unit, category_id)
-VALUES
+ VALUES
 --     COMPANY-2 / Green Tech
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'HP Elite 800G1 Desktop Computer Package', 8, 5,'PCS', 1),
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, '2021 Apple MacBook Pro', 0, 5,'PCS', 1),
