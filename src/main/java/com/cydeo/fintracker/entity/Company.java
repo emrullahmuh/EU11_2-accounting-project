@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name = "companies")
 public class Company extends BaseEntity {
 
-    @Column(name = "title",unique = true)
+    @Column(name = "title", unique = true)
     private String title;
 
     @Column(name = "phone")
@@ -33,6 +33,8 @@ public class Company extends BaseEntity {
     @Column(name = "company_status")
     private CompanyStatus companyStatus;
 
-    @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
     private List<User> users;
+
+
 }
