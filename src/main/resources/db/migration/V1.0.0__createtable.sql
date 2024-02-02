@@ -1,6 +1,6 @@
 -- Roles Table
 CREATE TABLE roles (
-                       id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                       id BIGSERIAL PRIMARY KEY,
                        insert_date_time TIMESTAMP NOT NULL,
                        insert_user_id BIGINT NOT NULL,
                        last_update_date_time TIMESTAMP NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE roles (
 );
 -- Addresses Table
 CREATE TABLE addresses (
-                           id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                           id BIGSERIAL PRIMARY KEY,
                            insert_date_time TIMESTAMP NOT NULL,
                            insert_user_id BIGINT NOT NULL,
                            last_update_date_time TIMESTAMP NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE addresses (
 );
 -- Companies Table
 CREATE TABLE companies (
-                           id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                           id BIGSERIAL PRIMARY KEY,
                            insert_date_time TIMESTAMP NOT NULL,
                            insert_user_id BIGINT NOT NULL,
                            last_update_date_time TIMESTAMP NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE companies (
 );
 -- Users Table
 CREATE TABLE users (
-                       id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                       id BIGSERIAL PRIMARY KEY,
                        insert_date_time TIMESTAMP NOT NULL,
                        insert_user_id BIGINT NOT NULL,
                        last_update_date_time TIMESTAMP NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE users (
 );
 -- Clients_Vendors Table
 CREATE TABLE clients_vendors (
-                                 id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                                 id BIGSERIAL PRIMARY KEY,
                                  insert_date_time TIMESTAMP NOT NULL,
                                  insert_user_id BIGINT NOT NULL,
                                  last_update_date_time TIMESTAMP NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE clients_vendors (
 );
 -- Categories Table
 CREATE TABLE categories (
-                            id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                            id BIGSERIAL PRIMARY KEY,
                             insert_date_time TIMESTAMP NOT NULL,
                             insert_user_id BIGINT NOT NULL,
                             last_update_date_time TIMESTAMP NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE categories (
 );
 -- Products Table
 CREATE TABLE products (
-                          id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                          id BIGSERIAL PRIMARY KEY,
                           insert_date_time TIMESTAMP NOT NULL,
                           insert_user_id BIGINT NOT NULL,
                           last_update_date_time TIMESTAMP NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE products (
 );
 -- Invoices Table
 CREATE TABLE invoices (
-                          id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                          id BIGSERIAL PRIMARY KEY,
                           insert_date_time TIMESTAMP NOT NULL,
                           insert_user_id BIGINT NOT NULL,
                           last_update_date_time TIMESTAMP NOT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE invoices (
 );
 -- Invoice_Products Table
 CREATE TABLE invoice_products (
-                                  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                                  id BIGSERIAL PRIMARY KEY,
                                   insert_date_time TIMESTAMP NOT NULL,
                                   insert_user_id BIGINT NOT NULL,
                                   last_update_date_time TIMESTAMP NOT NULL,
@@ -125,26 +125,3 @@ CREATE TABLE invoice_products (
                                   invoice_id BIGINT NOT NULL,
                                   product_id BIGINT NOT NULL
 );
--- Insert data into products table
-INSERT INTO products (insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
-                      name, quantity_in_stock, low_limit_alert, product_unit, category_id)
-VALUES
-    ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'HP Elite 800G1 Desktop Computer Package', 8, 5, 'PCS', 1),
-    ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, '2021 Apple MacBook Pro', 0, 5, 'PCS', 1),
-    ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'Apple iPhone-13', 0, 5, 'PCS', 2),
-    ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'SAMSUNG Galaxy S22', 0, 5, 'PCS', 2),
-    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S20 (renewed)', 30, 5, 'PCS', 3),
-    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S22', 20, 5, 'PCS', 3),
-    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Moto G Power', 0, 5, 'PCS', 3);
--- Insert data into invoices table
-INSERT INTO invoices (insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
-                      date, invoice_no, invoice_type, invoice_status, client_vendor_id, company_id)
-VALUES
-    ('2022-09-09 00:00', 2, 'false', '2022-09-09 00:00', 2, '2022-09-09', 'P-001', 'PURCHASE', 'APPROVED', 2, 2),
-    ('2022-09-10 00:00', 2, 'false', '2022-09-10 00:00', 2, '2022-09-10', 'P-002', 'PURCHASE', 'APPROVED', 3, 2),
-    ('2022-09-17 00:00', 2, 'false', '2022-09-17 00:00', 2, '2022-09-17', 'S-001', 'SALES', 'APPROVED', 1, 2),
-    ('2022-10-19 00:00', 2, 'false', '2022-10-19 00:00', 2, '2022-10-19', 'S-002', 'SALES', 'AWAITING_APPROVAL', 1, 2),
-    ('2022-11-20 00:00', 2, 'false', '2022-11-20 00:00', 2, '2022-11-20', 'S-003', 'SALES', 'AWAITING_APPROVAL', 1, 2),
-    ('2022-09-09 00:00', 3, 'false', '2022-09-09 00:00', 3, '2022-09-09', 'P-001', 'PURCHASE', 'APPROVED', 5, 3),
-    ('2022-09-10 00:00', 3, 'false', '2022-09-10 00:00', 3, '2022-09-10', 'P-002', 'PURCHASE', 'APPROVED', 5, 3),
-    ('2022-09-13 00:00', 3, 'false', '2022-09-13 00:00', 3, '2022-09-13', 'S-001', 'SALES', 'APPROVED', 4, 3),

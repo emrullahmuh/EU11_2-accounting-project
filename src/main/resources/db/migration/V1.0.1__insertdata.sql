@@ -1,4 +1,4 @@
-NSERT INTO roles (insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id, description)
+INSERT INTO roles (insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id, description)
 VALUES
     ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Root User'),
     ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1, 'Admin'),
@@ -28,14 +28,11 @@ VALUES
 INSERT INTO companies (insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                        title, phone, website, address_id, company_status)
 VALUES
-    ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-     'CYDEO', '+1 (652) 852-8888', 'https://www.cydeo.com', 1, 'ACTIVE'),
-    ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-     'Green Tech', '+1 (652) 852-3246', 'https://www.greentech.com', 2, 'ACTIVE'),
-    ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-     'Blue Tech', '+1 (215) 654-5268', 'https://www.bluetech.com', 3, 'ACTIVE'),
-    ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-     'Red Tech', '+1 (215) 846-2642', 'https://www.redtech.com', 4, 'PASSIVE');
+    ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1, 'CYDEO', '+1 (652) 852-8888', 'https://www.cydeo.com', 1, 'ACTIVE'),
+    ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1, 'Green Tech', '+1 (652) 852-3246', 'https://www.greentech.com', 2, 'ACTIVE'),
+    ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1, 'Blue Tech', '+1 (215) 654-5268', 'https://www.bluetech.com', 3, 'ACTIVE'),
+    ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1, 'Red Tech', '+1 (215) 846-2642', 'https://www.redtech.com', 4, 'PASSIVE');
+
 -- Insert data into users table
 INSERT INTO users (insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                    username, password, firstname, lastname, phone, role_id, company_id, enabled)
