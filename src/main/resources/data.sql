@@ -24,16 +24,16 @@ values ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
         'OwerWest Street', 'Android Square', 'Los Angeles', 'Phoneix', 'United States', '65654-8989');;
 
--- insert into companies(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
---                       title, phone, website, address_id, company_status)
--- values ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
---         'CYDEO','+1 (652) 852-8888', 'https://www.cydeo.com', 1, 'ACTIVE'),
---        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
---         'Green Tech','+1 (652) 852-3246', 'https://www.greentech.com', 2, 'ACTIVE'),
---        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
---         'Blue Tech','+1 (215) 654-5268', 'https://www.bluetech.com', 3, 'ACTIVE'),
---        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
---         'Red Tech','+1 (215) 846-2642', 'https://www.redtech.com', 4, 'PASSIVE');
+insert into companies(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
+                      title, phone, website, address_id, company_status)
+values ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
+        'CYDEO','+1 (652) 852-8888', 'https://www.cydeo.com', 1, 'ACTIVE'),
+       ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
+        'Green Tech','+1 (652) 852-3246', 'https://www.greentech.com', 2, 'ACTIVE'),
+       ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
+        'Blue Tech','+1 (215) 654-5268', 'https://www.bluetech.com', 3, 'ACTIVE'),
+       ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
+        'Red Tech','+1 (215) 846-2642', 'https://www.redtech.com', 4, 'PASSIVE');
 
 insert into users(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                   username, password, firstname, lastname, phone, role_id, company_id, enabled)
@@ -99,27 +99,27 @@ values
 
 insert into products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                      name, quantity_in_stock, low_limit_alert, product_unit, category_id)
- VALUES
+VALUES
 --     COMPANY-2 / Green Tech
-    ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'HP Elite 800G1 Desktop Computer Package', 8, 5,'PCS', 1),
-    ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, '2021 Apple MacBook Pro', 0, 5,'PCS', 1),
-    ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'Apple iPhone-13', 0, 5,'PCS', 2),
-    ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'SAMSUNG Galaxy S22',0, 5,'PCS', 2),
+('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'HP Elite 800G1 Desktop Computer Package', 8, 5,'PCS', 1),
+('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, '2021 Apple MacBook Pro', 0, 5,'PCS', 1),
+('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'Apple iPhone-13', 0, 5,'PCS', 2),
+('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'SAMSUNG Galaxy S22',0, 5,'PCS', 2),
 --     COMPANY-3 / Blue Tech
-    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S20 (renewed)', 30, 5, 'PCS', 3),
-    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S22', 20, 5, 'PCS', 3),
-    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Moto G Power', 0, 5, 'PCS', 3);
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S20 (renewed)', 30, 5, 'PCS', 3),
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S22', 20, 5, 'PCS', 3),
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Moto G Power', 0, 5, 'PCS', 3);
 
 
 insert into invoices(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                      date,invoice_no, invoice_type, invoice_status, client_vendor_id, company_id)
 values
 -- COMPANY-2 / Green Tech
- ('2022-09-09 00:00', 2, 'false', '2022-09-09 00:00', 2, '2022-09-09', 'P-001', 'PURCHASE', 'APPROVED', 3, 2),
- ('2022-09-10 00:00', 2, 'false', '2022-09-10 00:00', 2, '2022-09-10', 'P-002', 'PURCHASE', 'APPROVED', 4, 2),
- ('2022-09-17 00:00', 2, 'false', '2022-09-17 00:00', 2, '2022-09-17', 'S-001', 'SALES', 'APPROVED', 1, 2),
- ('2022-10-19 00:00', 2, 'false', '2022-10-19 00:00', 2, '2022-10-19', 'S-002', 'SALES', 'AWAITING_APPROVAL', 2, 2),
- ('2022-11-20 00:00', 2, 'false', '2022-11-20 00:00', 2, '2022-11-20', 'S-003', 'SALES', 'AWAITING_APPROVAL', 2, 2),
+('2022-09-09 00:00', 2, 'false', '2022-09-09 00:00', 2, '2022-09-09', 'P-001', 'PURCHASE', 'APPROVED', 3, 2),
+('2022-09-10 00:00', 2, 'false', '2022-09-10 00:00', 2, '2022-09-10', 'P-002', 'PURCHASE', 'APPROVED', 4, 2),
+('2022-09-17 00:00', 2, 'false', '2022-09-17 00:00', 2, '2022-09-17', 'S-001', 'SALES', 'APPROVED', 1, 2),
+('2022-10-19 00:00', 2, 'false', '2022-10-19 00:00', 2, '2022-10-19', 'S-002', 'SALES', 'AWAITING_APPROVAL', 2, 2),
+('2022-11-20 00:00', 2, 'false', '2022-11-20 00:00', 2, '2022-11-20', 'S-003', 'SALES', 'AWAITING_APPROVAL', 2, 2),
 
 -- COMPANY-3 / Blue Tech
 ('2022-09-09 00:00', 3, 'false', '2022-09-09 00:00', 3, '2022-09-09', 'P-001', 'PURCHASE', 'APPROVED', 6, 3),
@@ -152,4 +152,3 @@ values
 ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 5, 0, 10, 0, 10, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 24420 & profit (with tax) : 5280+1540=6820
 ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 2, 0, 10, 0, 11, 6),    --sale AWAITING_APPROVAL after approval total sale (with tax) : 27060 & profit (with tax) : 6820+440=7260
 ('2022-12-15 00:00', 3, 'false', '2022-12-15 00:00', 3, 600, 4, 0, 10, 0, 13, 7);    --purchase AWAITING_APPROVAL
-
