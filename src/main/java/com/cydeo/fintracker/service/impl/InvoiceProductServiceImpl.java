@@ -4,6 +4,8 @@ import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.dto.InvoiceDto;
 import com.cydeo.fintracker.dto.InvoiceProductDto;
 import com.cydeo.fintracker.entity.InvoiceProduct;
+import com.cydeo.fintracker.enums.InvoiceStatus;
+import com.cydeo.fintracker.enums.InvoiceType;
 import com.cydeo.fintracker.repository.InvoiceProductRepository;
 import com.cydeo.fintracker.service.CompanyService;
 import com.cydeo.fintracker.service.InvoiceProductService;
@@ -13,6 +15,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -89,6 +93,8 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 .collect(Collectors.toList());
     }
 
+
+
     private InvoiceProductDto calculateTotalInvoiceProduct(Long invoiceProductId) {
         InvoiceProductDto invoiceProductDTO = findById(invoiceProductId);
         BigDecimal total = BigDecimal.ZERO;
@@ -103,5 +109,11 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         invoiceProductDTO.setTotal(total);
 
         return invoiceProductDTO;
+    }
+    @Override
+    public BigDecimal getProfitLossBasedOnMonth(int year, Month month, Long id) {
+     int valueOfMonth=month.getValue();
+//    invoiceProductRepository.findByYear_Month_CompanyId_InvoiceStatus_InvoiceType
+        return  invoiceProductRepository.getTotalProfitLossForMonthAndCompanyAndInvoiceType(year,valueOfMonth,id,InvoiceType.SALES);
     }
 }
