@@ -8,21 +8,25 @@ import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.Invoice;
 import com.cydeo.fintracker.enums.InvoiceStatus;
 import com.cydeo.fintracker.enums.InvoiceType;
+import com.cydeo.fintracker.repository.InvoiceProductRepository;
 import com.cydeo.fintracker.repository.InvoiceRepository;
 import com.cydeo.fintracker.service.CompanyService;
 import com.cydeo.fintracker.service.InvoiceProductService;
 import com.cydeo.fintracker.service.InvoiceService;
 import com.cydeo.fintracker.service.ProductService;
 import com.cydeo.fintracker.util.MapperUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class InvoiceServiceImpl implements InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
@@ -30,20 +34,29 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final CompanyService companyService;
     private final InvoiceProductService invoiceProductService;
     private final ProductService productService;
+    private final InvoiceProductRepository invoiceProductRepository;
 
-    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, MapperUtil mapperUtil, CompanyService companyService, InvoiceProductService invoiceProductService, ProductService productService) {
+    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, MapperUtil mapperUtil, CompanyService companyService, InvoiceProductService invoiceProductService, ProductService productService, InvoiceProductRepository invoiceProductRepository) {
         this.invoiceRepository = invoiceRepository;
         this.mapperUtil = mapperUtil;
         this.companyService = companyService;
         this.invoiceProductService = invoiceProductService;
         this.productService = productService;
+        this.invoiceProductRepository = invoiceProductRepository;
     }
 
     @Override
     public InvoiceDto findById(Long id) {
 
-        return mapperUtil.convert(invoiceRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Invoice does not exist!.")), new InvoiceDto());
+
+        Invoice invoice = invoiceRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Invoice does not exist!."));
+
+        InvoiceDto invoiceDto = mapperUtil.convert(invoice, new InvoiceDto());
+
+        log.info("InvoiceDto found by '{}' id", invoice);
+
+        return invoiceDto;
     }
 
     @Override
@@ -99,6 +112,18 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setIsDeleted(true);
 
         invoiceRepository.save(invoice);
+    }
+
+    @Override
+    public InvoiceDto deleteByInvoice(Long invoiceId) {
+        Invoice invoice = invoiceRepository.findAllByIdAndIsDeleted(invoiceId, false);
+        if (InvoiceStatus.AWAITING_APPROVAL.equals(invoice.getInvoiceStatus())) {
+            invoice.setIsDeleted(true);
+        }
+        invoiceProductRepository.findAllByInvoiceId(invoice.getId()).stream()
+                .map(invoiceProduct -> invoiceProductService.delete(invoiceProduct.getId())).collect(Collectors.toList());
+        invoiceRepository.save(invoice);
+        return mapperUtil.convert(invoice,new InvoiceDto());
     }
 
     @Override

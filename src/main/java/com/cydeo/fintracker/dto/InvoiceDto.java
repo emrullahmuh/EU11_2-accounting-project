@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -21,6 +22,7 @@ public class InvoiceDto {
     private InvoiceType invoiceType;
     private LocalDate date;
     private CompanyDto company;
+    @NotNull(message = "Client vendor is a required field.")
     private ClientVendorDto clientVendor;
     private BigDecimal price;
     private BigDecimal tax;

@@ -56,13 +56,13 @@
                                                                                 th:value="${vendor.getId()}"
                                                                                 th:text="${vendor.getClientVendorName()}"></option>
                                                                     </select>
-<!--                                                                    <div th:if="${#fields.hasErrors('clientVendor')}">-->
-<!--                                                                        <ul>-->
-<!--                                                                            <li class="validation"-->
-<!--                                                                                th:each="err : ${#fields.errors('clientVendor')}"-->
-<!--                                                                                th:text="${err}"></li>-->
-<!--                                                                        </ul>-->
-<!--                                                                    </div>-->
+                                                                    <div th:if="${#fields.hasErrors('clientVendor')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('clientVendor')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>

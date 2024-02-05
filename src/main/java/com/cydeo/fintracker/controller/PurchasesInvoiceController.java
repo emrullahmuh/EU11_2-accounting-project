@@ -48,11 +48,11 @@ public class PurchasesInvoiceController {
     }
 
     @PostMapping("/create")
-    public String savePurchaseInvoice(@ModelAttribute("newPurchaseInvoice") InvoiceDto invoice, BindingResult bindingResult, Model model){
+    public String savePurchaseInvoice(@Valid @ModelAttribute("newPurchaseInvoice") InvoiceDto invoice, BindingResult bindingResult, Model model){
 
         if (bindingResult.hasErrors()){
             model.addAttribute("vendors", clientVendorService.getAllClientVendors(ClientVendorType.VENDOR));
-            return "/invoice/purchase-invoice-create";
+            return "invoice/purchase-invoice-create";
         }
 
         invoiceService.save(invoice, InvoiceType.PURCHASE);
@@ -97,7 +97,7 @@ public class PurchasesInvoiceController {
 
     @GetMapping("/delete/{id}")
     public String deletePurchaseInvoice(@PathVariable("id") Long id) {
-        invoiceService.delete(id);
+        invoiceService.deleteByInvoice(id);
         return "redirect:/purchaseInvoices/list";
     }
 
