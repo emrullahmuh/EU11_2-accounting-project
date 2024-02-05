@@ -16,8 +16,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -120,7 +118,6 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
 
-
     private InvoiceProductDto calculateTotalInvoiceProduct(Long invoiceProductId) {
         InvoiceProductDto invoiceProductDto = findById(invoiceProductId);
 
@@ -142,10 +139,13 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
         return invoiceProductDto;
     }
+
     @Override
-    public BigDecimal getProfitLossBasedOnMonth(int year, Month month, Long id) {
-     int valueOfMonth=month.getValue();
-//    invoiceProductRepository.findByYear_Month_CompanyId_InvoiceStatus_InvoiceType
-        return  invoiceProductRepository.getTotalProfitLossForMonthAndCompanyAndInvoiceType(year,valueOfMonth,id,InvoiceType.SALES);
+    public BigDecimal getProfitLossBasedOnMonth(int year, int month, Long id, InvoiceType invoiceType) {
+        CompanyDto companyDto = companyService.findById(id);
+        log.info("will display '{}' company's '{}' '{}' profit/loss", companyDto, year, month);
+        return invoiceProductRepository.getTotalPriceForMonthAndCompanyAndInvoiceType(year, month, id, invoiceType);
+
+
     }
 }
