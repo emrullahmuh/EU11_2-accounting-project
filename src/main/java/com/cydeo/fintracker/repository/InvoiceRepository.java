@@ -19,6 +19,11 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
     boolean existsByClientVendorId (Long id);
 
+    Invoice findByIdAndIsDeleted(Long invoiceId, Boolean isDeleted);
+
+    Invoice findInvoiceById(Long id);
+
     Invoice findAllByIdAndIsDeleted(Long invoiceId, Boolean isDeleted);
+
 
 }
