@@ -1,6 +1,8 @@
 package com.cydeo.fintracker;
 
 import lombok.extern.slf4j.Slf4j;
+import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.output.MigrateResult;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.sql.DataSource;
 
 @SpringBootApplication
 @EnableFeignClients
@@ -43,4 +46,9 @@ public class FinTrackerApplication {
         log.info("**** Fin Tracker Application was shut down cleanly **** ");
     }
 
+
+    @Bean
+    public MigrateResult migrateResult(DataSource dataSource){
+        return Flyway.configure().baselineOnMigrate(true).dataSource(dataSource).load().migrate();
+    }
 }

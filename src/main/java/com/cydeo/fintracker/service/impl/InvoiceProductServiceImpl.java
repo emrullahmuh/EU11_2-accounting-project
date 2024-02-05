@@ -49,12 +49,13 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     @Override
     public InvoiceProductDto save(InvoiceProductDto invoiceProductDto, Long id) {
         CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser().get(0);
-        InvoiceDto invoice = invoiceService.findById(id);
-        invoice.setCompany(companyDto);
-        invoiceProductDto.setInvoice(invoice);
-        InvoiceProduct invoiceProduct = invoiceProductRepository
-                .save(mapperUtil.convert(invoiceProductDto, new InvoiceProduct()));
-        return mapperUtil.convert(invoiceProduct, new InvoiceProductDto());
+        InvoiceDto invoiceDto = invoiceService.findById(id);
+        invoiceDto.setCompany(companyDto);
+        invoiceProductDto.setInvoice(invoiceDto);
+        InvoiceProduct converted = mapperUtil.convert(invoiceProductDto, new InvoiceProduct());
+        converted.setId((long) (findAll().size()+1));
+        InvoiceProduct saved = invoiceProductRepository.save(converted);
+        return mapperUtil.convert(saved, new InvoiceProductDto());
     }
 
     @Override
@@ -65,6 +66,27 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         invoiceProductRepository.save(invoiceProduct);
         InvoiceProductDto invoiceProductDto = mapperUtil.convert(invoiceProduct, new InvoiceProductDto());
         return invoiceProductDto;
+    }
+
+    @Override
+    public List<InvoiceProductDto> findAll() {
+
+        List<InvoiceProduct> invoiceProductList = invoiceProductRepository.findAll();
+
+        return invoiceProductList.stream()
+                .map(invoiceProduct -> mapperUtil.convert(invoiceProduct, new InvoiceProductDto()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InvoiceProductDto> findAllByInvoiceIdAndIsDeleted(Long id, Boolean isDeleted) {
+
+        List<InvoiceProduct> invoiceProductListNotDeleted = invoiceProductRepository.findAllByInvoiceIdAndIsDeleted(id, false);
+
+        return invoiceProductListNotDeleted.stream()
+                .map(invoiceProduct -> calculateTotalInvoiceProduct(invoiceProduct.getId()))
+                .map(p -> mapperUtil.convert(p, new InvoiceProductDto()))
+                .collect(Collectors.toList());
     }
 
     private InvoiceProductDto calculateTotalInvoiceProduct(Long invoiceProductId) {

@@ -42,10 +42,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceDto findById(Long id) {
 
-        InvoiceDto invoiceDto = mapperUtil.convert(invoiceRepository.findById(id)
+        return mapperUtil.convert(invoiceRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Invoice does not exist!.")), new InvoiceDto());
-
-        return invoiceDto;
     }
 
     @Override

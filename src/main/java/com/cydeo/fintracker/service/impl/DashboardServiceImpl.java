@@ -3,6 +3,10 @@ package com.cydeo.fintracker.service.impl;
 import com.cydeo.fintracker.client.ExchangeClient;
 import com.cydeo.fintracker.dto.response.ExchangeResponse;
 import com.cydeo.fintracker.dto.response.Usd;
+
+import com.cydeo.fintracker.enums.InvoiceStatus;
+import com.cydeo.fintracker.enums.InvoiceType;
+
 import com.cydeo.fintracker.service.DashboardService;
 import com.cydeo.fintracker.service.InvoiceService;
 import org.springframework.stereotype.Service;
@@ -27,14 +31,15 @@ public class DashboardServiceImpl implements DashboardService {
 
         Map<String, BigDecimal> summaryCalculations = new HashMap<>();
 
-        //Later delete-template;
-        // Total Cost:
-        BigDecimal totalCost = new BigDecimal(25000);
+        BigDecimal totalCost = invoiceService.listAllInvoices(InvoiceType.PURCHASE).stream()
+                .filter(invoiceDto -> invoiceDto.getInvoiceStatus() == InvoiceStatus.APPROVED)
+                .map(invoiceDto -> invoiceDto.getTotal()).reduce(BigDecimal.ZERO,BigDecimal::add);
 
-        // Total Sales:
-        BigDecimal totalSales = new BigDecimal(35000);
+        BigDecimal totalSales =invoiceService.listAllInvoices(InvoiceType.SALES).stream()
+                .filter(invoiceDto -> invoiceDto.getInvoiceStatus() == InvoiceStatus.APPROVED)
+                .map(invoiceDto -> invoiceDto.getTotal()).reduce(BigDecimal.ZERO,BigDecimal::add);
 
-        // Profit/Loss:
+        //TODO  Complete profitLoss  after report functionality done
         BigDecimal profitLoss = totalSales.subtract(totalCost);
 
         summaryCalculations.put("totalCost", totalCost);
