@@ -9,30 +9,29 @@ import java.math.BigDecimal;
 @Setter
 public class Usd {
 
-    //The names in dashboard.html
-    private BigDecimal eur;
-    private BigDecimal gbp;
-    private BigDecimal cad;
-    private BigDecimal jpy;
-    private BigDecimal inr;
+    private BigDecimal EUR;
+    private BigDecimal GBP;
+    private BigDecimal CAD;
+    private BigDecimal JPY;
+    private BigDecimal TRY;
 
     public BigDecimal getEuro() {
-        return eur;
+        return EUR;
     }
 
     public BigDecimal getBritishPound() {
-        return gbp;
+        return GBP;
     }
 
     public BigDecimal getCanadianDollar() {
-        return cad;
+        return CAD;
     }
 
     public BigDecimal getJapaneseYen() {
-        return jpy;
+        return JPY;
     }
 
-    public BigDecimal getIndianRupee() {
-        return inr;
+    public BigDecimal getTurkishLira() {
+        return TRY;
     }
 }

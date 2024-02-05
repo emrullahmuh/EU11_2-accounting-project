@@ -1,7 +1,12 @@
 package com.cydeo.fintracker.service.impl;
 
+import com.cydeo.fintracker.client.ExchangeClient;
+import com.cydeo.fintracker.dto.response.ExchangeResponse;
+import com.cydeo.fintracker.dto.response.Usd;
+
 import com.cydeo.fintracker.enums.InvoiceStatus;
 import com.cydeo.fintracker.enums.InvoiceType;
+
 import com.cydeo.fintracker.service.DashboardService;
 import com.cydeo.fintracker.service.InvoiceService;
 import org.springframework.stereotype.Service;
@@ -14,9 +19,11 @@ import java.util.Map;
 public class DashboardServiceImpl implements DashboardService {
 
     private final InvoiceService invoiceService;
+    private final ExchangeClient exchangeClient;
 
-    public DashboardServiceImpl(InvoiceService invoiceService) {
+    public DashboardServiceImpl(InvoiceService invoiceService, ExchangeClient exchangeClient) {
         this.invoiceService = invoiceService;
+        this.exchangeClient = exchangeClient;
     }
 
     @Override
@@ -41,4 +48,12 @@ public class DashboardServiceImpl implements DashboardService {
 
         return summaryCalculations;
     }
+
+    @Override
+    public Usd getAllMoney() {
+
+        ExchangeResponse apiExchange = exchangeClient.getExchangesRates();
+        return apiExchange.getUsd();
+    }
+
 }

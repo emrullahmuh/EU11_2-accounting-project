@@ -76,7 +76,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     public List<ClientVendorDto> getAllClientVendorsCompany() {
         UserDto loggedInUser = securityService.getLoggedInUser();
         List<ClientVendor> clientVendors = clientVendorRepository.findByCompanyIdAndIsDeleted(loggedInUser.getCompany().getId(),false);
-        return clientVendors.stream().map(clientVendor -> {
+        return clientVendors.stream().sorted(Comparator.comparing(ClientVendor::getClientVendorType).reversed().thenComparing(ClientVendor::getClientVendorName))
+                .map(clientVendor -> {
                     boolean hasInvoice = isClientHasInvoice(clientVendor.getId());
                     ClientVendorDto convert = mapperUtil.convert(clientVendor, new ClientVendorDto());
                     convert.setHasInvoice(hasInvoice);
