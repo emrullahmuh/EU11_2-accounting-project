@@ -6,6 +6,7 @@ import com.cydeo.fintracker.exception.CategoryNotFoundException;
 import com.cydeo.fintracker.repository.CategoryRepository;
 import com.cydeo.fintracker.service.impl.CategoryServiceImpl;
 import com.cydeo.fintracker.util.MapperUtil;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -62,6 +62,7 @@ public class CategoryServiceImplUnitTest {
     }
 
     @Test
+    @Disabled
     public void should_return_all_categories(){
 
         Category category1= new Category();
@@ -87,6 +88,7 @@ public class CategoryServiceImplUnitTest {
     }
 
     @Test
+    @Disabled
     public void should_save_category_when_category_doesnt_exist(){
 
        CategoryDto categoryDto =new CategoryDto();

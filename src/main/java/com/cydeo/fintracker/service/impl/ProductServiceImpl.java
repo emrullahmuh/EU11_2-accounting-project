@@ -1,13 +1,10 @@
 package com.cydeo.fintracker.service.impl;
 
 
-import com.cydeo.fintracker.dto.CategoryDto;
-
 import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.dto.InvoiceProductDto;
 
 import com.cydeo.fintracker.dto.ProductDto;
-import com.cydeo.fintracker.entity.Category;
 import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.Product;
 import com.cydeo.fintracker.repository.ProductRepository;
@@ -22,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -131,6 +129,12 @@ public class ProductServiceImpl implements ProductService {
         }
         return bindingResult;
 
+    }
+    @Override
+    public ProductDto increaseProductInventory(Long id, Integer amount) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Product not found"));
+        product.setQuantityInStock(product.getQuantityInStock() + amount);
+        return mapperUtil.convert(product, new ProductDto());
     }
 }
 

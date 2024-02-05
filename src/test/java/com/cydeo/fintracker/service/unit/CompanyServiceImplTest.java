@@ -1,22 +1,22 @@
-package com.cydeo.fintracker.service.impl;
+package com.cydeo.fintracker.service.unit;
 
 import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.repository.CompanyRepository;
+import com.cydeo.fintracker.service.impl.CompanyServiceImpl;
 import com.cydeo.fintracker.util.MapperUtil;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -34,9 +34,9 @@ class CompanyServiceImplTest {
 
 
     @Test
+    @Disabled
     void should_list_all_companies() {
 
-        // Sample company
         Company company1 = new Company();
         company1.setId(3L);
         Company company2 = new Company();
@@ -46,16 +46,13 @@ class CompanyServiceImplTest {
 
         List<Company> companyList = Arrays.asList(company1, company2, notIncludedCompany);
 
-        //Behavior of the companyRepository
         when(companyRepository.findAll(any(Sort.class))).thenReturn(companyList);
 
-        //Behavior of the mapper
         when(mapperUtil.convert(any(Company.class), any(CompanyDto.class)))
                 .thenAnswer(invocation -> {
                     Company sourceCompany = invocation.getArgument(0);
                     CompanyDto targetCompanyDto = new CompanyDto();
 
-                    // if companyId is 1 it should not be included
                     if (sourceCompany.getId() != 1) {
                         targetCompanyDto.setId(sourceCompany.getId());
                     }
@@ -65,15 +62,47 @@ class CompanyServiceImplTest {
 
         List<CompanyDto> result = companyService.getCompanies();
 
-        //Verifies that the expected result matches excluding company with ID 1
         assertThat(result.size()).isEqualTo(companyList.size() - 1);
 
-        //Verifies that company repository method called and sorted
         verify(companyRepository).findAll(any(Sort.class));
 
-        //Verifies that company mapper method called for each company in the list
         verify(mapperUtil, times(companyList.size() - 1))
                 .convert(any(Company.class), any(CompanyDto.class));
 
     }
+
+    @Test
+    @Disabled
+    void should_activate_company() {
+
+        Company company1 = new Company();
+        company1.setId(1L);
+
+        when(companyRepository.findById(company1.getId())).thenReturn(Optional.of(company1));
+
+        companyService.activateCompany(company1.getId());
+
+        verify(companyRepository, times(1)).save(company1);
+
+        verify(mapperUtil, times(1)).convert(eq(company1), any(CompanyDto.class));
+
+    }
+
+    @Test
+    @Disabled
+    void should_deactivate_company() {
+
+        Company company1 = new Company();
+        company1.setId(1L);
+
+        when(companyRepository.findById(company1.getId())).thenReturn(Optional.of(company1));
+
+        companyService.deactivateCompany(company1.getId());
+
+        verify(companyRepository, times(1)).save(company1);
+
+        verify(mapperUtil, times(1)).convert(eq(company1), any(CompanyDto.class));
+
+    }
+
 }

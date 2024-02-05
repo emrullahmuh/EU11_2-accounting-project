@@ -2,6 +2,7 @@ package com.cydeo.fintracker.repository;
 
 import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.Invoice;
+import com.cydeo.fintracker.entity.InvoiceProduct;
 import com.cydeo.fintracker.enums.InvoiceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,12 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     List<Invoice> retrieveInvoiceByTypeAndCompany(InvoiceType invoiceType, Company company);
 
     boolean existsByClientVendorId (Long id);
+
+    Invoice findByIdAndIsDeleted(Long invoiceId, Boolean isDeleted);
+
+    Invoice findInvoiceById(Long id);
+
+    Invoice findAllByIdAndIsDeleted(Long invoiceId, Boolean isDeleted);
+
+
 }

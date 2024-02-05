@@ -2,6 +2,7 @@ package com.cydeo.fintracker.service;
 
 
 import com.cydeo.fintracker.dto.InvoiceDto;
+import com.cydeo.fintracker.entity.Invoice;
 import com.cydeo.fintracker.enums.InvoiceType;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public interface InvoiceService {
     InvoiceDto update(InvoiceDto invoiceDto);
 
     void delete(Long id);
+
+    InvoiceDto deleteByInvoice(Long invoiceId);
 
     InvoiceDto createNewPurchaseInvoice();
 

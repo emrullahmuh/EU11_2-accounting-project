@@ -1,13 +1,8 @@
 package com.cydeo.fintracker.repository;
 
-import com.cydeo.fintracker.entity.Invoice;
 import com.cydeo.fintracker.entity.InvoiceProduct;
-import com.cydeo.fintracker.enums.InvoiceStatus;
-import com.cydeo.fintracker.enums.InvoiceType;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface InvoiceProductRepository extends JpaRepository<InvoiceProduct, Long> {
