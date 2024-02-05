@@ -159,18 +159,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public InvoiceDto deleteByInvoice(Long invoiceId) {
-        Invoice invoice = invoiceRepository.findAllByIdAndIsDeleted(invoiceId, false);
-        if (InvoiceStatus.AWAITING_APPROVAL.equals(invoice.getInvoiceStatus())) {
-            invoice.setIsDeleted(true);
-        }
-        invoiceProductRepository.findAllByInvoiceId(invoice.getId()).stream()
-                .map(invoiceProduct -> invoiceProductService.delete(invoiceProduct.getId())).collect(Collectors.toList());
-        invoiceRepository.save(invoice);
-        return mapperUtil.convert(invoice,new InvoiceDto());
-    }
-
-    @Override
     public InvoiceDto createNewPurchaseInvoice() {
         CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser().get(0);
 

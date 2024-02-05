@@ -25,24 +25,24 @@ public class FinTrackerApplication {
     }
 
     @Bean
-    public ModelMapper modelMapper(){
+    public ModelMapper modelMapper() {
         return new ModelMapper();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @PostConstruct
-    public void logStartUp(){
+    public void logStartUp() {
         log.info("**** Fin Tracker Application is being started **** ");
         System.out.println("System.getenv() = " + System.getenv());
     }
 
 
     @PreDestroy
-    public void logShutDown(){
+    public void logShutDown() {
         log.info("**** Fin Tracker Application was shut down cleanly **** ");
     }
 
