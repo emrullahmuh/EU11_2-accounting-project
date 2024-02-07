@@ -24,7 +24,6 @@ public class Payment extends BaseEntity {
     private LocalDate paymentDate;
     private boolean isPaid;
 
-    @Column(unique = true)
     private String companyStripeId;
 
     @Enumerated(EnumType.STRING)
