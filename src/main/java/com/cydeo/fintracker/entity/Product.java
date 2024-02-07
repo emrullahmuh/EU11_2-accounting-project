@@ -25,11 +25,11 @@ public class Product extends BaseEntity {
     private ProductUnit productUnit;
 
     @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @OneToMany
     @JoinColumn(name = "product_id")
     private List<InvoiceProduct> invoiceProducts;
-
 
 }

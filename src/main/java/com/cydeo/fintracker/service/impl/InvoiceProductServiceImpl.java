@@ -3,11 +3,14 @@ package com.cydeo.fintracker.service.impl;
 import com.cydeo.fintracker.dto.CompanyDto;
 import com.cydeo.fintracker.dto.InvoiceDto;
 import com.cydeo.fintracker.dto.InvoiceProductDto;
+import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.InvoiceProduct;
+import com.cydeo.fintracker.enums.InvoiceStatus;
 import com.cydeo.fintracker.repository.InvoiceProductRepository;
 import com.cydeo.fintracker.service.CompanyService;
 import com.cydeo.fintracker.service.InvoiceProductService;
 import com.cydeo.fintracker.service.InvoiceService;
+import com.cydeo.fintracker.service.SecurityService;
 import com.cydeo.fintracker.util.MapperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -27,12 +30,14 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     private final MapperUtil mapperUtil;
     private final CompanyService companyService;
     private final InvoiceService invoiceService;
+    private final SecurityService securityService;
 
-    public InvoiceProductServiceImpl(InvoiceProductRepository invoiceProductRepository, MapperUtil mapperUtil, CompanyService companyService, @Lazy InvoiceService invoiceService) {
+    public InvoiceProductServiceImpl(InvoiceProductRepository invoiceProductRepository, MapperUtil mapperUtil, CompanyService companyService, @Lazy InvoiceService invoiceService, SecurityService securityService) {
         this.invoiceProductRepository = invoiceProductRepository;
         this.mapperUtil = mapperUtil;
         this.companyService = companyService;
         this.invoiceService = invoiceService;
+        this.securityService = securityService;
     }
 
     @Override
@@ -139,5 +144,16 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         invoiceProductDto.setTotal(total);
 
         return invoiceProductDto;
+    }
+
+    @Override
+    public List<InvoiceProductDto> findAllApprovedInvoiceProducts(InvoiceStatus invoiceStatus) {
+
+        CompanyDto companyDto = securityService.getLoggedInUser().getCompany();
+        Company company = mapperUtil.convert(companyDto, new Company());
+        return invoiceProductRepository.findByInvoice_CompanyAndInvoice_InvoiceStatus(company,invoiceStatus).stream()
+                .map(invoiceProduct -> mapperUtil.convert(invoiceProduct, new InvoiceProductDto()))
+                .collect(Collectors.toList());
+
     }
 }

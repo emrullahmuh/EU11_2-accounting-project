@@ -31,6 +31,7 @@ public class Payment extends BaseEntity {
     private Months month;
 
     @ManyToOne
+    @JoinColumn(name = "company_id")
     private Company company;
 
 
