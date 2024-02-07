@@ -140,7 +140,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         log.info("Non-deleted invoice retrieved '{}'", invoice);
 
-        if (invoice.getInvoiceStatus().equals(InvoiceStatus.AWAITING_APPROVAL)) {
+        if (InvoiceStatus.AWAITING_APPROVAL.equals(invoice.getInvoiceStatus())) {
             invoice.setIsDeleted(true);
         }
 

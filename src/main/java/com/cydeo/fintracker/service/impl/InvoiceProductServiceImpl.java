@@ -71,6 +71,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
         invoiceDto.setCompany(companyDto);
         invoiceProductDto.setInvoice(invoiceDto);
+        invoiceProductDto.setProfitLoss(BigDecimal.ZERO);
         InvoiceProduct converted = mapperUtil.convert(invoiceProductDto, new InvoiceProduct());
         converted.setId(null);
         InvoiceProduct saved = invoiceProductRepository.save(converted);
