@@ -94,7 +94,7 @@ public class SalesInvoiceController {
 
     @GetMapping("/delete/{id}")
     public String deleteSalesInvoiceById(@PathVariable("id") Long id) {
-        invoiceService.delete(id);
+        invoiceService.deleteByInvoice(id);
         return "redirect:/salesInvoices/list";
     }
 
