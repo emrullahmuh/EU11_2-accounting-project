@@ -45,6 +45,7 @@ public class SalesInvoiceController {
 
     @PostMapping("/create")
     public String saveSalesInvoice(@Valid @ModelAttribute("newSalesInvoice") InvoiceDto invoice, BindingResult bindingResult, Model model) {
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("clients", clientVendorService.getAllClientVendors(ClientVendorType.CLIENT));
             return "invoice/sales-invoice-create";
