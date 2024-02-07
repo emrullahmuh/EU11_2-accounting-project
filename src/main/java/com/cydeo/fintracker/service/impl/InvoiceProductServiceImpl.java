@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -121,17 +122,20 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         log.info("Invoice product found by '{}' id", invoiceProductDto);
 
         BigDecimal total = BigDecimal.ZERO;
-        if (invoiceProductDto.getQuantity() == null || invoiceProductDto.getPrice() == null || invoiceProductDto.getTax() == null) {
+
+        if (Objects.isNull(invoiceProductDto.getQuantity()) || Objects.isNull(invoiceProductDto.getPrice()) || Objects.isNull(invoiceProductDto.getTax())) {
+
             throw new NoSuchElementException("Quantity or price is null");
         }
         List<InvoiceProduct> list = invoiceProductRepository.findAllByIdAndIsDeleted(invoiceProductDto.getId(), false);
 
         log.info("All non-deleted invoice products retrieved by invoice product id '{}'", list.size());
 
-        for (InvoiceProduct each : list) {
-            total = total.add(each.getPrice().multiply(BigDecimal.valueOf(each.getQuantity())));//15
-            total = total.add(total.multiply(BigDecimal.valueOf(each.getTax()).divide(BigDecimal.valueOf(100))));
-        }
+        // Total cost of each invoiceProduct in the invoice is calculated including the tax
+        total = list.stream()
+                .map(each -> each.getPrice().multiply(BigDecimal.valueOf(each.getQuantity())).add(each.getPrice().multiply(BigDecimal.valueOf(each.getQuantity())).multiply(BigDecimal.valueOf(each.getTax()).divide(BigDecimal.valueOf(100)))))
+                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+
         invoiceProductDto.setTotal(total);
 
         return invoiceProductDto;

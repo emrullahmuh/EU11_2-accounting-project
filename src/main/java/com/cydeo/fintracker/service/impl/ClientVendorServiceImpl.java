@@ -44,7 +44,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
         Company company = mapperUtil.convert(companyDto, new Company());
 
-        Optional<List<ClientVendor>> storedClientVendors = clientVendorRepository.findAllByClientVendorTypeAndCompanyOrderByClientVendorName(ClientVendorType.VENDOR, company);
+        Optional<List<ClientVendor>> storedClientVendors = clientVendorRepository.findAllByClientVendorTypeAndCompanyOrderByClientVendorName(clientVendorType, company);
 
         if (storedClientVendors.isEmpty()) {
             throw new NoSuchElementException();

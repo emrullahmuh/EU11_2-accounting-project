@@ -168,9 +168,17 @@ public class InvoiceServiceImpl implements InvoiceService {
         InvoiceDto invoiceDto = new InvoiceDto();
         int no = invoiceRepository.findAllByInvoiceTypeAndCompanyOrderByInvoiceNoDesc(InvoiceType.PURCHASE, company).size() + 1;
 
-        if (no < 10) invoiceDto.setInvoiceNo("P-00" + no);
-        else if (no < 100 && no >= 10) invoiceDto.setInvoiceNo("P-0" + no);
-        else invoiceDto.setInvoiceNo("P-" + no);
+
+        if (no < 10) {
+            invoiceDto.setInvoiceNo("P-00" + no);
+        } else if (no < 100 && no >= 10) {
+            invoiceDto.setInvoiceNo("P-0" + no);
+        }
+        else {
+            invoiceDto.setInvoiceNo("P-" + no);
+        }
+
+
         invoiceDto.setDate(LocalDate.now());
         invoiceDto.setInvoiceStatus(InvoiceStatus.AWAITING_APPROVAL);
 
