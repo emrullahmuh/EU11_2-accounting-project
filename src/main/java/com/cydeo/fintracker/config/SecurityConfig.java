@@ -29,7 +29,7 @@ public class SecurityConfig {
         return http
                 .authorizeRequests()
                 .antMatchers("/users/**").hasAnyAuthority("Root User", "Admin")
-                .antMatchers("/reports/profitLossData","/reports/stockData").hasAuthority("Manager")
+                .antMatchers("/reports/profitLossData","/reports/stockData").hasAnyAuthority("Admin","Manager")
                 .antMatchers("/reports/**","/payments/**").hasAuthority("Admin")
                 .antMatchers("/companies/**").hasAuthority("Root User")
                 .antMatchers("/clientVendors/**","/categories/**","/products/**").hasAnyAuthority("Admin","Manager","Employee")

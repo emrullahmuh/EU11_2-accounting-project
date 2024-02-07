@@ -12,7 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("/reports")
 public class ReportingController {
+
     private final ReportingService reportingService;
+
+    @GetMapping("/stockData")
+    public String getStockReport(Model model){
+
+        model.addAttribute("invoiceProducts",reportingService.generateStockReport());
+
+        return "report/stock-report";
+    }
+
+
     @GetMapping("/profitLossData")
     public String getProfitLossList(Model model) {
         model.addAttribute("monthlyProfitLossDataMap", reportingService.getMonthlyProfitLoss());
