@@ -76,9 +76,13 @@ public class SalesInvoiceController {
     public String addInvoiceProduct(@PathVariable("id") Long id,
                                      @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto,
                                      BindingResult bindingResult, Model model) {
+
+        bindingResult = invoiceProductService.checkProductStockBeforeAddingToInvoice(invoiceProductDto, id, bindingResult);
+
+
         if (productService.checkInventory(invoiceProductDto)) {
             bindingResult.rejectValue("quantity", "",
-                    "Not enough " + "<" + invoiceProductDto.getProduct().getName() + ">" + " quantity to sell...");
+                    "The quantity entered for " + invoiceProductDto.getProduct().getName() + " exceeding the total stock. Total stock for this product is: " + invoiceProductDto.getProduct().getQuantityInStock());
         }
         if (bindingResult.hasErrors()) {
             model.addAttribute("invoice", invoiceService.findById(id));
