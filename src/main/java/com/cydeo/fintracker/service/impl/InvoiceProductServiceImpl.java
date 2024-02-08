@@ -240,15 +240,9 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         return bindingResult;
 
 
-    @Override
-    public BigDecimal getProfitLossBasedOnMonth(int year, int month, Long id, InvoiceType invoiceType) {
-        CompanyDto companyDto = companyService.findById(id);
-        log.info("will display '{}' company's '{}' '{}' profit/loss", companyDto, year, month);
-        return invoiceProductRepository.getTotalPriceForMonthAndCompanyAndInvoiceType(year, month, id, invoiceType);
 
 
-    }
-
+}
     @Override
     public List<InvoiceProductDto> findAllApprovedInvoiceProducts(InvoiceStatus invoiceStatus) {
 
@@ -259,4 +253,19 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 .collect(Collectors.toList());
 
     }
-}
+@Override
+public BigDecimal getProfitLossBasedOnMonth(int year, int month, Long id, InvoiceType invoiceType) {
+    CompanyDto companyDto = companyService.findById(id);
+    log.info("will display '{}' company's '{}' '{}' profit/loss", companyDto, year, month);
+
+    BigDecimal totalProfitLoss= invoiceProductRepository.getTotalPriceForMonthAndCompanyAndInvoiceType(year, month, id, invoiceType);
+
+
+    if (totalProfitLoss == null) {
+        log.warn("Total profit/loss is null for year '{}', month '{}', company '{}', and invoice type '{}'", year, month, id, invoiceType);
+        return BigDecimal.ZERO; // or any other default value you prefer
+    }
+
+    return totalProfitLoss;
+
+}}

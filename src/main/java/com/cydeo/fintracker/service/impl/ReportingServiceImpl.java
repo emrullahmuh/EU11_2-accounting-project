@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -30,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ReportingServiceImpl implements ReportingService {
+
     private final SecurityService securityService;
     private final InvoiceProductService invoiceProductService;
     private final CompanyService companyService;
@@ -39,48 +39,58 @@ public class ReportingServiceImpl implements ReportingService {
 
     @Override
     public Map<String, BigDecimal> getMonthlyProfitLoss() {
+
         Map<String, BigDecimal> mapOfDateAndProfitLoss = new HashMap<>();
-        CompanyDto company = securityService.getLoggedInUser().getCompany();
+        CompanyDto company = companyService.getCompanyDtoByLoggedInUser().get(0);
+
         Long companyId = company.getId();
-        LocalDateTime companyInsertDate =getCompanyInsertDate(company);
+        LocalDateTime companyInsertDate = company.getInsertDate();
+
         List<LocalDate> dateKeys = listDate(companyInsertDate);
-        log.info("get all month from company insert date till now");
+
         for (LocalDate date : dateKeys) {
+
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MMMM");
             String key = date.format(formatter);
+
             BigDecimal profitLoss = invoiceProductService.getProfitLossBasedOnMonth
                     (date.getYear(), date.getMonthValue(), companyId, InvoiceType.SALES);
             mapOfDateAndProfitLoss.put(key.toUpperCase(), profitLoss);
-log.info("put date and profitLoss to map");
+
         }
+
+        log.info("Monthly profit/loss data has been retrieved for company with ID {}.", companyId);
+
         return mapOfDateAndProfitLoss;
     }
+
     public List<LocalDate> listDate(LocalDateTime localDateTime) {
+        if (localDateTime == null) {
+            throw new IllegalArgumentException("localDateTime cannot be null");
+        }
+
         int year = localDateTime.getYear();
         Month month = localDateTime.getMonth();
         int day = localDateTime.getDayOfMonth();
+
         LocalDate startDate = LocalDate.of(year, month, day);
         LocalDate now = LocalDate.now();
+
         List<LocalDate> listOfDate = new ArrayList<>();
+
         while (startDate.isBefore(now)) {
             listOfDate.add(startDate);
             startDate = startDate.plusMonths(1);
+
         }
-        log.info("this method will give list of month from company insert date till now ");
+        log.info("list of months from company insert date till now: {} ", listOfDate);
         return listOfDate;
     }
-    public LocalDateTime getCompanyInsertDate(CompanyDto companyDto){
-       Company company= mapperUtil.convert(companyDto,new Company());
-       LocalDateTime companyInsertDate = company.insertDateTime;
-    return companyInsertDate;
-    }
 
-    private final InvoiceProductService invoiceProductService;
 
     public List<InvoiceProductDto> generateStockReport() {
+
         return invoiceProductService.findAllApprovedInvoiceProducts(InvoiceStatus.APPROVED);
     }
-
-}
 
 }
