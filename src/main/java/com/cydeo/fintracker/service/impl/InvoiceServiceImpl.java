@@ -210,8 +210,26 @@ public class InvoiceServiceImpl implements InvoiceService {
                 Integer amount = invoiceProductDto.getQuantity();
                 invoiceProductDto.setRemainingQuantity(amount);
 //                invoiceProductService.save(invoiceProductDto, invoice.getId());
-                matchRemainingQuantity(invoiceProductDto.getId());
+                matchRemainingQuantityPurchase(invoiceProductDto.getId());
                 ProductDto productDto = productService.increaseProductInventory(productId, amount);
+
+                log.info("Product quantity-in-stock increased by invoice product quantity '{}'", productDto);
+
+            }
+
+        } else if (invoice.getInvoiceType().getValue().equals(InvoiceType.SALES.getValue())) {
+            List<InvoiceProductDto> invoiceProductDtoList = invoiceProductService.listAllInvoiceProduct(id);
+
+            log.info("Invoice product list has been retrieved '{}'", invoiceProductDtoList.size());
+
+            for (InvoiceProductDto invoiceProductDto : invoiceProductDtoList) {
+                Long productId = invoiceProductDto.getProduct().getId();
+                Integer amount = invoiceProductDto.getQuantity();
+                invoiceProductDto.setRemainingQuantity(amount);
+//                invoiceProductService.save(invoiceProductDto, invoice.getId());
+                matchRemainingQuantitySales(invoiceProductDto.getId());
+                invoiceProductService.setProfitLossForInvoiceProduct(invoiceProductDto);
+                ProductDto productDto = productService.decreaseProductInventory(productId, amount);
 
                 log.info("Product quantity-in-stock increased by invoice product quantity '{}'", productDto);
 
@@ -219,6 +237,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 
         }
+
+
 
         invoice.setInvoiceStatus(InvoiceStatus.APPROVED);
         invoice.setDate(LocalDate.now());
@@ -283,7 +303,21 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     }
 
-    private void matchRemainingQuantity(Long id) {
-        invoiceProductRepository.getById(id).setRemainingQuantity(invoiceProductRepository.getById(id).getQuantity());
+    private void matchRemainingQuantityPurchase(Long id) {
+        invoiceProductRepository.findById(id).get().setRemainingQuantity(invoiceProductRepository.findById(id).get().getQuantity());
+    }
+
+    private void matchRemainingQuantitySales(Long id) {
+
+        int quantitySold = invoiceProductRepository.findById(id).get().getQuantity();
+
+        log.info("Number of quantity to be sold retrieved '{}'", quantitySold);
+
+        int quantityInStock = invoiceProductRepository.findById(id).get().getProduct().getQuantityInStock();
+
+        log.info("Quantity in stock retrieved '{}'", quantityInStock);
+
+        invoiceProductRepository.findById(id).get().setRemainingQuantity(quantityInStock - quantitySold);
+
     }
 }

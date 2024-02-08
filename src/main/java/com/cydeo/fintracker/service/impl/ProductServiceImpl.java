@@ -136,5 +136,12 @@ public class ProductServiceImpl implements ProductService {
         product.setQuantityInStock(product.getQuantityInStock() + amount);
         return mapperUtil.convert(product, new ProductDto());
     }
+
+    @Override
+    public ProductDto decreaseProductInventory(Long id, Integer amount) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Product not found"));
+        product.setQuantityInStock(product.getQuantityInStock() - amount);
+        return mapperUtil.convert(product, new ProductDto());
+    }
 }
 

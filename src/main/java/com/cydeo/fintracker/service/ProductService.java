@@ -32,4 +32,6 @@ public interface ProductService {
     BindingResult uniqueName(ProductDto productDto, BindingResult bindingResult);
 
     ProductDto increaseProductInventory(Long id, Integer amount);
+
+    ProductDto decreaseProductInventory(Long id, Integer amount);
 }
