@@ -48,7 +48,11 @@ public class PaymentController {
     @GetMapping("/toInvoice/{paymentid}")
     public String paymentInvoice(@PathVariable("paymentid") long paymentId,Model model) {
 
-        return null;
+        model.addAttribute("company", paymentService.findPaymentById(paymentId).getCompany());
+        model.addAttribute("payment", paymentService.findPaymentById(paymentId));
+        model.addAttribute("modelId", paymentId);
+        model.addAttribute("currency", "USD");
+        return "payment/payment-invoice";
 
     }
 

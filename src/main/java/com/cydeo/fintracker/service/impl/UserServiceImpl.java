@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(convertedUser);
 
-        return findByUsername(user.getUsername());
+        return user;
     }
 
     private boolean isOnlyAdmin(UserDto userDTO) {
