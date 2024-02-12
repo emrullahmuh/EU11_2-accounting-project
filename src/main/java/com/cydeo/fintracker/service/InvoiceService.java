@@ -5,6 +5,7 @@ import com.cydeo.fintracker.dto.InvoiceDto;
 import com.cydeo.fintracker.entity.Invoice;
 import com.cydeo.fintracker.enums.InvoiceType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface InvoiceService {
@@ -28,5 +29,7 @@ public interface InvoiceService {
 
     InvoiceDto createNewSalesInvoice();
     boolean existsByClientVendorId (Long id);
+
+
 
 }

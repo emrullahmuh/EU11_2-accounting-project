@@ -6,10 +6,7 @@ import com.cydeo.fintracker.dto.InvoiceProductDto;
 import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.InvoiceProduct;
 import com.cydeo.fintracker.enums.InvoiceStatus;
-
 import com.cydeo.fintracker.enums.InvoiceType;
-
-
 import com.cydeo.fintracker.repository.InvoiceProductRepository;
 import com.cydeo.fintracker.service.CompanyService;
 import com.cydeo.fintracker.service.InvoiceProductService;
@@ -58,7 +55,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
         List<InvoiceProduct> allByInvoiceIdAndIsDeleted = invoiceProductRepository.findAllByInvoiceIdAndIsDeleted(id, false);
 
-        log.info("All non-deleted invoice products retrieved by invoice '{}'", allByInvoiceIdAndIsDeleted);
+        log.info("(1) - All non-deleted invoice products retrieved by invoice '{}'", allByInvoiceIdAndIsDeleted);
 
         return allByInvoiceIdAndIsDeleted.stream()
                 .map(invoiceProduct -> calculateTotalInvoiceProduct(invoiceProduct.getId()))
@@ -121,7 +118,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
         List<InvoiceProduct> invoiceProductListNotDeleted = invoiceProductRepository.findAllByInvoiceIdAndIsDeleted(id, false);
 
-        log.info("All non-deleted invoice products retrieved by invoice '{}'", invoiceProductListNotDeleted);
+        log.info("(2) - All non-deleted invoice products retrieved by invoice id '{}'", invoiceProductListNotDeleted);
 
         return invoiceProductListNotDeleted.stream()
                 .map(invoiceProduct -> calculateTotalInvoiceProduct(invoiceProduct.getId()))
@@ -142,7 +139,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         }
         List<InvoiceProduct> list = invoiceProductRepository.findAllByIdAndIsDeleted(invoiceProductDto.getId(), false);
 
-        log.info("All non-deleted invoice products retrieved by invoice product id '{}'", list.size());
+        log.info("(3) - All non-deleted invoice products retrieved by invoice id '{}'", list.size());
 
         // Total cost of each invoiceProduct in the invoice is calculated including the tax
         total = list.stream()

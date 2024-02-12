@@ -34,4 +34,8 @@ public interface ProductService {
     ProductDto increaseProductInventory(Long id, Integer amount);
 
     ProductDto decreaseProductInventory(Long id, Integer amount);
+
+    BindingResult checkProductByCompanyForPurchase(BindingResult bindingResult);
+
+    BindingResult checkProductByCompanyForSales(BindingResult bindingResult);
 }

@@ -46,6 +46,8 @@ public class SalesInvoiceController {
     @PostMapping("/create")
     public String saveSalesInvoice(@Valid @ModelAttribute("newSalesInvoice") InvoiceDto invoice, BindingResult bindingResult, Model model) {
 
+        bindingResult = productService.checkProductByCompanyForSales(bindingResult);
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("clients", clientVendorService.getAllClientVendors(ClientVendorType.CLIENT));
             return "invoice/sales-invoice-create";

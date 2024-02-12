@@ -50,6 +50,8 @@ public class PurchasesInvoiceController {
     @PostMapping("/create")
     public String savePurchaseInvoice(@Valid @ModelAttribute("newPurchaseInvoice") InvoiceDto invoice, BindingResult bindingResult, Model model){
 
+        bindingResult = productService.checkProductByCompanyForPurchase(bindingResult);
+
         if (bindingResult.hasErrors()){
             model.addAttribute("vendors", clientVendorService.getAllClientVendors(ClientVendorType.VENDOR));
             return "invoice/purchase-invoice-create";
@@ -78,7 +80,7 @@ public class PurchasesInvoiceController {
         invoiceDto.setId(byId.getId());
         invoiceService.save(invoiceDto, InvoiceType.PURCHASE);
         invoiceService.createNewPurchaseInvoice();
-        return "redirect:/purchaseInvoices/update/" + id;
+        return "redirect:/purchaseInvoices/list";
     }
 
     @PostMapping("/addInvoiceProduct/{id}")
