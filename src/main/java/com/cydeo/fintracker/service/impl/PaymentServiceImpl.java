@@ -121,7 +121,7 @@ public class PaymentServiceImpl implements PaymentService {
         String currency = "usd";
 
         Map<String, Object> params = new HashMap<>();
-        params.put("amount", amount.intValue());
+        params.put("amount", amount.multiply(BigDecimal.valueOf(100)).intValue());
         params.put("currency", currency);
         params.put("source", stripeToken);
 
