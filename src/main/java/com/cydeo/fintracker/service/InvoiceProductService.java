@@ -2,6 +2,7 @@ package com.cydeo.fintracker.service;
 
 import com.cydeo.fintracker.dto.InvoiceProductDto;
 import com.cydeo.fintracker.entity.InvoiceProduct;
+import org.springframework.validation.BindingResult;
 
 import org.springframework.validation.BindingResult;
 

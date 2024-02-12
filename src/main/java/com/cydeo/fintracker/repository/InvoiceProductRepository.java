@@ -6,7 +6,6 @@ import com.cydeo.fintracker.enums.InvoiceStatus;
 import com.cydeo.fintracker.enums.InvoiceType;
 
 import com.cydeo.fintracker.enums.InvoiceType;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

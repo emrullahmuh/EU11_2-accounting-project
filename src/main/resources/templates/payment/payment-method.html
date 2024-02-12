@@ -30,16 +30,16 @@
                                                     <form th:action="@{/payments/charge/{id}(id=${modelId})}" method='POST' id='checkout-form'>
                                                         <input type='hidden' th:value='${modelId}' name='modelId'/>
                                                         <input type='hidden' th:value='${amount}' name='amount'/>
-                                                        <label>Price: $ <span th:text='${amount/100}'></span></label>
+                                                        <label>Price: $ <span th:text='${amount}'></span></label>
                                                         <script
                                                                 src='https://checkout.stripe.com/checkout.js'
                                                                 class='stripe-button'
                                                                 th:attr='data-key=${stripePublicKey},
-                                                                    data-amount=${amount},
+                                                                    data-amount=${amount*100},
                                                                     data-currency=${currency}'
-                                                                    data-name='TheGoGetters'
+                                                                    data-name='FIN TRACKER'
                                                                     data-description='Usage Fee'
-                                                                    data-image='https://askingmatters.com/wp-content/uploads/2015/02/go-getter-292x300.png'
+                                                                    data-image='/images/fin-tracker-logo.webp'
                                                                     data-locale='auto'
                                                                     data-zip-code='false'>
                                                         </script>

@@ -143,5 +143,46 @@ public class ProductServiceImpl implements ProductService {
         product.setQuantityInStock(product.getQuantityInStock() - amount);
         return mapperUtil.convert(product, new ProductDto());
     }
+    @Override
+    public BindingResult checkProductByCompanyForPurchase(BindingResult bindingResult) {
+
+        CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser().get(0);
+
+        Company company = mapperUtil.convert(companyDto, new Company());
+
+        if (productRepository.findAllByCompanyId(company.getId(), false).size() == 0) {
+
+            String errorMessage = "The company has no product. Please create a product first!";
+
+            FieldError productNullError = new FieldError("newPurchaseInvoice", "clientVendor", errorMessage);
+
+            bindingResult.addError(productNullError);
+
+        }
+
+        return bindingResult;
+
+    }
+
+    @Override
+    public BindingResult checkProductByCompanyForSales(BindingResult bindingResult) {
+
+        CompanyDto companyDto = companyService.getCompanyDtoByLoggedInUser().get(0);
+
+        Company company = mapperUtil.convert(companyDto, new Company());
+
+        if (productRepository.findAllByCompanyId(company.getId(), false).size() == 0) {
+
+            String errorMessage = "The company has no product. Please create a product first!";
+
+            FieldError productNullError = new FieldError("newSalesInvoice", "clientVendor", errorMessage);
+
+            bindingResult.addError(productNullError);
+
+        }
+
+        return bindingResult;
+
+    }
 }
 

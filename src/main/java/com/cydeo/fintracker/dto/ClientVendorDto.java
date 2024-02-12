@@ -26,11 +26,13 @@ public class ClientVendorDto {
     @Size(min = 2, max = 100, message = "Company Name must be between 2 and 50 characters long.")
     private String clientVendorName;
 
-    @NotBlank(message = "Phone Number is required field and may be in any valid phone number format.")
+    @NotBlank(message = "Phone Number is a required field.")
+    @Pattern(regexp = "\\+\\d{1,3} \\(\\d{3}\\) \\d{3}-\\d{4}", message = "Phone number should have a valid format. Ex: +1 (222) 333-4444")
     private String phone;
 
-    @Pattern(regexp = "^(www\\.)?[a-zA-Z0-9\\-]+\\.[a-zA-Z]{2,5}$", message = "Website should have a valid format. Ex: www.cydeo.com or cydeo.com")
-    private String website;
+    @NotBlank(message = "Website is a required field.")
+    @Pattern(regexp = "^https?://www\\.[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Website should have a valid format. Ex: https://www.cydeo.com or http://www.cydeo.com")
+    private String website = "https://www.";
 
     @NotNull(message = "Please select type")
     private ClientVendorType clientVendorType;

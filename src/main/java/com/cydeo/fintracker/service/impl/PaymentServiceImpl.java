@@ -2,6 +2,7 @@ package com.cydeo.fintracker.service.impl;
 
 import com.cydeo.fintracker.dto.PaymentDto;
 import com.cydeo.fintracker.dto.PaymentResultDto;
+import com.cydeo.fintracker.dto.UserDto;
 import com.cydeo.fintracker.entity.Payment;
 import com.cydeo.fintracker.enums.Months;
 import com.cydeo.fintracker.exception.PaymentException;
@@ -47,7 +48,8 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public List<PaymentDto> listAllPaymentsByYear(int year) {
 
-        Long loggedUserCompanyId = securityService.getLoggedInUser().getCompany().getId();
+        UserDto userDto = securityService.getLoggedInUser();
+        Long loggedUserCompanyId = userDto.getCompany().getId();
 
         List<Payment> payments = paymentRepository.findAll().stream()
                 .filter(payment -> payment.getYear() == year)
@@ -55,7 +57,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .collect(Collectors.toList());
 
         int currentYear = Year.now().getValue();
-        int currentMonth = LocalDate.now().getMonthValue();
+
 
         int companyOpeningYear = companyRepository.findById(loggedUserCompanyId).get().getInsertDateTime().getYear();
         int companyOpeningMonth = companyRepository.findById(loggedUserCompanyId).get().getInsertDateTime().getMonthValue();
@@ -66,9 +68,6 @@ public class PaymentServiceImpl implements PaymentService {
                 break;
             }
 
-            if (year == currentYear && month.ordinal() + 1 > currentMonth) {
-                break;
-            }
 
             if (year == companyOpeningYear && month.ordinal() + 1 < companyOpeningMonth) {
                 continue;
@@ -91,17 +90,14 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
 
-        // Fetch the payments again after creating them
         payments = paymentRepository.findAll().stream()
                 .filter(payment -> payment.getYear() == year)
                 .filter(payment -> Objects.equals(payment.getCompany().getId(), loggedUserCompanyId))
                 .collect(Collectors.toList());
 
 
-        // Sort payments based on the ordinal value of the month
         payments.sort(Comparator.comparing(payment -> payment.getMonth().ordinal()));
 
-        // Map Payment entities to PaymentDto using the mapper
         return payments.stream()
                 .map(payment -> mapperUtil.convert(payment, new PaymentDto()))
                 .collect(Collectors.toList());
@@ -109,16 +105,21 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentDto findPaymentById(Long id) {
-        return mapperUtil.convert(paymentRepository.findById(id), new PaymentDto());
+        Optional<Payment> payment = paymentRepository.findById(id);
+        if (payment.isEmpty()) {
+            throw new IllegalArgumentException("Payment not found with ID: " + id);
+        }
+        PaymentDto paymentDto = mapperUtil.convert(payment.get(), new PaymentDto());
+        return paymentDto;
     }
+
 
     @Override
     public PaymentResultDto processPayment(long modelId, String stripeToken) {
 
         BigDecimal amount = paymentRepository.findById(modelId).get().getAmount();
-        String currency = "usd";  // Replace with the actual currency
+        String currency = "usd";
 
-        // Create a charge using the Stripe API
         Map<String, Object> params = new HashMap<>();
         params.put("amount", amount.intValue());
         params.put("currency", currency);
@@ -139,7 +140,7 @@ public class PaymentServiceImpl implements PaymentService {
             return new PaymentResultDto(modelId, charge.getStatus(), charge.getId(), charge.getBalanceTransaction());
 
         } catch (StripeException e) {
-            // Handle Stripe exception
+
             throw new PaymentException("Error processing payment: " + e.getMessage());
         }
     }

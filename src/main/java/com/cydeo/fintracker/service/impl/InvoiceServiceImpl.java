@@ -59,6 +59,27 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         log.info("InvoiceDto found by '{}' id", invoice);
 
+        List<InvoiceProductDto> invoiceProductDtoList = invoiceProductService.listAllInvoiceProduct(id);
+
+        BigDecimal subtotal = invoiceProductDtoList.stream()
+                .map(invoiceProductDto -> invoiceProductDto.getPrice()
+                        .multiply(BigDecimal.valueOf(invoiceProductDto.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal tax = invoiceProductDtoList.stream()
+                .map(invoiceProductDto -> invoiceProductDto.getPrice()
+                        .multiply(BigDecimal.valueOf(invoiceProductDto.getQuantity()))
+                        .multiply(BigDecimal.valueOf((invoiceProductDto.getTax() * 0.01))))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal grandTotal = subtotal.add(tax);
+
+        invoiceDto.setPrice(subtotal);
+        invoiceDto.setTax(tax);
+        invoiceDto.setTotal(grandTotal);
+
+        log.info("Subtotal, Tax, and Grand Total amount calculated '{}', '{}', '{}', ''", subtotal, tax, grandTotal);
+
         return invoiceDto;
     }
 

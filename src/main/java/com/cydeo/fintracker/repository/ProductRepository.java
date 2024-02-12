@@ -27,5 +27,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("select p from Product p where p.category.company = ?1 and p.isDeleted = ?2")
     List<Product> findAllByCompany(Company company, Boolean isDeleted);
 
+    @Query("select p from Product p where p.category.company.id = ?1 and p.isDeleted = ?2")
+    List<Product> findAllByCompanyId(Long companyId, Boolean isDeleted);
+
 
 }
