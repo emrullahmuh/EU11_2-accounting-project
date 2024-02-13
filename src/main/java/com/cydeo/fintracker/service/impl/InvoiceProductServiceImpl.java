@@ -6,8 +6,6 @@ import com.cydeo.fintracker.dto.InvoiceProductDto;
 import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.InvoiceProduct;
 import com.cydeo.fintracker.enums.InvoiceStatus;
-import com.cydeo.fintracker.enums.InvoiceStatus;
-import com.cydeo.fintracker.enums.InvoiceType;
 
 import com.cydeo.fintracker.enums.InvoiceType;
 import com.cydeo.fintracker.repository.InvoiceProductRepository;
@@ -240,9 +238,6 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
 
-
-
-}
     @Override
     public List<InvoiceProductDto> findAllApprovedInvoiceProducts(InvoiceStatus invoiceStatus) {
 
@@ -253,19 +248,5 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 .collect(Collectors.toList());
 
     }
-@Override
-public BigDecimal getProfitLossBasedOnMonth(int year, int month, Long id, InvoiceType invoiceType) {
-    CompanyDto companyDto = companyService.findById(id);
-    log.info("will display '{}' company's '{}' '{}' profit/loss", companyDto, year, month);
 
-    BigDecimal totalProfitLoss= invoiceProductRepository.getTotalPriceForMonthAndCompanyAndInvoiceType(year, month, id, invoiceType);
-
-
-    if (totalProfitLoss == null) {
-        log.warn("Total profit/loss is null for year '{}', month '{}', company '{}', and invoice type '{}'", year, month, id, invoiceType);
-        return BigDecimal.ZERO; // or any other default value you prefer
-    }
-
-    return totalProfitLoss;
-
-}}
+}
