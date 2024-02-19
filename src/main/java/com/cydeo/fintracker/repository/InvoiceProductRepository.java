@@ -4,10 +4,14 @@ import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.InvoiceProduct;
 import com.cydeo.fintracker.enums.InvoiceStatus;
 import com.cydeo.fintracker.enums.InvoiceType;
+
+import com.cydeo.fintracker.enums.InvoiceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.lang.annotation.Native;
+import org.springframework.data.jpa.repository.Query;
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface InvoiceProductRepository extends JpaRepository<InvoiceProduct, Long> {
@@ -21,6 +25,15 @@ public interface InvoiceProductRepository extends JpaRepository<InvoiceProduct, 
     List<InvoiceProduct> findAllByInvoiceIdAndIsDeleted(Long id, Boolean isDeleted);
 
 
+    @Query("SELECT SUM(ip.price) FROM InvoiceProduct ip " +
+            "WHERE YEAR(ip.invoice.date) = :year " +
+            "AND MONTH(ip.invoice.date) = :month " +
+            "AND ip.invoice.company.id = :companyId " +
+            "AND ip.invoice.invoiceType = :invoiceType")
+    BigDecimal getTotalPriceForMonthAndCompanyAndInvoiceType(int year, int month, Long companyId, InvoiceType invoiceType);
+
+
+
     @Query(" Select ip from InvoiceProduct ip join Invoice i on ip.invoice.id=i.id" +
             " where i.invoiceStatus=?1 " +
             "And i.invoiceType=?2 And i.company.title=?3 And ip.product.id=?4 AND ip.remainingQuantity>0 ")
@@ -29,6 +42,5 @@ public interface InvoiceProductRepository extends JpaRepository<InvoiceProduct, 
     List<InvoiceProduct> findByInvoice_CompanyAndInvoice_InvoiceStatusAndInvoice_InvoiceTypeOrderByInsertDateTime(Company company, InvoiceStatus invoiceStatus, InvoiceType invoiceType);
 
     List<InvoiceProduct> findByInvoice_CompanyAndInvoice_InvoiceStatus(Company company, InvoiceStatus invoiceStatus);
-
 
 }

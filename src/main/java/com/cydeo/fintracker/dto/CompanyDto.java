@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -32,5 +33,8 @@ public class CompanyDto {
     private AddressDto address;
 
     private CompanyStatus companyStatus;
+
+    private LocalDateTime insertDate;
+
 
 }

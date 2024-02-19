@@ -6,6 +6,7 @@ import com.cydeo.fintracker.dto.InvoiceProductDto;
 import com.cydeo.fintracker.entity.Company;
 import com.cydeo.fintracker.entity.InvoiceProduct;
 import com.cydeo.fintracker.enums.InvoiceStatus;
+
 import com.cydeo.fintracker.enums.InvoiceType;
 import com.cydeo.fintracker.repository.InvoiceProductRepository;
 import com.cydeo.fintracker.service.CompanyService;
@@ -246,6 +247,6 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 .map(invoiceProduct -> mapperUtil.convert(invoiceProduct, new InvoiceProductDto()))
                 .collect(Collectors.toList());
 
-
     }
+
 }
