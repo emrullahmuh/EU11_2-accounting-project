@@ -1,8 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-
 <head th:replace="fragments/head :: header"></head>
-
+<style>
+  .center-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .result-box {
+    align-self: flex-start;
+    padding: 20px;
+    border: 6px solid #228409;
+    border-radius: 20px;
+    text-align: left;
+    background-color: #b8edcd;
+  }
+  .success {
+    color: #228409;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .failed {
+    color: red;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  .details-row {
+    display: flex;
+    /*justify-content: space-evenly;*/
+    margin-bottom: 10px;
+  }
+  .title {
+    font-weight: bold;
+    color: #3366ff;
+  }
+  .value {
+    text-align: left;
+    font-weight: bold;
+  }
+</style>
 <body>
 <div class="dashboard-main-wrapper">
   <div th:replace="fragments/header :: header"></div>
@@ -11,16 +48,39 @@
     <div class="dashboard-ecommerce">
       <div class="container-fluid dashboard-content">
         <div class="ecommerce-widget">
-          <h3 th:if='${error}' th:text='Transaction failed. Please try again!' style='color: red;'></h3>
-          <div th:unless='${error}'>
-            <h3 style='color: green;'>Payment is successful:</h3>
-            <div>Id.: <span th:text='${id}' /></div>
-            <div>Status: <span th:text='${status}' /></div>
-            <div>Charge id.: <span th:text='${chargeId}' /></div>
-            <div>Balance transaction id.: <span th:text='${balance_transaction}' /></div>
-            <div>Description: <span th:text="'Cydeo accounting subscription fee for :' + ${month} + ' ' + ${year}" /></div>
+          <div class="center-box">
+            <div class="result-box" th:if="${error}">
+              <h3 th:text="'Transaction failed. Please try again!'" class="failed"></h3>
+            </div>
+            <div class="result-box" th:unless="${error}">
+              <h3 th:text="'Successful'" class="success"></h3>
+              <div class="payment-details">
+                <div class="details-row">
+                  <div class="title" th:text="'Id.: '"></div>
+                  <div class="value" th:text="'&nbsp;' + ${id}"></div>
+                </div>
+                <div class="details-row">
+                  <div class="title" th:text="'Status: '"></div>
+                  <div class="value" th:text="'&nbsp;' + ${status}"></div>
+                </div>
+                <div class="details-row">
+                  <div class="title" th:text="'Charge Id: '"></div>
+                  <div class="value" th:text="'&nbsp;' + ${chargeId}"></div>
+                </div>
+                <div class="details-row">
+                  <div class="title" th:text="'Balance Transaction: '"></div>
+                  <div class="value" th:text="'&nbsp;' + ${balance_transaction}"></div>
+                </div>
+                <div class="details-row">
+                  <div class="title" th:text="'Date: '"></div>
+                  <div class="value" th:text="${'&nbsp;' + month + ' ' + year}"></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <a th:href="@{/payments/list}">Checkout again</a>
+          <div class="text-center">
+            <a th:href="@{/payments/list}" class="btn btn-success mb-2 mb-sm-0 mr-sm-2" style="margin: 20px;">Checkout</a>
+          </div>
         </div>
       </div>
     </div>
@@ -29,5 +89,4 @@
 <div th:replace="fragments/footer :: footer"></div>
 <div th:replace="fragments/javascript :: js"></div>
 </body>
-
 </html>
