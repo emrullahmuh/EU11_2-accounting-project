@@ -8,7 +8,7 @@ import com.cydeo.fintracker.dto.InvoiceProductDto;
 import java.util.List;
 
 public interface ReportingService {
-    Map<String, BigDecimal> getMonthlyProfitLoss();
+    Map<String,String> getMonthlyProfitLoss();
     public List<InvoiceProductDto> generateStockReport();
 
 }

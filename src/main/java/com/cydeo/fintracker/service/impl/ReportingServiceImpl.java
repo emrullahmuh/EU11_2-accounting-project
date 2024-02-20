@@ -29,20 +29,30 @@ public class ReportingServiceImpl implements ReportingService {
 
 
     @Override
-    public Map<String, BigDecimal> getMonthlyProfitLoss() {
+    public Map<String, String> getMonthlyProfitLoss() {
         CompanyDto company = companyService.getCompanyDtoByLoggedInUser().get(0);
         Long companyId = company.getId();
 
-        List<Object[]> results = reportRepository.findReportsByCompanyIdAndInvoiceType(companyId, InvoiceType.SALES);
 
-        Map<String, BigDecimal> reportData = new HashMap<>();
+        List<Object[]> results = reportRepository.findReportsByCompanyIdAndInvoiceType(companyId);
+
+        Map<String, String> reportData = new HashMap<>();
 
         for (Object[] result : results) {
             int year = (int) result[0];
             int month = (int) result[1];
             String period = year + " " + Month.of(month).toString();
-            BigDecimal totalProfitLoss = (BigDecimal) result[2];
-            reportData.put(period, totalProfitLoss);
+            InvoiceType invoiceType = (InvoiceType) result[2];
+            BigDecimal totalProfitLoss = (BigDecimal) result[3];
+
+            String value = "";
+            if (invoiceType.equals(InvoiceType.SALES)) {
+                value = "+ " + totalProfitLoss.toString();
+
+            } else if (invoiceType.equals(InvoiceType.PURCHASE)) {
+                value = "- " + totalProfitLoss.toString();
+            }
+            reportData.put(period, value);
         }
         log.info("Monthly profit/loss data has been retrieved successfully for company with ID {}. Total {} data points retrieved for the period.", companyId, reportData.size());
 

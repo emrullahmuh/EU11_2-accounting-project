@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Builder
 @Entity
 @Table(name = "report")
-public class ReportView extends BaseEntity {
+public class ReportView {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
